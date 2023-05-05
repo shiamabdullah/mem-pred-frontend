@@ -1,0 +1,13 @@
+.logo_image {
+  inline-size: 100%;
+}
+
+.user_avatar_icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgb(75 85 99);
+}
