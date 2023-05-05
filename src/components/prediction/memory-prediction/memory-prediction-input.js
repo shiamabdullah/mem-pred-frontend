@@ -1,10 +1,24 @@
 import { Autocomplete, Button, TextField } from "@mui/material";
-import { BITS, HDHSTYPE, MEMTYPE, PORTTYPE, TECH, VENDOR, VTTYPE, WORDS } from "../../../utils/data/memory-prediction-data";
-import { BITS23FDX, MEMTYPE22FDX, PORTTYPE22FDX, VENDOR22FDX, WORDS23FDX } from "../../../utils/data/memory-prediction-data-22fdx";
+import {
+  BITS,
+  HDHSTYPE,
+  MEMTYPE,
+  PORTTYPE,
+  TECH,
+  VENDOR,
+  VTTYPE,
+  WORDS,
+} from "../../../utils/data/memory-prediction-data";
+import {
+  BITS23FDX,
+  MEMTYPE22FDX,
+  PORTTYPE22FDX,
+  VENDOR22FDX,
+  WORDS23FDX,
+} from "../../../utils/data/memory-prediction-data-22fdx";
 import Label from "../../helper-component/label";
 import Loader from "../../helper-component/loader";
 import SelectInput from "../../helper-component/select-input";
-
 
 export default function MemoryPredictionInputs({
   onSubmit,
@@ -12,12 +26,11 @@ export default function MemoryPredictionInputs({
   loading,
   handleReset,
   predictionInput,
-  handleChangeAutoComplete
+  handleChangeAutoComplete,
 }) {
   return (
     <div className="w-full">
       <div className="grid grid-cols-3 gap-6">
-
         <div className="mb-4">
           <Label>Tech</Label>
           <SelectInput
@@ -32,16 +45,27 @@ export default function MemoryPredictionInputs({
         <div className="mb-4">
           <Label>Words</Label>
           <Autocomplete
-            freeSolo
             value={predictionInput?.words || ""}
-            onChange={(event, newValue) => handleChangeAutoComplete(newValue, "words")}
+            onChange={(event, newValue) =>
+              handleChangeAutoComplete(newValue, "words")
+            }
             options={predictionInput?.tech === "12LPP" ? WORDS : WORDS23FDX}
             renderInput={(params) => (
               <TextField
                 {...params}
                 type="number"
-                onChange={(e) => handleChangeAutoComplete(e.target.value, "words")}
-                label={predictionInput['words'] ? "" : "Select or enter a value"}
+                onChange={(e) => {
+                  let input = e.target.value;
+                  if (
+                    !input ||
+                    (input[input.length - 1].match("[0-9]") &&
+                      input[0].match("[1-9]"))
+                  )
+                    handleChangeAutoComplete(input, "words");
+                }}
+                label={
+                  predictionInput["words"] ? "" : "Select or enter a value"
+                }
               />
             )}
           />
@@ -50,16 +74,32 @@ export default function MemoryPredictionInputs({
         <div className="mb-4">
           <Label>Bits</Label>
           <Autocomplete
-            freeSolo
             value={predictionInput?.bits || ""}
-            onChange={(event, newValue) => handleChangeAutoComplete(newValue, "bits")}
+            onChange={(event, newValue) =>
+              handleChangeAutoComplete(newValue, "bits")
+            }
             options={predictionInput?.tech === "12LPP" ? BITS : BITS23FDX}
             renderInput={(params) => (
               <TextField
                 {...params}
                 type="number"
-                onChange={(e) => handleChangeAutoComplete(e.target.value, "bits")}
-                label={predictionInput['bits'] ? "" : "Select or enter a value"}
+                onChange={(e) => {
+                  let input = e.target.value;
+                  if (
+                    !input ||
+                    (input[input.length - 1].match("[0-9]") &&
+                      input[0].match("[1-9]"))
+                  )
+                    handleChangeAutoComplete(input, "bits");
+                }}
+                // onChange={(e) =>
+                //   handleChangeAutoComplete(e.target.value, "bits")
+                // }
+                label={
+                  predictionInput["bits"]
+                    ? ""
+                    : "Select or enter a value. Must be a positive integer"
+                }
               />
             )}
           />
@@ -93,13 +133,15 @@ export default function MemoryPredictionInputs({
             name="port"
             handleOnChange={handleOnChange}
             predictionInput={predictionInput}
-            options={predictionInput?.tech === "12LPP" ? PORTTYPE : PORTTYPE22FDX}
+            options={
+              predictionInput?.tech === "12LPP" ? PORTTYPE : PORTTYPE22FDX
+            }
             value={predictionInput?.port}
           />
         </div>
 
-        {
-          predictionInput?.tech === "12LPP" && <>
+        {predictionInput?.tech === "12LPP" && (
+          <>
             <div className="mb-4">
               <Label>HD_or_HS</Label>
               <SelectInput
@@ -129,9 +171,14 @@ export default function MemoryPredictionInputs({
                 id="banks"
                 name="banks"
                 type="number"
-                error={(predictionInput?.banks > 16 || predictionInput?.banks < 1)}
-                helperText={(predictionInput?.banks > 16 || predictionInput?.banks < 1) ?
-                  'Number must be between 1 and 16' : ""}
+                error={
+                  predictionInput?.banks > 16 || predictionInput?.banks < 1
+                }
+                helperText={
+                  predictionInput?.banks > 16 || predictionInput?.banks < 1
+                    ? "Number must be between 1 and 16"
+                    : ""
+                }
                 value={predictionInput?.banks || ""}
                 onChange={handleOnChange}
               />
@@ -143,16 +190,19 @@ export default function MemoryPredictionInputs({
                 fullWidth
                 id="mux"
                 name="mux"
-                error={(predictionInput?.mux > 16 || predictionInput?.mux < 1)}
-                helperText={(predictionInput?.mux > 16 || predictionInput?.mux < 1) ?
-                  'Number must be between 1 and 16' : ""}
+                error={predictionInput?.mux > 16 || predictionInput?.mux < 1}
+                helperText={
+                  predictionInput?.mux > 16 || predictionInput?.mux < 1
+                    ? "Number must be between 1 and 16"
+                    : ""
+                }
                 type="number"
                 value={predictionInput?.mux || ""}
                 onChange={handleOnChange}
               />
             </div>
           </>
-        }
+        )}
 
         <div className="mb-4">
           <Label>VDDPE</Label>
@@ -177,7 +227,6 @@ export default function MemoryPredictionInputs({
             onChange={handleOnChange}
           />
         </div>
-
       </div>
 
       <div className="flex w-full items-center  justify-center gap-6 mt-5">

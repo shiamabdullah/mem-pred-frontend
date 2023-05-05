@@ -2,15 +2,20 @@ import axios from "axios";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { resetLogicInput, selectLogicInput, updateLogicInput, updateLogicOutput } from "../../../redux/reducer/logicSlice";
+import {
+  resetLogicInput,
+  selectLogicInput,
+  updateLogicInput,
+  updateLogicOutput,
+} from "../../../redux/reducer/logicSlice";
 import LogicPredictionInputs from "./logic-prediction-input";
 
 const LogicPrediction = () => {
-  const logicDefaultInput = useSelector(selectLogicInput)
+  const logicDefaultInput = useSelector(selectLogicInput);
   const [predictions, setPredictions] = useState({});
   const [predictionInput, setPredictionInput] = useState(logicDefaultInput);
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const handleOnChange = (e) => {
     setPredictionInput((prev) => {
@@ -22,21 +27,20 @@ const LogicPrediction = () => {
 
   const postPrediction = (payload) => {
     setLoading(true);
-    const url = `${process.env.REACT_APP_BASE_URL}/api/predict/`;
+    const url = `${process.env.REACT_APP_BASE_URL}/api/logic_predict_post/`;
     axios
       .post(url, payload)
       .then((response) => {
         if (response.data?.result?.length > 0) {
-          dispatch(updateLogicOutput(response.data.result[0]))
-        };
+          dispatch(updateLogicOutput(response.data.result[0]));
+        }
         setPredictions(response.data);
         setLoading(false);
       })
       .catch((error) => {
         setLoading(false);
-        console.log(error.message)
-      }
-      );
+        console.log(error.message);
+      });
     // .finally(() => );
   };
 
@@ -44,11 +48,11 @@ const LogicPrediction = () => {
   const handleReset = () => {
     setPredictionInput({});
     setLoading(false);
-    dispatch(resetLogicInput)
+    dispatch(resetLogicInput);
   };
 
   const onSubmit = async () => {
-    dispatch(updateLogicInput(predictionInput))
+    dispatch(updateLogicInput(predictionInput));
     // Filtered Values in a array
     if (
       !predictionInput.frequency ||
@@ -60,8 +64,10 @@ const LogicPrediction = () => {
       !predictionInput.bias
     ) {
       toast.error(
-        `${!predictionInput.frequency ? "Frequency," : ""} ${!predictionInput.vnom ? "Vnom," : ""
-        } ${!predictionInput.track ? "Track," : ""} ${!predictionInput.design ? "Design," : ""
+        `${!predictionInput.frequency ? "Frequency," : ""} ${
+          !predictionInput.vnom ? "Vnom," : ""
+        } ${!predictionInput.track ? "Track," : ""} ${
+          !predictionInput.design ? "Design," : ""
         } ${!predictionInput.beol ? "Beol," : ""} 
         ${!predictionInput.process ? "Process," : ""}
         ${!predictionInput.bias ? "BIAS," : ""}
@@ -85,9 +91,7 @@ const LogicPrediction = () => {
         : undefined,
       vnom: predictionInput.vnom ? predictionInput.vnom : undefined,
 
-      track: predictionInput.track
-        ? predictionInput.track
-        : undefined,
+      track: predictionInput.track ? predictionInput.track : undefined,
       design: predictionInput.design ? predictionInput.design : undefined,
       beol: predictionInput.beol ? predictionInput.beol : undefined,
       process: predictionInput.process ? predictionInput.process : undefined,
