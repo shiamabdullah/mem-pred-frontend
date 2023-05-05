@@ -1,14 +1,23 @@
 import { Button, TextField } from "@mui/material";
-import { BEOLTYPE, BIASTYPE, DESIGNTYPE, PROCESSTYPE, TRACKTYPE } from "../../../utils/data/logic-prediction-data";
+import {
+  BEOLTYPE,
+  BIASTYPE,
+  DESIGNTYPE,
+  PROCESSTYPE,
+  TRACKTYPE,
+} from "../../../utils/data/logic-prediction-data";
 import Label from "../../helper-component/label";
 import Loader from "../../helper-component/loader";
 import SelectInput from "../../helper-component/select-input";
 
-
 export default function LogicPredictionInputs({
-  onSubmit, handleOnChange, loading, handleReset, predictionInput
+  onSubmit,
+  handleOnChange,
+  loading,
+  handleReset,
+  predictionInput,
 }) {
-
+  console.log({ predictionInput });
   return (
     <div className="w-full">
       <div className="grid grid-cols-3 gap-6">
@@ -17,6 +26,7 @@ export default function LogicPredictionInputs({
           <SelectInput
             name="design"
             options={DESIGNTYPE}
+            predictionInput={predictionInput}
             value={predictionInput?.design}
             handleOnChange={handleOnChange}
           />
@@ -58,6 +68,7 @@ export default function LogicPredictionInputs({
             handleOnChange={handleOnChange}
             options={TRACKTYPE}
             value={predictionInput?.track}
+            predictionInput={predictionInput}
           />
         </div>
 
@@ -70,6 +81,7 @@ export default function LogicPredictionInputs({
             options={BEOLTYPE}
             defaultValue={""}
             value={predictionInput?.beol}
+            predictionInput={predictionInput}
           />
         </div>
         <div className="mb-4">
@@ -81,6 +93,7 @@ export default function LogicPredictionInputs({
             options={PROCESSTYPE}
             defaultValue={""}
             value={predictionInput?.process}
+            predictionInput={predictionInput}
           />
         </div>
 
@@ -93,9 +106,9 @@ export default function LogicPredictionInputs({
             options={BIASTYPE}
             defaultValue={""}
             value={predictionInput?.bias}
+            predictionInput={predictionInput}
           />
         </div>
-
       </div>
       <div className="flex w-full items-center justify-center gap-6 mt-5">
         <Button
@@ -118,4 +131,3 @@ export default function LogicPredictionInputs({
     </div>
   );
 }
-
