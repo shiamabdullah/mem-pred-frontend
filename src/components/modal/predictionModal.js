@@ -1,16 +1,16 @@
 // @flow strict
 
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import * as React from "react";
 import { CSVLink } from "react-csv";
+import { MdOutlineFileDownload } from "react-icons/md";
 import generateCompareData from "../../utils/helper/generateCompareData";
 import CompareTable from "./compare-table";
 
 function PredictionModal({ selectedData }) {
   const selectedDataKeys = Object.keys(selectedData);
-
   const csvData = generateCompareData(selectedData);
-  console.log({ csvData });
+
   return (
     <div>
       <Typography sx={{ mb: 3 }} align="center" variant="h5" component="h5">
@@ -24,13 +24,34 @@ function PredictionModal({ selectedData }) {
           <span>Compare Prediction</span>
         )}
       </Typography>
-      <div className="flex justify-end mb-3">
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          paddingBottom: "1rem",
+        }}
+      >
         <CSVLink
           data={csvData}
-          filename="compare_data.csv"
-          className="py-2 px-4 bg-blue-500 hover:bg-blue-600 rounded-md text-white font-medium transition-all duration-200"
+          filename={`compare_data_${new Date()
+            .toISOString()
+            .replace(/[-T:\.Z]/g, "")}.csv`}
         >
-          Download CSV
+          <Button
+            variant="contained"
+            style={{
+              width: "8rem",
+              textAlign: "center",
+              boxShadow:
+                "0 1px 2px rgba(0,0,0,0.16), 0 1px 2px rgba(0,0,0,0.23)",
+              padding: "0.5rem 1rem",
+              borderRadius: "0.375rem",
+              backgroundColor: "#F67E4C",
+              color: "white",
+            }}
+          >
+            Download
+          </Button>
         </CSVLink>
       </div>
       <CompareTable selectedData={selectedData} />
