@@ -8,34 +8,37 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import * as React from "react";
 
-const rows = [
-  "Comp",
-  "Type",
-  "Words",
-  "Bits",
-  "Area_umA2",
-  "tacc_ns_ffg",
-  "tcycle_ns_ffg",
-  "tsetup_ns_ffg",
-  "thold_ns_ffg",
-  "read_power_pj_ffg",
-  "write_power_pj_ffg",
-  "tacc_ns_ssg",
-  "tcycle_ns_ssg",
-  "tsetup_ns_ssg",
-  "thold_ns_ssg",
-  "read_power_pj_ssg",
-  "write_power_pj_ssg",
-  "tacc_ns_tt",
-  "tcycle_ns_tt",
-  "tsetup_ns_tt",
-  "thold_ns_tt",
-  "read_power_pj_tt",
-  "write_power_pj_tt",
-  "leakage_power_mw_ffg",
-  "leakage_power_mw_ssg",
-  "leakage_power_mw_tt",
-];
+// const rows = [
+//   "Vendor",
+//   "Tech",
+//   "Mem_Type",
+//   "Port",
+//   "HD_or_HS",
+//   "Vt_Type",
+//   "Words",
+//   "Bits",
+//   "Mux",
+//   "Banks",
+//   "Area_umA2",
+//   "read_power_pj_ffg",
+//   "read_power_pj_ssg",
+//   "read_power_pj_tt",
+//   "tacc_ns_ffg",
+//   "tacc_ns_ssg",
+//   "tacc_ns_tt",
+//   "tcycle_ns_ffg",
+//   "tcycle_ns_ssg",
+//   "tcycle_ns_tt",
+//   "thold_ns_ffg",
+//   "thold_ns_ssg",
+//   "thold_ns_tt",
+//   "tsetup_ns_ffg",
+//   "tsetup_ns_ssg",
+//   "tsetup_ns_tt",
+//   "write_power_pj_ffg",
+//   "write_power_pj_ssg",
+//   "write_power_pj_tt",
+// ];
 
 function getDifference(num1, num2) {
   var difference = num1 - num2;
@@ -78,7 +81,7 @@ function getRandomColor() {
 export default function CompareTable({ selectedData }) {
   const selectedDataKeys = Object.keys(selectedData);
 
-  // console.log(selectedDataKeys)
+  const rows = Object.keys(JSON.parse(selectedData[selectedDataKeys[0]]));
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -92,7 +95,7 @@ export default function CompareTable({ selectedData }) {
         >
           <TableHead>
             <TableRow>
-              <TableCell style={{ minWidth: 180 }}>Predictions</TableCell>
+              <TableCell style={{ minWidth: 180 }}>Features</TableCell>
               {selectedDataKeys.length > 0 &&
                 selectedDataKeys.map((column, index) => (
                   <TableCell
