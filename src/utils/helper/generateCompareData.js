@@ -1,3 +1,15 @@
+function getDifference(num1, num2) {
+  var difference = num1 - num2;
+  var average = num1 + num2 / 2;
+  var percentageDifference = (difference / average) * 100;
+
+  if (Number.isInteger(percentageDifference)) {
+    return percentageDifference;
+  }
+
+  return percentageDifference.toFixed(2);
+}
+
 export default function generateCompareData(selectedData) {
   const selectedDataKeys = Object.keys(selectedData);
   const numSelectedDataKeys = selectedDataKeys.length;
@@ -32,7 +44,7 @@ export default function generateCompareData(selectedData) {
       //   const featureAverage = featureTotal / numSelectedDataKeys;
       const difference =
         typeof rowData[1] === "number" && typeof rowData[2] === "number"
-          ? rowData[1] - rowData[2]
+          ? getDifference(rowData[1] - rowData[2])
           : "-";
       rowData.push(difference);
       dataRows.push(rowData);
