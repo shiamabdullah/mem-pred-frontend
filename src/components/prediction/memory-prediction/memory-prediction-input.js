@@ -1,4 +1,5 @@
 import { Autocomplete, Button, TextField } from "@mui/material";
+import InputAdornment from '@mui/material/InputAdornment';
 import {
   BITS,
   HDHSTYPE,
@@ -16,9 +17,11 @@ import {
   VENDOR22FDX,
   WORDS23FDX,
 } from "../../../utils/data/memory-prediction-data-22fdx";
+import LabelWithOptions from "../../helper-component/labe-with-options";
 import Label from "../../helper-component/label";
 import Loader from "../../helper-component/loader";
 import SelectInput from "../../helper-component/select-input";
+
 
 export default function MemoryPredictionInputs({
   onSubmit,
@@ -27,10 +30,12 @@ export default function MemoryPredictionInputs({
   handleReset,
   predictionInput,
   handleChangeAutoComplete,
+  setPredictionInput
 }) {
+  // console.log(predictionInput)
   return (
     <div className="w-full">
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid sm:grid-cols-3 sm:gap-6">
         <div className="mb-4">
           <Label>Tech</Label>
           <SelectInput
@@ -165,41 +170,108 @@ export default function MemoryPredictionInputs({
             </div>
 
             <div className="mb-4">
-              <Label>Banks</Label>
-              <TextField
-                fullWidth
-                id="banks"
-                name="banks"
-                type="number"
-                error={
-                  predictionInput?.banks > 16 || predictionInput?.banks < 1
-                }
-                helperText={
-                  predictionInput?.banks > 16 || predictionInput?.banks < 1
-                    ? "Number must be between 1 and 16"
-                    : ""
-                }
-                value={predictionInput?.banks || ""}
-                onChange={handleOnChange}
-              />
+              <LabelWithOptions
+                defaultValue={predictionInput?.banksType}
+                label="Banks"
+                onChange={(value) => setPredictionInput((prev) => {
+                  const temp = JSON.parse(JSON.stringify(prev));
+                  temp['banksType'] = value;
+                  return temp;
+                })} />
+              {
+                predictionInput?.banksType === 'specific' ?
+                  <TextField
+                    fullWidth
+                    id="banks"
+                    name="banks"
+                    type="number"
+                    error={
+                      predictionInput?.banks > 16 || predictionInput?.banks < 1
+                    }
+                    helperText={
+                      predictionInput?.banks > 16 || predictionInput?.banks < 1
+                        ? "Number must be between 1 and 16"
+                        : ""
+                    }
+                    value={predictionInput?.banks || ""}
+                    onChange={handleOnChange}
+                  /> :
+                  <div>
+                    <TextField
+                      sx={{ mx: 1, width: '12ch' }}
+                      type="number"
+                      name="banksMin"
+                      onChange={handleOnChange}
+                      InputProps={{
+                        startAdornment:
+                          <InputAdornment position="start">Min :</InputAdornment>,
+                      }}
+                    />
+                    <TextField
+                      sx={{ mx: 1, width: '12ch' }}
+                      type="number"
+                      name="banksMax"
+                      onChange={handleOnChange}
+                      InputProps={{
+                        startAdornment:
+                          <InputAdornment position="start">Max :</InputAdornment>,
+                      }}
+                    />
+                  </div>
+              }
             </div>
 
             <div className="mb-4">
-              <Label>Mux</Label>
-              <TextField
-                fullWidth
-                id="mux"
-                name="mux"
-                error={predictionInput?.mux > 16 || predictionInput?.mux < 1}
-                helperText={
-                  predictionInput?.mux > 16 || predictionInput?.mux < 1
-                    ? "Number must be between 1 and 16"
-                    : ""
-                }
-                type="number"
-                value={predictionInput?.mux || ""}
-                onChange={handleOnChange}
+              <LabelWithOptions
+                defaultValue={predictionInput?.muxType}
+                label="Mux"
+                onChange={(value) => setPredictionInput((prev) => {
+                  const temp = JSON.parse(JSON.stringify(prev));
+                  temp['muxType'] = value;
+                  return temp;
+                })}
               />
+              {
+                predictionInput?.muxType === 'specific' ?
+
+                  <TextField
+                    fullWidth
+                    id="mux"
+                    name="mux"
+                    error={predictionInput?.mux > 16 || predictionInput?.mux < 1}
+                    helperText={
+                      predictionInput?.mux > 16 || predictionInput?.mux < 1
+                        ? "Number must be between 1 and 16"
+                        : ""
+                    }
+                    type="number"
+                    value={predictionInput?.mux || ""}
+                    onChange={handleOnChange}
+                  />
+                  :
+                  <div>
+                    <TextField
+                      sx={{ mx: 1, width: '12ch' }}
+                      type="number"
+                      name="muxMin"
+                      onChange={handleOnChange}
+                      InputProps={{
+                        startAdornment:
+                          <InputAdornment position="start">Min :</InputAdornment>,
+                      }}
+                    />
+                    <TextField
+                      sx={{ mx: 1, width: '12ch' }}
+                      type="number"
+                      name="muxMax"
+                      onChange={handleOnChange}
+                      InputProps={{
+                        startAdornment:
+                          <InputAdornment position="start">Max :</InputAdornment>,
+                      }}
+                    />
+                  </div>
+              }
             </div>
           </>
         )}

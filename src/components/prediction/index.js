@@ -2,12 +2,12 @@
 
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
 import * as React from 'react';
-import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
+import { IoMdArrowDropdown } from 'react-icons/io';
 import { useSelector } from 'react-redux';
 import HomeLayout from '../../layout/home-layout';
 import { selectCurrentState } from '../../redux/reducer/layoutSlice';
 import { selectLogicOutput } from '../../redux/reducer/logicSlice';
-import { selectMemoryOutput } from '../../redux/reducer/memorySlice';
+import { selectMemoryOutput, selectMultipleOutput } from '../../redux/reducer/memorySlice';
 import PredictionInput from './prediction-input';
 import PredictionOutput from './prediction-output';
 
@@ -16,6 +16,9 @@ function Prediction() {
   const logicOutput = useSelector(selectLogicOutput);
   const memoryOutput = useSelector(selectMemoryOutput);
   const currentState = useSelector(selectCurrentState);
+  const multipleOutput = useSelector(selectMultipleOutput);
+
+  console.log(multipleOutput)
 
   function isNotEmpty(obj) {
     return Object.keys(obj).length > 0;
@@ -26,7 +29,7 @@ function Prediction() {
       <HomeLayout>
         {
           (
-            (isNotEmpty(memoryOutput) && currentState === 'memory')
+            ((isNotEmpty(memoryOutput) || multipleOutput.length > 0) && currentState === 'memory')
             || (isNotEmpty(logicOutput) && currentState === 'logic')) ?
             <Accordion expanded={isExpanded} onChange={(e, f) => setExpanded(f)}>
               <AccordionSummary

@@ -6,7 +6,7 @@ import { MdOutlineFileDownload, MdSave } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentState, selectLoading } from '../../redux/reducer/layoutSlice';
 import { selectLogicOutput } from '../../redux/reducer/logicSlice';
-import { selectMemoryOutput } from '../../redux/reducer/memorySlice';
+import { selectMemoryOutput, selectMultipleOutput } from '../../redux/reducer/memorySlice';
 import { updateSaveResult } from '../../redux/reducer/resultSlice';
 import ChartsContainer from '../charts/ChartsContainer';
 import BuildOutputResult from './output-result';
@@ -17,6 +17,8 @@ function PredictionOutput() {
   const logicOutput = useSelector(selectLogicOutput);
   const memoryOutput = useSelector(selectMemoryOutput);
   const loading = useSelector(selectLoading);
+  const multipleOutput = useSelector(selectMultipleOutput);
+
 
 
   const output = currentState === 'logic' ? logicOutput || {} : memoryOutput || {};
