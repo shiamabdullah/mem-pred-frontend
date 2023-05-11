@@ -64,7 +64,6 @@ function MultipleOutput() {
               >
                 <MdOutlineFileDownload className="text-2xl text-[#F24E1E]" />
               </CSVLink>
-              CSV
             </Button>
           </Tooltip>
         </div>
