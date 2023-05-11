@@ -2,7 +2,7 @@ import { Divider, ListItem, ListItemText } from "@mui/material";
 import React from "react";
 
 const BuildOutputResult = ({ data }) => {
-  console.log(data)
+  // console.log(data)
   
   const properties = Object.entries(data);
 

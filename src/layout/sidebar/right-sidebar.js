@@ -10,14 +10,15 @@ import * as React from "react";
 import { useState } from "react";
 import { IoMdCheckboxOutline } from "react-icons/io";
 import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
+import { RxCross2 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import PredictionModal from "../../components/modal/predictionModal";
+import { selectCurrentState } from "../../redux/reducer/layoutSlice";
 import {
   removeSavedResult,
-  selectOutputResult,
+  selectMultipleSavedResult,
+  selectSavedResult,
 } from "../../redux/reducer/resultSlice";
-import { selectCurrentState } from "../../redux/reducer/layoutSlice";
-import { RxCross2 } from "react-icons/rx";
 
 const modalStyle = {
   position: "absolute",
@@ -35,8 +36,11 @@ function RightSidebar() {
   const [isOpenModal, setOpenModal] = useState(false);
   const [selectedData, setSelectedData] = useState({});
   const currentInput = useSelector(selectCurrentState);
-  const savedResult = useSelector(selectOutputResult);
+  const savedResult = useSelector(selectSavedResult);
+  const savedMultipleResult = useSelector(selectMultipleSavedResult);
   const dispatch = useDispatch();
+
+  console.log(savedMultipleResult, savedResult)
 
   // Update checkbox data on change
   const handleChangeCheckBox = (e) => {

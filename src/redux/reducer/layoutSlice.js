@@ -33,7 +33,6 @@ export const { updateCurrentState, updateOutputResult, updateLoading } = layoutS
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 export const selectCurrentState = (state) => state.layout.currentState;
-export const selectOutputResult = (state) => state.layout.outputResult;
 export const selectLoading = (state) => state.layout.loading;
 
 export default layoutSlice.reducer;
