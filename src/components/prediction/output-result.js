@@ -2,6 +2,8 @@ import { Divider, ListItem, ListItemText } from "@mui/material";
 import React from "react";
 
 const BuildOutputResult = ({ data }) => {
+  console.log(data)
+  
   const properties = Object.entries(data);
 
   const propertyRows = properties.map(([key, value], i) => {

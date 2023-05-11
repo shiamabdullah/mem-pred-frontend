@@ -8,6 +8,7 @@ import HomeLayout from '../../layout/home-layout';
 import { selectCurrentState } from '../../redux/reducer/layoutSlice';
 import { selectLogicOutput } from '../../redux/reducer/logicSlice';
 import { selectMemoryOutput, selectMultipleOutput } from '../../redux/reducer/memorySlice';
+import MultipleOutput from './multiple-output';
 import PredictionInput from './prediction-input';
 import PredictionOutput from './prediction-output';
 
@@ -18,7 +19,6 @@ function Prediction() {
   const currentState = useSelector(selectCurrentState);
   const multipleOutput = useSelector(selectMultipleOutput);
 
-  console.log(multipleOutput)
 
   function isNotEmpty(obj) {
     return Object.keys(obj).length > 0;
@@ -45,8 +45,10 @@ function Prediction() {
             <PredictionInput />
         }
         {
-          ((isNotEmpty(memoryOutput) && currentState === 'memory')
-            || (isNotEmpty(logicOutput) && currentState === 'logic')) && <PredictionOutput />
+          (currentState === 'memory' && multipleOutput.length > 0) ? <MultipleOutput data={multipleOutput} /> :
+            ((isNotEmpty(memoryOutput) && currentState === 'memory')
+              || (isNotEmpty(logicOutput) && currentState === 'logic'))
+            && <PredictionOutput />
         }
       </HomeLayout>
     </>
