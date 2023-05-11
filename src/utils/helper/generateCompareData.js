@@ -13,7 +13,7 @@ function getDifference(num1, num2) {
 export default function generateCompareData(selectedData) {
   const selectedDataKeys = Object.keys(selectedData);
   const numSelectedDataKeys = selectedDataKeys.length;
-  console.log({ numSelectedDataKeys });
+  console.log(selectedDataKeys);
   const features = Object.keys(JSON.parse(selectedData[selectedDataKeys[1]]));
   const colNames = [
     "Features",
@@ -44,7 +44,7 @@ export default function generateCompareData(selectedData) {
       //   const featureAverage = featureTotal / numSelectedDataKeys;
       const difference =
         typeof rowData[1] === "number" && typeof rowData[2] === "number"
-          ? getDifference(rowData[1] - rowData[2])
+          ? getDifference(rowData[1], rowData[2])
           : "-";
       rowData.push(difference);
       dataRows.push(rowData);

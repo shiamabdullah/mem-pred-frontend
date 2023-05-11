@@ -3,11 +3,11 @@
 import { Button, Typography } from "@mui/material";
 import * as React from "react";
 import { CSVLink } from "react-csv";
-import { MdOutlineFileDownload } from "react-icons/md";
 import generateCompareData from "../../utils/helper/generateCompareData";
 import CompareTable from "./compare-table";
 
 function PredictionModal({ selectedData }) {
+  // console.log(selectedData)
   const selectedDataKeys = Object.keys(selectedData);
   const csvData = generateCompareData(selectedData);
 
