@@ -28,12 +28,14 @@ export const memorySlice = createSlice({
 
     updateMemoryOutput: (state, action) => {
       state.memoryOutput = action.payload;
+      state.multipleOutput = initialState.multipleOutput;
     },
 
     updateMultipleOutput: (state, action) => {
       state.multipleOutput = action.payload;
-    }
-  },
+      state.memoryOutput = initialState.memoryInput;
+    },
+  }
 });
 
 export const {

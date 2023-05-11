@@ -8,7 +8,7 @@ import MemoryPredictionInputs from "./memory-prediction-input";
 
 const MemoryPrediction = () => {
   const memoryInput = useSelector(selectMemoryInput);
-  const [predictionInput, setPredictionInput] = useState(memoryInput);
+  const [inputData, setInputData] = useState(memoryInput);
   const loading = useSelector(selectLoading);
   const dispatch = useDispatch();
 
@@ -17,8 +17,8 @@ const MemoryPrediction = () => {
     if (e.target.name === "tech") {
       handleReset()
     }
-    console.log(e.target.name)
-    setPredictionInput((prev) => {
+    // console.log(e.target.name)
+    setInputData((prev) => {
       const temp = JSON.parse(JSON.stringify(prev));
       temp[e.target?.name] = e.target?.value;
       return temp;
@@ -27,7 +27,7 @@ const MemoryPrediction = () => {
 
   // Define handleChangeAutoComplete function
   const handleChangeAutoComplete = (value, name) => {
-    setPredictionInput((prev) => {
+    setInputData((prev) => {
       const temp = JSON.parse(JSON.stringify(prev));
       temp[name] = value;
       return temp;
@@ -36,7 +36,7 @@ const MemoryPrediction = () => {
 
   // Function to send data payload to a server endpoint for prediction
   const postPrediction = (payload, url) => {
-    console.log(payload)
+    // console.log(payload)
     axios
       .post(url, payload)
       .then((response) => {
@@ -52,22 +52,22 @@ const MemoryPrediction = () => {
   };
 
   // Error for required fields  
-  const validatePredictionInput = (predictionInput) => {
-    let requiredFields = predictionInput.tech === "12LPP" ?
+  const validateRequiredInput = (inputData) => {
+    let requiredFields = inputData.tech === "12LPP" ?
       ["vendor", "tech", "mem_type", "port", "hd_or_hs", "vt_type", "words", "bits"] :
       ["vendor", "tech", "mem_type", "port", "words", "bits"];
 
-    if (predictionInput.banksType === 'specific' && predictionInput.muxType === 'specific') {
+    if (inputData.banksType === 'specific' && inputData.muxType === 'specific') {
       requiredFields.push('banks', 'mux');
-    } else if (predictionInput.banksType === 'specific' && predictionInput.muxType === 'range') {
+    } else if (inputData.banksType === 'specific' && inputData.muxType === 'range') {
       requiredFields.push('banks', 'muxMin', 'muxMax');
-    } else if (predictionInput.muxType === 'specific' && predictionInput.banksType === 'range') {
+    } else if (inputData.muxType === 'specific' && inputData.banksType === 'range') {
       requiredFields.push('banksMin', 'banksMax', 'mux');
     } else {
       requiredFields.push('banksMin', 'banksMax', 'muxMin', 'muxMax');
     }
 
-    const missingFields = requiredFields.filter((field) => !predictionInput[field]);
+    const missingFields = requiredFields.filter((field) => !inputData[field]);
     return missingFields.length === 0
       ? null
       : `${missingFields.join(", ")} field${missingFields.length > 1 ? "s" : ""} are required`;
@@ -77,56 +77,56 @@ const MemoryPrediction = () => {
   const sendMultipleRequest = () => {
     const payload = []
 
-    if (predictionInput?.banksType === 'range' && predictionInput?.muxType === 'range') {
-      for (let i = predictionInput?.banksMin; i <= predictionInput?.banksMax; i++) {
-        for (let j = predictionInput?.muxMin; j <= predictionInput?.muxMax; j++) {
+    if (inputData?.banksType === 'range' && inputData?.muxType === 'range') {
+      for (let i = inputData?.banksMin; i <= inputData?.banksMax; i++) {
+        for (let j = inputData?.muxMin; j <= inputData?.muxMax; j++) {
           payload.push({
-            vendor: predictionInput?.vendor,
-            tech: predictionInput?.tech,
-            mem_type: predictionInput?.mem_type,
-            port: predictionInput?.port,
-            hd_or_hs: predictionInput?.hd_or_hs,
-            vt_type: predictionInput?.vt_type,
-            words: predictionInput.words,
-            bits: predictionInput.bits,
+            vendor: inputData?.vendor,
+            tech: inputData?.tech,
+            mem_type: inputData?.mem_type,
+            port: inputData?.port,
+            hd_or_hs: inputData?.hd_or_hs,
+            vt_type: inputData?.vt_type,
+            words: inputData.words,
+            bits: inputData.bits,
             mux: j,
             banks: i,
           })
         }
       }
-    } else if (predictionInput?.banksType === 'range' && predictionInput?.muxType === 'specific') {
-      for (let i = predictionInput?.banksMin; i <= predictionInput?.banksMax; i++) {
+    } else if (inputData?.banksType === 'range' && inputData?.muxType === 'specific') {
+      for (let i = inputData?.banksMin; i <= inputData?.banksMax; i++) {
         payload.push({
-          vendor: predictionInput?.vendor,
-          tech: predictionInput?.tech,
-          mem_type: predictionInput?.mem_type,
-          port: predictionInput?.port,
-          hd_or_hs: predictionInput?.hd_or_hs,
-          vt_type: predictionInput?.vt_type,
-          words: predictionInput.words,
-          bits: predictionInput.bits,
-          mux: predictionInput?.mux,
+          vendor: inputData?.vendor,
+          tech: inputData?.tech,
+          mem_type: inputData?.mem_type,
+          port: inputData?.port,
+          hd_or_hs: inputData?.hd_or_hs,
+          vt_type: inputData?.vt_type,
+          words: inputData.words,
+          bits: inputData.bits,
+          mux: inputData?.mux,
           banks: i,
         })
       }
     } else {
-      for (let i = predictionInput?.muxMin; i <= predictionInput?.muxMax; i++) {
+      for (let i = inputData?.muxMin; i <= inputData?.muxMax; i++) {
         payload.push({
-          vendor: predictionInput?.vendor,
-          tech: predictionInput?.tech,
-          mem_type: predictionInput?.mem_type,
-          port: predictionInput?.port,
-          hd_or_hs: predictionInput?.hd_or_hs,
-          vt_type: predictionInput?.vt_type,
-          words: predictionInput.words,
-          bits: predictionInput.bits,
+          vendor: inputData?.vendor,
+          tech: inputData?.tech,
+          mem_type: inputData?.mem_type,
+          port: inputData?.port,
+          hd_or_hs: inputData?.hd_or_hs,
+          vt_type: inputData?.vt_type,
+          words: inputData.words,
+          bits: inputData.bits,
           mux: i,
-          banks: predictionInput?.banks,
+          banks: inputData?.banks,
         })
       }
     }
 
-    // console.log(payload)
+    // console.log(payload, inputData)
 
     const url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-new-multi/`
     axios
@@ -146,48 +146,73 @@ const MemoryPrediction = () => {
     // dispatch(updateLoading(false));
   }
 
+  const rangeValidationCheck = (inputData) => {
+    if (inputData?.banksType === 'specific' &&
+      (parseInt(inputData?.banks) > 16 || parseInt(inputData?.banks) < 1)) {
+      return ('Banks must be between 1 and 16!')
+    } else if (inputData?.banksType === 'range' &&
+      (parseInt(inputData?.banksMax) < parseInt(inputData?.banksMin)
+        || parseInt(inputData?.banksMax) > 16
+        || parseInt(inputData?.banksMin) < 1)) {
+      return ('Banks must be between 1 and 16!')
+    } else if (inputData?.muxType === 'specific' && (parseInt(inputData?.mux) > 16 || parseInt(inputData?.mux) < 1)) {
+      return ('Mux must be between 1 and 16!')
+    } else if (inputData?.muxType === 'range' && (parseInt(inputData?.muxMax) < parseInt(inputData?.muxMin)
+      || parseInt(inputData?.muxMax) > 16
+      || parseInt(inputData?.muxMin) < 1)) {
+      return 'Mux must be between 1 and 16!'
+    } else {
+      return false
+    }
+  }
+
 
   // Define onSubmit function
   const onSubmit = async () => {
 
-    dispatch(updateMemoryInput(predictionInput))
-    const validationError = validatePredictionInput(predictionInput);
+    dispatch(updateMemoryInput(inputData))
+    const validationError = validateRequiredInput(inputData);
 
     if (validationError) {
       toast.error(validationError);
       return;
     }
+    const rangeError = rangeValidationCheck(inputData);
 
+    if (rangeError) {
+      toast.error(rangeError);
+      return;
+    }
     dispatch(updateLoading(true))
 
-    if (predictionInput?.banksType === "specific" && predictionInput?.muxType === 'specific') {
+    if (inputData?.banksType === "specific" && inputData?.muxType === 'specific') {
       let url;
-      predictionInput?.tech === "12LPP"
+      inputData?.tech === "12LPP"
         ? (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-new/`)
         : (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory/`);
 
-      const payload = predictionInput?.tech === "12LPP" ? {
-        vendor: predictionInput?.vendor,
-        tech: predictionInput?.tech,
-        mem_type: predictionInput?.mem_type,
-        port: predictionInput?.port,
-        hd_or_hs: predictionInput?.hd_or_hs,
-        vt_type: predictionInput?.vt_type,
-        words: predictionInput.words,
-        bits: predictionInput.bits,
-        mux: predictionInput.mux,
-        banks: predictionInput.banks,
+      const payload = inputData?.tech === "12LPP" ? {
+        vendor: inputData?.vendor,
+        tech: inputData?.tech,
+        mem_type: inputData?.mem_type,
+        port: inputData?.port,
+        hd_or_hs: inputData?.hd_or_hs,
+        vt_type: inputData?.vt_type,
+        words: inputData.words,
+        bits: inputData.bits,
+        mux: inputData.mux,
+        banks: inputData.banks,
       } : {
         // ...predictionInput,
-        comp: predictionInput.vendor,
+        comp: inputData.vendor,
         type:
-          predictionInput.tech +
+          inputData.tech +
           "_" +
-          predictionInput.mem_type +
+          inputData.mem_type +
           "_" +
-          predictionInput.port,
-        words: predictionInput.words,
-        bits: predictionInput.bits,
+          inputData.port,
+        words: inputData.words,
+        bits: inputData.bits,
       }
 
       postPrediction(payload, url);
@@ -198,7 +223,7 @@ const MemoryPrediction = () => {
 
   // Define handleReset function
   const handleReset = () => {
-    setPredictionInput({
+    setInputData({
       model: 'basic',
       tech: '12LPP',
       banksType: 'specific',
@@ -215,9 +240,9 @@ const MemoryPrediction = () => {
         handleOnChange={handleOnChange}
         onSubmit={onSubmit}
         handleReset={handleReset}
-        predictionInput={predictionInput}
+        predictionInput={inputData}
         handleChangeAutoComplete={handleChangeAutoComplete}
-        setPredictionInput={setPredictionInput}
+        setPredictionInput={setInputData}
       />
     </>
   );
