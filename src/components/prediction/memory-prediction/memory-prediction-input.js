@@ -185,14 +185,6 @@ export default function MemoryPredictionInputs({
                     id="banks"
                     name="banks"
                     type="number"
-                    error={
-                      predictionInput?.banks > 16 || predictionInput?.banks < 1
-                    }
-                    helperText={
-                      predictionInput?.banks > 16 || predictionInput?.banks < 1
-                        ? "Number must be between 1 and 16"
-                        : ""
-                    }
                     value={predictionInput?.banks || ""}
                     onChange={handleOnChange}
                   /> :
@@ -202,6 +194,7 @@ export default function MemoryPredictionInputs({
                       type="number"
                       name="banksMin"
                       onChange={handleOnChange}
+                      value={predictionInput?.banksMin || ""}
                       InputProps={{
                         startAdornment:
                           <InputAdornment position="start">Min :</InputAdornment>,
@@ -212,6 +205,7 @@ export default function MemoryPredictionInputs({
                       type="number"
                       name="banksMax"
                       onChange={handleOnChange}
+                      value={predictionInput?.banksMax || ""}
                       InputProps={{
                         startAdornment:
                           <InputAdornment position="start">Max :</InputAdornment>,
@@ -238,12 +232,6 @@ export default function MemoryPredictionInputs({
                     fullWidth
                     id="mux"
                     name="mux"
-                    error={predictionInput?.mux > 16 || predictionInput?.mux < 1}
-                    helperText={
-                      predictionInput?.mux > 16 || predictionInput?.mux < 1
-                        ? "Number must be between 1 and 16"
-                        : ""
-                    }
                     type="number"
                     value={predictionInput?.mux || ""}
                     onChange={handleOnChange}
@@ -255,6 +243,7 @@ export default function MemoryPredictionInputs({
                       type="number"
                       name="muxMin"
                       onChange={handleOnChange}
+                      value={predictionInput?.muxMin || ""}
                       InputProps={{
                         startAdornment:
                           <InputAdornment position="start">Min :</InputAdornment>,
@@ -265,6 +254,7 @@ export default function MemoryPredictionInputs({
                       type="number"
                       name="muxMax"
                       onChange={handleOnChange}
+                      value={predictionInput?.muxMax || ""}
                       InputProps={{
                         startAdornment:
                           <InputAdornment position="start">Max :</InputAdornment>,
