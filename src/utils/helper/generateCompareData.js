@@ -13,7 +13,7 @@ function getDifference(num1, num2) {
 export default function generateCompareData(selectedData) {
   const selectedDataKeys = Object.keys(selectedData);
   const numSelectedDataKeys = selectedDataKeys.length;
-  console.log({ numSelectedDataKeys });
+  console.log(selectedDataKeys);
   const features = Object.keys(JSON.parse(selectedData[selectedDataKeys[1]]));
   const colNames = [
     "Features",

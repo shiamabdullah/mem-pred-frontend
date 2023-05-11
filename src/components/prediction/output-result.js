@@ -2,9 +2,11 @@ import { Divider, ListItem, ListItemText } from "@mui/material";
 import React from "react";
 
 const BuildOutputResult = ({ data }) => {
-  console.log(data)
-  
+  // console.log(data)
+
   const properties = Object.entries(data);
+
+  const subTitle = (data?.Banks && data?.Mux) ? `(Banks - ${data?.Banks}, Mux - ${data?.Mux})` : ""
 
   const propertyRows = properties.map(([key, value], i) => {
     if (!Boolean(value)) {
@@ -31,7 +33,7 @@ const BuildOutputResult = ({ data }) => {
   return (
     <div className="px-4">
       <div className="mb-5">
-        <p className="text-xl px-5 text-[#753EFE] mb-1 font-medium">Predictions</p>
+        <p className="text-xl px-5 text-[#753EFE] mb-1 font-medium">Predictions {subTitle} </p>
         <Divider />
       </div>
 
