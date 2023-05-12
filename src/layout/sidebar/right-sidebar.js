@@ -12,7 +12,10 @@ import * as React from "react";
 import { useState } from "react";
 import { CSVLink } from "react-csv";
 import { IoMdCheckboxOutline } from "react-icons/io";
-import { MdOutlineCheckBoxOutlineBlank, MdOutlineFileDownload } from "react-icons/md";
+import {
+  MdOutlineCheckBoxOutlineBlank,
+  MdOutlineFileDownload,
+} from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import PredictionModal from "../../components/modal/predictionModal";
@@ -47,136 +50,134 @@ function RightSidebar() {
 
   const csvHeaders = [
     {
-      "label": "Vendor",
-      "key": "Vendor"
+      label: "Vendor",
+      key: "Vendor",
     },
     {
-      "label": "Tech",
-      "key": "Tech"
+      label: "Tech",
+      key: "Tech",
     },
     {
-      "label": "Mem_Type",
-      "key": "Mem_Type"
+      label: "Mem_Type",
+      key: "Mem_Type",
     },
     {
-      "label": "Port",
-      "key": "Port"
+      label: "Port",
+      key: "Port",
     },
     {
-      "label": "HD_or_HS",
-      "key": "HD_or_HS"
+      label: "HD_or_HS",
+      key: "HD_or_HS",
     },
     {
-      "label": "Vt_Type",
-      "key": "Vt_Type"
+      label: "Vt_Type",
+      key: "Vt_Type",
     },
     {
-      "label": "Words",
-      "key": "Words"
+      label: "Words",
+      key: "Words",
     },
     {
-      "label": "Bits",
-      "key": "Bits"
+      label: "Bits",
+      key: "Bits",
     },
     {
-      "label": "Mux",
-      "key": "Mux"
+      label: "Mux",
+      key: "Mux",
     },
     {
-      "label": "Banks",
-      "key": "Banks"
+      label: "Banks",
+      key: "Banks",
     },
     {
-      "label": "Area_umA2",
-      "key": "Area_umA2"
+      label: "Area_umA2",
+      key: "Area_umA2",
     },
     {
-      "label": "read_power_pj_ffg",
-      "key": "read_power_pj_ffg"
+      label: "read_power_pj_ffg",
+      key: "read_power_pj_ffg",
     },
     {
-      "label": "read_power_pj_ssg",
-      "key": "read_power_pj_ssg"
+      label: "read_power_pj_ssg",
+      key: "read_power_pj_ssg",
     },
     {
-      "label": "read_power_pj_tt",
-      "key": "read_power_pj_tt"
+      label: "read_power_pj_tt",
+      key: "read_power_pj_tt",
     },
     {
-      "label": "tacc_ns_ffg",
-      "key": "tacc_ns_ffg"
+      label: "tacc_ns_ffg",
+      key: "tacc_ns_ffg",
     },
     {
-      "label": "tacc_ns_ssg",
-      "key": "tacc_ns_ssg"
+      label: "tacc_ns_ssg",
+      key: "tacc_ns_ssg",
     },
     {
-      "label": "tacc_ns_tt",
-      "key": "tacc_ns_tt"
+      label: "tacc_ns_tt",
+      key: "tacc_ns_tt",
     },
     {
-      "label": "tcycle_ns_ffg",
-      "key": "tcycle_ns_ffg"
+      label: "tcycle_ns_ffg",
+      key: "tcycle_ns_ffg",
     },
     {
-      "label": "tcycle_ns_ssg",
-      "key": "tcycle_ns_ssg"
+      label: "tcycle_ns_ssg",
+      key: "tcycle_ns_ssg",
     },
     {
-      "label": "tcycle_ns_tt",
-      "key": "tcycle_ns_tt"
+      label: "tcycle_ns_tt",
+      key: "tcycle_ns_tt",
     },
     {
-      "label": "thold_ns_ffg",
-      "key": "thold_ns_ffg"
+      label: "thold_ns_ffg",
+      key: "thold_ns_ffg",
     },
     {
-      "label": "thold_ns_ssg",
-      "key": "thold_ns_ssg"
+      label: "thold_ns_ssg",
+      key: "thold_ns_ssg",
     },
     {
-      "label": "thold_ns_tt",
-      "key": "thold_ns_tt"
+      label: "thold_ns_tt",
+      key: "thold_ns_tt",
     },
     {
-      "label": "tsetup_ns_ffg",
-      "key": "tsetup_ns_ffg"
+      label: "tsetup_ns_ffg",
+      key: "tsetup_ns_ffg",
     },
     {
-      "label": "tsetup_ns_ssg",
-      "key": "tsetup_ns_ssg"
+      label: "tsetup_ns_ssg",
+      key: "tsetup_ns_ssg",
     },
     {
-      "label": "tsetup_ns_tt",
-      "key": "tsetup_ns_tt"
+      label: "tsetup_ns_tt",
+      key: "tsetup_ns_tt",
     },
     {
-      "label": "write_power_pj_ffg",
-      "key": "write_power_pj_ffg"
+      label: "write_power_pj_ffg",
+      key: "write_power_pj_ffg",
     },
     {
-      "label": "write_power_pj_ssg",
-      "key": "write_power_pj_ssg"
+      label: "write_power_pj_ssg",
+      key: "write_power_pj_ssg",
     },
     {
-      "label": "write_power_pj_tt",
-      "key": "write_power_pj_tt"
+      label: "write_power_pj_tt",
+      key: "write_power_pj_tt",
     },
     {
-      "label": "leakage_power_mw_ffg",
-      "key": "leakage_power_mw_ffg"
+      label: "leakage_power_mw_ffg",
+      key: "leakage_power_mw_ffg",
     },
     {
-      "label": "leakage_power_mw_ssg",
-      "key": "leakage_power_mw_ssg"
+      label: "leakage_power_mw_ssg",
+      key: "leakage_power_mw_ssg",
     },
     {
-      "label": "leakage_power_mw_tt",
-      "key": "leakage_power_mw_tt"
-    }
-  ]
-
-
+      label: "leakage_power_mw_tt",
+      key: "leakage_power_mw_tt",
+    },
+  ];
 
   // Update checkbox data on change
   const handleChangeCheckBox = (e) => {
@@ -232,131 +233,131 @@ function RightSidebar() {
       <p className="text-center text-base px-6 text-[#753EFE]">
         Previously saved Predictions
       </p>
-      {(savedResult?.length > 0 || savedMultipleResult?.length > 0) && currentInput === "memory" && (
-        <>
-          <div className="my-12 flex flex-col">
-            {
-              savedResult.length > 0 &&
-              <Divider>
-                <Chip label="Spacific" />
-              </Divider>
-            }
-            {savedResult.map((result, i) => (
-              <div key={i} className="flex justify-between items-center">
-                <FormControlLabel
-                  label={
-                    result.name?.length > 12 ? (
-                      <Tooltip title={result?.name}>
-                        <p className="text-gray-500">
-                          {result.name?.slice(0, 12)}
-                          {result.name?.length > 12 && "..."}
-                        </p>
-                      </Tooltip>
-                    ) : (
-                      <p className="text-gray-500">{result.name}</p>
-                    )
-                  }
-                  key={i}
-                  onChange={handleChangeCheckBox}
-                  name={result.name}
-                  value={JSON.stringify(result.data)}
-                  control={
-                    <Checkbox
-                      icon={
-                        <MdOutlineCheckBoxOutlineBlank className="text-[#F24E1E] text-2xl mb-[2px]" />
-                      }
-                      checkedIcon={
-                        <IoMdCheckboxOutline className="text-[#F24E1E] text-2xl mb-[2px]" />
-                      }
-                    />
-                  }
-                />
+      {(savedResult?.length > 0 || savedMultipleResult?.length > 0) &&
+        currentInput === "memory" && (
+          <>
+            <div className="my-12 flex flex-col">
+              {savedResult.length > 0 && (
+                <Divider>
+                  <Chip label="Specific" />
+                </Divider>
+              )}
+              {savedResult.map((result, i) => (
+                <div key={i} className="flex justify-between items-center">
+                  <FormControlLabel
+                    label={
+                      result.name?.length > 12 ? (
+                        <Tooltip title={result?.name}>
+                          <p className="text-gray-500">
+                            {result.name?.slice(0, 12)}
+                            {result.name?.length > 12 && "..."}
+                          </p>
+                        </Tooltip>
+                      ) : (
+                        <p className="text-gray-500">{result.name}</p>
+                      )
+                    }
+                    key={i}
+                    onChange={handleChangeCheckBox}
+                    name={result.name}
+                    value={JSON.stringify(result.data)}
+                    control={
+                      <Checkbox
+                        icon={
+                          <MdOutlineCheckBoxOutlineBlank className="text-[#F24E1E] text-2xl mb-[2px]" />
+                        }
+                        checkedIcon={
+                          <IoMdCheckboxOutline className="text-[#F24E1E] text-2xl mb-[2px]" />
+                        }
+                      />
+                    }
+                  />
+                  <Button
+                    onClick={() => dispatch(removeSavedResult(i))}
+                    className="p-1 min-w-fit m-0"
+                  >
+                    <RxCross2 className="text-[#F24E1E] text-xl" />
+                  </Button>
+                </div>
+              ))}
+              <div className="w-full flex justify-center my-5 items-center">
                 <Button
-                  onClick={() => dispatch(removeSavedResult(i))}
-                  className="p-1 min-w-fit m-0"
+                  className="px-2 text-center shadow-sm py-2"
+                  color="secondary"
+                  variant="contained"
+                  onClick={handleChangeModalStatus}
+                  disabled={
+                    Object.keys(selectedDataMultiple).length > 0 ||
+                    Object.keys(selectedData).length < 2
+                  }
                 >
-                  <RxCross2 className="text-[#F24E1E] text-xl" />
+                  Compare
                 </Button>
-              </div>
-            ))}
-            <div className="w-full flex justify-center my-5 items-center">
-              <Button
-                className="px-2 text-center shadow-sm py-2"
-                color="secondary"
-                variant="contained"
-                onClick={handleChangeModalStatus}
-                disabled={Object.keys(selectedDataMultiple).length > 0 || Object.keys(selectedData).length < 2}
-              >
-                Compare
-              </Button>
-              {/* <Button
+                {/* <Button
               className="px-2 text-center shadow-sm py-2"
               color="secondary"
               variant="contained"
               disabled={Object.keys(selectedDataMultiple).length === 0}
             >Download</Button> */}
-            </div>
-            {
-              savedMultipleResult.length > 0 &&
-              <Divider>
-                <Chip label="Range" />
-              </Divider>
-            }
-            {savedMultipleResult.map((result, i) => (
-              <div key={i} className="flex justify-between items-center">
-                <FormControlLabel
-                  label={
-                    result.name?.length > 12 ? (
-                      <Tooltip title={result?.name}>
-                        <p className="text-gray-500">
-                          {result.name?.slice(0, 12)}
-                          {result.name?.length > 12 && "..."}
-                        </p>
-                      </Tooltip>
-                    ) : (
-                      <p className="text-gray-500">{result.name}</p>
-                    )
-                  }
-                  key={i}
-                  onChange={handleChangeCheckBoxMultiple}
-                  name={result.name}
-                  value={JSON.stringify(result.data)}
-                  control={
-                    <Checkbox
-                      icon={
-                        <MdOutlineCheckBoxOutlineBlank className="text-[#F24E1E] text-2xl mb-[2px]" />
-                      }
-                      checkedIcon={
-                        <IoMdCheckboxOutline className="text-[#F24E1E] text-2xl mb-[2px]" />
-                      }
-                    />
-                  }
-                />
-                <Tooltip title="Download CSV" placement="top">
-                  <Button className="p-0 min-w-fit">
-                    <CSVLink
-                      data={result?.data}
-                      headers={csvHeaders}
-                      filename={result?.name + ".csv"}
-                      className={`inline-flex items-center`}
-                    >
-                      <MdOutlineFileDownload className="text-2xl text-[#F24E1E]" />
-                    </CSVLink>
-                  </Button>
-                </Tooltip>
-                <Button
-                  onClick={() => dispatch(removeSavedMultipleResults(i))}
-                  className="p-1 min-w-fit m-0"
-                >
-                  <RxCross2 className="text-[#F24E1E] text-xl" />
-                </Button>
               </div>
-            ))}
-          </div>
-
-
-        </>
-      )}
+              {savedMultipleResult.length > 0 && (
+                <Divider>
+                  <Chip label="Range" />
+                </Divider>
+              )}
+              {savedMultipleResult.map((result, i) => (
+                <div key={i} className="flex justify-between items-center">
+                  <FormControlLabel
+                    label={
+                      result.name?.length > 12 ? (
+                        <Tooltip title={result?.name}>
+                          <p className="text-gray-500">
+                            {result.name?.slice(0, 12)}
+                            {result.name?.length > 12 && "..."}
+                          </p>
+                        </Tooltip>
+                      ) : (
+                        <p className="text-gray-500">{result.name}</p>
+                      )
+                    }
+                    key={i}
+                    onChange={handleChangeCheckBoxMultiple}
+                    name={result.name}
+                    value={JSON.stringify(result.data)}
+                    control={
+                      <Checkbox
+                        icon={
+                          <MdOutlineCheckBoxOutlineBlank className="text-[#F24E1E] text-2xl mb-[2px]" />
+                        }
+                        checkedIcon={
+                          <IoMdCheckboxOutline className="text-[#F24E1E] text-2xl mb-[2px]" />
+                        }
+                      />
+                    }
+                  />
+                  <Tooltip title="Download CSV" placement="top">
+                    <Button className="p-0 min-w-fit">
+                      <CSVLink
+                        data={result?.data}
+                        headers={csvHeaders}
+                        filename={result?.name + ".csv"}
+                        className={`inline-flex items-center`}
+                      >
+                        <MdOutlineFileDownload className="text-2xl text-[#F24E1E]" />
+                      </CSVLink>
+                    </Button>
+                  </Tooltip>
+                  <Button
+                    onClick={() => dispatch(removeSavedMultipleResults(i))}
+                    className="p-1 min-w-fit m-0"
+                  >
+                    <RxCross2 className="text-[#F24E1E] text-xl" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
 
       <>
         <Modal
