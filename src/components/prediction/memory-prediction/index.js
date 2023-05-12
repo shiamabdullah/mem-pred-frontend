@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
@@ -13,11 +13,14 @@ import {
   updateMemoryOutput,
   updateMultipleOutput,
 } from "../../../redux/reducer/memorySlice";
+import { find_indexes } from "../../../utils/helper/solution";
 import MemoryPredictionInputs from "./memory-prediction-input";
 
 const MemoryPrediction = () => {
   const memoryInput = useSelector(selectMemoryInput);
   const [inputData, setInputData] = useState(memoryInput);
+  const [banksRange, setBanksRange] = useState([]);
+  const [muxRange, setMuxRange] = useState([]);
   const loading = useSelector(selectLoading);
   const dispatch = useDispatch();
 
@@ -65,15 +68,15 @@ const MemoryPrediction = () => {
     let requiredFields =
       inputData.tech === "12LPP"
         ? [
-            "vendor",
-            "tech",
-            "mem_type",
-            "port",
-            "hd_or_hs",
-            "vt_type",
-            "words",
-            "bits",
-          ]
+          "vendor",
+          "tech",
+          "mem_type",
+          "port",
+          "hd_or_hs",
+          "vt_type",
+          "words",
+          "bits",
+        ]
         : ["vendor", "tech", "mem_type", "port", "words", "bits"];
 
     if (
@@ -98,9 +101,8 @@ const MemoryPrediction = () => {
     const missingFields = requiredFields.filter((field) => !inputData[field]);
     return missingFields.length === 0
       ? null
-      : `${missingFields.join(", ")} field${
-          missingFields.length > 1 ? "s" : ""
-        } are required`;
+      : `${missingFields.join(", ")} field${missingFields.length > 1 ? "s" : ""
+      } are required`;
   };
 
   // Send request with multiple input
@@ -254,29 +256,29 @@ const MemoryPrediction = () => {
       const payload =
         inputData?.tech === "12LPP"
           ? {
-              vendor: inputData?.vendor,
-              tech: inputData?.tech,
-              mem_type: inputData?.mem_type,
-              port: inputData?.port,
-              hd_or_hs: inputData?.hd_or_hs,
-              vt_type: inputData?.vt_type,
-              words: inputData.words,
-              bits: inputData.bits,
-              mux: inputData.mux,
-              banks: inputData.banks,
-            }
+            vendor: inputData?.vendor,
+            tech: inputData?.tech,
+            mem_type: inputData?.mem_type,
+            port: inputData?.port,
+            hd_or_hs: inputData?.hd_or_hs,
+            vt_type: inputData?.vt_type,
+            words: inputData.words,
+            bits: inputData.bits,
+            mux: inputData.mux,
+            banks: inputData.banks,
+          }
           : {
-              // ...predictionInput,
-              comp: inputData.vendor,
-              type:
-                inputData.tech +
-                "_" +
-                inputData.mem_type +
-                "_" +
-                inputData.port,
-              words: inputData.words,
-              bits: inputData.bits,
-            };
+            // ...predictionInput,
+            comp: inputData.vendor,
+            type:
+              inputData.tech +
+              "_" +
+              inputData.mem_type +
+              "_" +
+              inputData.port,
+            words: inputData.words,
+            bits: inputData.bits,
+          };
 
       postPrediction(payload, url);
     } else {
@@ -296,6 +298,20 @@ const MemoryPrediction = () => {
     dispatch(updateLoading(false));
   };
 
+  const setBanksAndMuxRanges = () => {
+    if (inputData.words && inputData.bits) {
+      const matchedRange = find_indexes(parseInt(inputData.words), parseInt(inputData.bits));
+      // console.log(matchedRange)
+      setBanksRange(matchedRange.matching_banks);
+      setMuxRange(matchedRange.matching_mux);
+    }
+  }
+
+  useEffect(() => {
+    setBanksAndMuxRanges()
+  }, [inputData.words, inputData.bits]);
+
+
   return (
     <>
       <MemoryPredictionInputs
@@ -306,6 +322,8 @@ const MemoryPrediction = () => {
         predictionInput={inputData}
         handleChangeAutoComplete={handleChangeAutoComplete}
         setPredictionInput={setInputData}
+        banksRange={banksRange}
+        muxRange={muxRange}
       />
     </>
   );
