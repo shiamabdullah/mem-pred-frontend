@@ -196,30 +196,25 @@ const MemoryPrediction = () => {
   };
 
   const rangeValidationCheck = (inputData) => {
-    if (
-      inputData?.banksType === "specific" &&
-      (parseInt(inputData?.banks) > 16 || parseInt(inputData?.banks) < 1)
-    ) {
-      return "Banks must be between 1 and 16!";
+    if (inputData?.banksType === "specific" && parseInt(inputData?.banks) < 1) {
+      return "Banks must be a positive number";
     } else if (
       inputData?.banksType === "range" &&
       (parseInt(inputData?.banksMax) < parseInt(inputData?.banksMin) ||
-        parseInt(inputData?.banksMax) > 16 ||
         parseInt(inputData?.banksMin) < 1)
     ) {
-      return "Banks must be between 1 and 16!";
+      return "Banks must be a positive number";
     } else if (
       inputData?.muxType === "specific" &&
-      (parseInt(inputData?.mux) > 16 || parseInt(inputData?.mux) < 1)
+      parseInt(inputData?.mux) < 1
     ) {
-      return "Mux must be between 1 and 16!";
+      return "Mux must be a positive number";
     } else if (
       inputData?.muxType === "range" &&
       (parseInt(inputData?.muxMax) < parseInt(inputData?.muxMin) ||
-        parseInt(inputData?.muxMax) > 16 ||
         parseInt(inputData?.muxMin) < 1)
     ) {
-      return "Mux must be between 1 and 16!";
+      return "Mux must be a positive number";
     } else {
       return false;
     }
