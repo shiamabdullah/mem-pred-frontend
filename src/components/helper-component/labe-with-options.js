@@ -4,7 +4,7 @@ import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import * as React from 'react';
 import Label from './label';
 
-function LabelWithOptions({ label, onChange, defaultValue }) {
+function LabelWithOptions({ label, onChange, defaultValue, isDisabled }) {
 
   return (
     <div className="flex justify-between items-center p-0 m-0">
@@ -20,10 +20,12 @@ function LabelWithOptions({ label, onChange, defaultValue }) {
         <FormControlLabel
           value="specific"
           control={<Radio className="p-0 mx-1" size="small" />}
+          disabled={isDisabled}
           label="Specific Value" />
         <FormControlLabel
           value="range"
           className="mr-1 pr-0"
+          disabled={isDisabled}
           control={<Radio className="p-0 mx-1" size="small" />}
           label="Range" />
       </RadioGroup>

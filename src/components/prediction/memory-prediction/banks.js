@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   FormControl,
   FormControlLabel,
@@ -7,6 +6,7 @@ import {
   RadioGroup,
   TextField,
 } from "@mui/material";
+import { useState } from "react";
 
 function BanksInput({ value, handleOnChange }) {
   const [banks, setBanks] = useState(null);

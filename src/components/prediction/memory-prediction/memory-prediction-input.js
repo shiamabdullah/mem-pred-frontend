@@ -1,5 +1,4 @@
-import { Autocomplete, Button, TextField } from "@mui/material";
-import InputAdornment from '@mui/material/InputAdornment';
+import { Autocomplete, Button, FormControlLabel, Paper, Radio, RadioGroup, TextField } from "@mui/material";
 import {
   BITS,
   HDHSTYPE,
@@ -30,7 +29,9 @@ export default function MemoryPredictionInputs({
   handleReset,
   predictionInput,
   handleChangeAutoComplete,
-  setPredictionInput
+  setPredictionInput,
+  banksRange,
+  muxRange,
 }) {
   // console.log(predictionInput)
   return (
@@ -173,6 +174,7 @@ export default function MemoryPredictionInputs({
               <LabelWithOptions
                 defaultValue={predictionInput?.banksType}
                 label="Banks"
+                isDisabled={banksRange.length < 1}
                 onChange={(value) => setPredictionInput((prev) => {
                   const temp = JSON.parse(JSON.stringify(prev));
                   temp['banksType'] = value;
@@ -180,38 +182,32 @@ export default function MemoryPredictionInputs({
                 })} />
               {
                 predictionInput?.banksType === 'specific' ?
+                  <Paper className="h-14 flex items-center justify-center">
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                      onChange={(e) => setPredictionInput((prev) => {
+                        const temp = JSON.parse(JSON.stringify(prev));
+                        temp['banks'] = e.target.value;
+                        return temp;
+                      })}
+                    >{
+                        banksRange.length > 0 && banksRange.map((item, index) => (
+                          <FormControlLabel
+                            key={index}
+                            value={item}
+                            control={<Radio size="small" />}
+                            label={item} />
+                        ))
+                      }
+                    </RadioGroup>
+                  </Paper>
+                  :
                   <TextField
                     fullWidth
-                    id="banks"
-                    name="banks"
-                    type="number"
-                    value={predictionInput?.banks || ""}
-                    onChange={handleOnChange}
-                  /> :
-                  <div>
-                    <TextField
-                      sx={{ mx: 1, width: '12ch' }}
-                      type="number"
-                      name="banksMin"
-                      onChange={handleOnChange}
-                      value={predictionInput?.banksMin || ""}
-                      InputProps={{
-                        startAdornment:
-                          <InputAdornment position="start">Min :</InputAdornment>,
-                      }}
-                    />
-                    <TextField
-                      sx={{ mx: 1, width: '12ch' }}
-                      type="number"
-                      name="banksMax"
-                      onChange={handleOnChange}
-                      value={predictionInput?.banksMax || ""}
-                      InputProps={{
-                        startAdornment:
-                          <InputAdornment position="start">Max :</InputAdornment>,
-                      }}
-                    />
-                  </div>
+                    placeholder={`${banksRange.join(',')}`}
+                    disabled />
               }
             </div>
 
@@ -219,6 +215,7 @@ export default function MemoryPredictionInputs({
               <LabelWithOptions
                 defaultValue={predictionInput?.muxType}
                 label="Mux"
+                isDisabled={muxRange.length < 1}
                 onChange={(value) => setPredictionInput((prev) => {
                   const temp = JSON.parse(JSON.stringify(prev));
                   temp['muxType'] = value;
@@ -228,39 +225,32 @@ export default function MemoryPredictionInputs({
               {
                 predictionInput?.muxType === 'specific' ?
 
+                  <Paper className="h-14 flex items-center justify-center">
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                      onChange={(e) => setPredictionInput((prev) => {
+                        const temp = JSON.parse(JSON.stringify(prev));
+                        temp['mux'] = e.target.value;
+                        return temp;
+                      })}
+                    >{
+                        muxRange.length > 0 && muxRange.map((item, index) => (
+                          <FormControlLabel
+                            key={index}
+                            value={item}
+                            control={<Radio size="small" />}
+                            label={item} />
+                        ))
+                      }
+                    </RadioGroup>
+                  </Paper>
+                  :
                   <TextField
                     fullWidth
-                    id="mux"
-                    name="mux"
-                    type="number"
-                    value={predictionInput?.mux || ""}
-                    onChange={handleOnChange}
-                  />
-                  :
-                  <div>
-                    <TextField
-                      sx={{ mx: 1, width: '12ch' }}
-                      type="number"
-                      name="muxMin"
-                      onChange={handleOnChange}
-                      value={predictionInput?.muxMin || ""}
-                      InputProps={{
-                        startAdornment:
-                          <InputAdornment position="start">Min :</InputAdornment>,
-                      }}
-                    />
-                    <TextField
-                      sx={{ mx: 1, width: '12ch' }}
-                      type="number"
-                      name="muxMax"
-                      onChange={handleOnChange}
-                      value={predictionInput?.muxMax || ""}
-                      InputProps={{
-                        startAdornment:
-                          <InputAdornment position="start">Max :</InputAdornment>,
-                      }}
-                    />
-                  </div>
+                    placeholder={`${muxRange.join(',')}`}
+                    disabled />
               }
             </div>
           </>
