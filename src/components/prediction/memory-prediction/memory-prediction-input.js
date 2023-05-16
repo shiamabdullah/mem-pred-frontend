@@ -119,7 +119,11 @@ export default function MemoryPredictionInputs({
             <div className="mb-4">
               <Label>Words</Label>
               <Autocomplete
-                value={predictionInput?.words || ""}
+                value={
+                  predictionInput?.words
+                    ? predictionInput?.words.toString()
+                    : ""
+                }
                 onChange={(event, newValue) =>
                   handleChangeAutoComplete(newValue, "words")
                 }

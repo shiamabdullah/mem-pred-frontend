@@ -299,14 +299,22 @@ const MemoryPrediction = () => {
 
   const setBanksAndMuxRanges = () => {
     if (inputData.words && inputData.bits) {
-      const matchedRange = findMuxBanks(
-        fileName,
-        parseInt(inputData.words),
-        parseInt(inputData.bits)
-      );
+      const matchedRange =
+        fileName &&
+        findMuxBanks(
+          fileName,
+          parseInt(inputData.words),
+          parseInt(inputData.bits)
+        );
       // console.log(matchedRange)
-      setBanksRange(matchedRange.matching_banks);
-      setMuxRange(matchedRange.matching_mux);
+      setBanksRange(
+        matchedRange?.matching_banks?.length > 0
+          ? matchedRange.matching_banks
+          : []
+      );
+      setMuxRange(
+        matchedRange?.matching_mux?.length > 0 ? matchedRange.matching_mux : []
+      );
     }
   };
 

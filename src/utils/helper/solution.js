@@ -204,15 +204,21 @@ export function findWordsBits(name) {
   let matchingWords = [];
   let matchingBits = [];
 
-  for (let spec of specs) {
-    matchingWords.push(...spec[2]);
-    matchingBits.push(...spec[3]);
-  }
+  if (specs) {
+    for (let spec of specs) {
+      matchingWords.push(...spec[2]);
+      matchingBits.push(...spec[3]);
+    }
 
-  return {
-    matchingWords: findUniqueValues(matchingWords),
-    matchingBits: findUniqueValues(matchingBits),
-  };
+    return {
+      matchingWords: findUniqueValues(matchingWords),
+      matchingBits: findUniqueValues(matchingBits),
+    };
+  } else
+    return {
+      matchingWords: [],
+      matchingBits: [],
+    };
 }
 
 export function findMuxBanks(name, words, bits) {
@@ -221,7 +227,7 @@ export function findMuxBanks(name, words, bits) {
   let matchingMux = [];
   let matchingBanks = [];
 
-  for (let i = 0; i < specs.length; i++) {
+  for (let i = 0; i < specs?.length; i++) {
     let spec = specs[i];
     if (spec[2].includes(words) && spec[3].includes(bits)) {
       matchingIndexes.push(i);
@@ -229,10 +235,6 @@ export function findMuxBanks(name, words, bits) {
       matchingBanks.push(spec[1]);
     }
   }
-  console.log({
-    matching_mux: findUniqueValues(matchingMux),
-    matching_banks: findUniqueValues(matchingBanks),
-  });
 
   return {
     matching_mux: findUniqueValues(matchingMux),
