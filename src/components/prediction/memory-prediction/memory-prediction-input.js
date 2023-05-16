@@ -1,4 +1,12 @@
-import { Autocomplete, Button, FormControlLabel, Paper, Radio, RadioGroup, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  FormControlLabel,
+  Paper,
+  Radio,
+  RadioGroup,
+  TextField,
+} from "@mui/material";
 import {
   BITS,
   HDHSTYPE,
@@ -21,7 +29,6 @@ import Label from "../../helper-component/label";
 import Loader from "../../helper-component/loader";
 import SelectInput from "../../helper-component/select-input";
 
-
 export default function MemoryPredictionInputs({
   onSubmit,
   handleOnChange,
@@ -32,6 +39,8 @@ export default function MemoryPredictionInputs({
   setPredictionInput,
   banksRange,
   muxRange,
+  optionForWords,
+  optionForBits,
 }) {
   // console.log(predictionInput)
   return (
@@ -45,69 +54,6 @@ export default function MemoryPredictionInputs({
             predictionInput={predictionInput}
             options={TECH}
             value={predictionInput?.tech}
-          />
-        </div>
-
-        <div className="mb-4">
-          <Label>Words</Label>
-          <Autocomplete
-            value={predictionInput?.words || ""}
-            onChange={(event, newValue) =>
-              handleChangeAutoComplete(newValue, "words")
-            }
-            options={predictionInput?.tech === "12LPP" ? WORDS : WORDS23FDX}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                type="number"
-                onChange={(e) => {
-                  let input = e.target.value;
-                  if (
-                    !input ||
-                    (input[input.length - 1].match("[0-9]") &&
-                      input[0].match("[1-9]"))
-                  )
-                    handleChangeAutoComplete(input, "words");
-                }}
-                label={
-                  predictionInput["words"] ? "" : "Select or enter a value"
-                }
-              />
-            )}
-          />
-        </div>
-
-        <div className="mb-4">
-          <Label>Bits</Label>
-          <Autocomplete
-            value={predictionInput?.bits || ""}
-            onChange={(event, newValue) =>
-              handleChangeAutoComplete(newValue, "bits")
-            }
-            options={predictionInput?.tech === "12LPP" ? BITS : BITS23FDX}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                type="number"
-                onChange={(e) => {
-                  let input = e.target.value;
-                  if (
-                    !input ||
-                    (input[input.length - 1].match("[0-9]") &&
-                      input[0].match("[1-9]"))
-                  )
-                    handleChangeAutoComplete(input, "bits");
-                }}
-                // onChange={(e) =>
-                //   handleChangeAutoComplete(e.target.value, "bits")
-                // }
-                label={
-                  predictionInput["bits"]
-                    ? ""
-                    : "Select or enter a value. Must be a positive integer"
-                }
-              />
-            )}
           />
         </div>
 
@@ -146,7 +92,7 @@ export default function MemoryPredictionInputs({
           />
         </div>
 
-        {predictionInput?.tech === "12LPP" && (
+        {predictionInput?.tech === "12LPP" ? (
           <>
             <div className="mb-4">
               <Label>HD_or_HS</Label>
@@ -171,44 +117,121 @@ export default function MemoryPredictionInputs({
             </div>
 
             <div className="mb-4">
+              <Label>Words</Label>
+              <Autocomplete
+                value={predictionInput?.words || ""}
+                onChange={(event, newValue) =>
+                  handleChangeAutoComplete(newValue, "words")
+                }
+                options={
+                  predictionInput?.tech === "12LPP"
+                    ? optionForWords.sort((a, b) => a - b)
+                    : WORDS23FDX
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    type="number"
+                    onChange={(e) => {
+                      let input = e.target.value;
+                      if (
+                        !input ||
+                        (input[input.length - 1].match("[0-9]") &&
+                          input[0].match("[1-9]"))
+                      )
+                        handleChangeAutoComplete(input, "words");
+                    }}
+                    label={
+                      predictionInput["words"] ? "" : "Select or enter a value"
+                    }
+                  />
+                )}
+              />
+            </div>
+
+            <div className="mb-4">
+              <Label>Bits</Label>
+              <Autocomplete
+                value={predictionInput?.bits || ""}
+                onChange={(event, newValue) =>
+                  handleChangeAutoComplete(newValue, "bits")
+                }
+                options={
+                  predictionInput?.tech === "12LPP"
+                    ? optionForBits.sort((a, b) => a - b)
+                    : BITS23FDX
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    type="number"
+                    onChange={(e) => {
+                      let input = e.target.value;
+                      if (
+                        !input ||
+                        (input[input.length - 1].match("[0-9]") &&
+                          input[0].match("[1-9]"))
+                      )
+                        handleChangeAutoComplete(input, "bits");
+                    }}
+                    // onChange={(e) =>
+                    //   handleChangeAutoComplete(e.target.value, "bits")
+                    // }
+                    label={
+                      predictionInput["bits"]
+                        ? ""
+                        : "Select or enter a value. Must be a positive integer"
+                    }
+                  />
+                )}
+              />
+            </div>
+
+            <div className="mb-4">
               <LabelWithOptions
                 defaultValue={predictionInput?.banksType}
                 label="Banks"
                 isDisabled={banksRange.length < 1}
-                onChange={(value) => setPredictionInput((prev) => {
-                  const temp = JSON.parse(JSON.stringify(prev));
-                  temp['banksType'] = value;
-                  return temp;
-                })} />
-              {
-                predictionInput?.banksType === 'specific' ?
-                  <Paper className="h-14 flex items-center justify-center">
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="row-radio-buttons-group"
-                      onChange={(e) => setPredictionInput((prev) => {
+                onChange={(value) =>
+                  setPredictionInput((prev) => {
+                    const temp = JSON.parse(JSON.stringify(prev));
+                    temp["banksType"] = value;
+                    return temp;
+                  })
+                }
+              />
+              {predictionInput?.banksType === "specific" ? (
+                <Paper className="h-14 flex items-center justify-center">
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                    onChange={(e) =>
+                      setPredictionInput((prev) => {
                         const temp = JSON.parse(JSON.stringify(prev));
-                        temp['banks'] = e.target.value;
+                        temp["banks"] = e.target.value;
                         return temp;
-                      })}
-                    >{
-                        banksRange.length > 0 && banksRange.map((item, index) => (
-                          <FormControlLabel
-                            key={index}
-                            value={item}
-                            control={<Radio size="small" />}
-                            label={item} />
-                        ))
-                      }
-                    </RadioGroup>
-                  </Paper>
-                  :
-                  <TextField
-                    fullWidth
-                    placeholder={`${banksRange.join(',')}`}
-                    disabled />
-              }
+                      })
+                    }
+                  >
+                    {banksRange.length > 0 &&
+                      banksRange.map((item, index) => (
+                        <FormControlLabel
+                          key={index}
+                          value={item}
+                          control={<Radio size="small" />}
+                          label={item}
+                        />
+                      ))}
+                  </RadioGroup>
+                </Paper>
+              ) : (
+                <TextField
+                  fullWidth
+                  placeholder={`${banksRange.join(",")}`}
+                  disabled
+                />
+              )}
             </div>
 
             <div className="mb-4">
@@ -216,42 +239,111 @@ export default function MemoryPredictionInputs({
                 defaultValue={predictionInput?.muxType}
                 label="Mux"
                 isDisabled={muxRange.length < 1}
-                onChange={(value) => setPredictionInput((prev) => {
-                  const temp = JSON.parse(JSON.stringify(prev));
-                  temp['muxType'] = value;
-                  return temp;
-                })}
+                onChange={(value) =>
+                  setPredictionInput((prev) => {
+                    const temp = JSON.parse(JSON.stringify(prev));
+                    temp["muxType"] = value;
+                    return temp;
+                  })
+                }
               />
-              {
-                predictionInput?.muxType === 'specific' ?
-
-                  <Paper className="h-14 flex items-center justify-center">
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="row-radio-buttons-group"
-                      onChange={(e) => setPredictionInput((prev) => {
+              {predictionInput?.muxType === "specific" ? (
+                <Paper className="h-14 flex items-center justify-center">
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                    onChange={(e) =>
+                      setPredictionInput((prev) => {
                         const temp = JSON.parse(JSON.stringify(prev));
-                        temp['mux'] = e.target.value;
+                        temp["mux"] = e.target.value;
                         return temp;
-                      })}
-                    >{
-                        muxRange.length > 0 && muxRange.map((item, index) => (
-                          <FormControlLabel
-                            key={index}
-                            value={item}
-                            control={<Radio size="small" />}
-                            label={item} />
-                        ))
-                      }
-                    </RadioGroup>
-                  </Paper>
-                  :
+                      })
+                    }
+                  >
+                    {muxRange.length > 0 &&
+                      muxRange.map((item, index) => (
+                        <FormControlLabel
+                          key={index}
+                          value={item}
+                          control={<Radio size="small" />}
+                          label={item}
+                        />
+                      ))}
+                  </RadioGroup>
+                </Paper>
+              ) : (
+                <TextField
+                  fullWidth
+                  placeholder={`${muxRange.join(",")}`}
+                  disabled
+                />
+              )}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="mb-4">
+              <Label>Words</Label>
+              <Autocomplete
+                value={predictionInput?.words || ""}
+                onChange={(event, newValue) =>
+                  handleChangeAutoComplete(newValue, "words")
+                }
+                options={predictionInput?.tech === "12LPP" ? WORDS : WORDS23FDX}
+                renderInput={(params) => (
                   <TextField
-                    fullWidth
-                    placeholder={`${muxRange.join(',')}`}
-                    disabled />
-              }
+                    {...params}
+                    type="number"
+                    onChange={(e) => {
+                      let input = e.target.value;
+                      if (
+                        !input ||
+                        (input[input.length - 1].match("[0-9]") &&
+                          input[0].match("[1-9]"))
+                      )
+                        handleChangeAutoComplete(input, "words");
+                    }}
+                    label={
+                      predictionInput["words"] ? "" : "Select or enter a value"
+                    }
+                  />
+                )}
+              />
+            </div>
+
+            <div className="mb-4">
+              <Label>Bits</Label>
+              <Autocomplete
+                value={predictionInput?.bits || ""}
+                onChange={(event, newValue) =>
+                  handleChangeAutoComplete(newValue, "bits")
+                }
+                options={predictionInput?.tech === "12LPP" ? BITS : BITS23FDX}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    type="number"
+                    onChange={(e) => {
+                      let input = e.target.value;
+                      if (
+                        !input ||
+                        (input[input.length - 1].match("[0-9]") &&
+                          input[0].match("[1-9]"))
+                      )
+                        handleChangeAutoComplete(input, "bits");
+                    }}
+                    // onChange={(e) =>
+                    //   handleChangeAutoComplete(e.target.value, "bits")
+                    // }
+                    label={
+                      predictionInput["bits"]
+                        ? ""
+                        : "Select or enter a value. Must be a positive integer"
+                    }
+                  />
+                )}
+              />
             </div>
           </>
         )}
