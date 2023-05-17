@@ -308,6 +308,8 @@ const MemoryPrediction = () => {
           parseInt(inputData.words),
           parseInt(inputData.bits)
         );
+      // matchedRange?.matching_banks?.push("All");
+      // matchedRange?.matching_mux?.push("All");
       // console.log(matchedRange)
       setBanksRange(
         matchedRange?.matching_banks?.length > 0

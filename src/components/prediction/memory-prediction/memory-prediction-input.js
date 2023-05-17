@@ -240,6 +240,9 @@ export default function MemoryPredictionInputs({
                               let previousData = prevSelectedBanks.filter(
                                 (bank) => bank !== e.target.value
                               );
+                              if (e.target.value === "All") {
+                                previousData = banksRange;
+                              }
                               setPredictionInput((prev) => {
                                 const temp = JSON.parse(JSON.stringify(prev));
                                 temp["banks"] = previousData;
@@ -251,6 +254,9 @@ export default function MemoryPredictionInputs({
                                 ...prevSelectedBanks,
                                 e.target.value,
                               ];
+                              if (e.target.value === "All") {
+                                checkedData = banksRange;
+                              }
                               setPredictionInput((prev) => {
                                 const temp = JSON.parse(JSON.stringify(prev));
                                 temp["banks"] = checkedData;
@@ -279,28 +285,6 @@ export default function MemoryPredictionInputs({
               <LabelWithOptions label="Mux" />
 
               <Paper className="h-14 flex items-center justify-center">
-                {/* <RadioGroup
-                  row
-                  aria-labelledby="demo-row-radio-buttons-group-label"
-                  name="row-radio-buttons-group"
-                  onChange={(e) =>
-                    setPredictionInput((prev) => {
-                      const temp = JSON.parse(JSON.stringify(prev));
-                      temp["mux"] = e.target.value;
-                      return temp;
-                    })
-                  }
-                >
-                  {muxRange.length > 0 &&
-                    muxRange.map((item, index) => (
-                      <FormControlLabel
-                        key={index}
-                        value={item}
-                        control={<Radio size="small" />}
-                        label={item}
-                      />
-                    ))}
-                </RadioGroup> */}
                 <FormGroup row>
                   {muxRange.length > 0 &&
                     muxRange.map((item, index) => (
