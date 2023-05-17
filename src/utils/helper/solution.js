@@ -32,8 +32,8 @@ const data = getRangedConf(config);
 
 export function getInputCsvStructData(name) {
   const specs = config[name];
-  //   const parsedArray = specs.split("_");
-  //   console.log(parsedArray[3]);
+
+  const vt = name.split("_") === "lvt" ? "l" : "r";
 
   const csvHeaders = [
     { label: "compiler_name", key: "compiler_name" },
@@ -49,15 +49,13 @@ export function getInputCsvStructData(name) {
       compiler_name: name,
       mux: obj[0],
       bank: obj[1],
-      words_min_max_incr: obj[2],
-      bits_min_max_incr: obj[3],
+      words_min_max_incr: obj[2]?.join(":"),
+      bits_min_max_incr: obj[3]?.join(":"),
+      vttype: vt,
     };
   });
-  console.log(csvData);
-  return csvData;
+  return { csvData, csvHeaders };
 }
-
-getInputCsvStructData("sram_sp_hse_lvt");
 
 export function findWordsBits(name) {
   let specs = data[name];
