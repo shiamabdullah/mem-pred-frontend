@@ -6,6 +6,8 @@ import {
   Radio,
   RadioGroup,
   TextField,
+  Checkbox,
+  FormGroup,
 } from "@mui/material";
 import {
   BITS,
@@ -28,6 +30,7 @@ import LabelWithOptions from "../../helper-component/labe-with-options";
 import Label from "../../helper-component/label";
 import Loader from "../../helper-component/loader";
 import SelectInput from "../../helper-component/select-input";
+import { CleaningServices } from "@mui/icons-material";
 
 export default function MemoryPredictionInputs({
   onSubmit,
@@ -41,6 +44,11 @@ export default function MemoryPredictionInputs({
   muxRange,
   optionForWords,
   optionForBits,
+  handleCheckboxChange,
+  selectedBanks,
+  setSelectedBanks,
+  selectedMux,
+  setSelectedMux,
 }) {
   // console.log(predictionInput)
   return (
@@ -192,97 +200,124 @@ export default function MemoryPredictionInputs({
             </div>
 
             <div className="mb-4">
-              <LabelWithOptions
-                defaultValue={predictionInput?.banksType}
-                label="Banks"
-                isDisabled={banksRange.length < 1}
-                onChange={(value) =>
-                  setPredictionInput((prev) => {
-                    const temp = JSON.parse(JSON.stringify(prev));
-                    temp["banksType"] = value;
-                    return temp;
-                  })
-                }
-              />
-              {predictionInput?.banksType === "specific" ? (
-                <Paper className="h-14 flex items-center justify-center">
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
-                    onChange={(e) =>
-                      setPredictionInput((prev) => {
-                        const temp = JSON.parse(JSON.stringify(prev));
-                        temp["banks"] = e.target.value;
-                        return temp;
-                      })
-                    }
-                  >
-                    {banksRange.length > 0 &&
-                      banksRange.map((item, index) => (
-                        <FormControlLabel
-                          key={index}
-                          value={item}
-                          control={<Radio size="small" />}
-                          label={item}
-                        />
-                      ))}
-                  </RadioGroup>
-                </Paper>
-              ) : (
-                <TextField
-                  fullWidth
-                  placeholder={`${banksRange.join(",")}`}
-                  disabled
-                />
-              )}
+              <LabelWithOptions label="Banks" />
+
+              <Paper className="h-14 flex items-center justify-center">
+                {console.log(selectedBanks)}
+                <FormGroup row>
+                  {banksRange.length > 0 &&
+                    banksRange.map((item, index) => (
+                      <FormControlLabel
+                        onChange={(e) => {
+                          setSelectedBanks((prevSelectedBanks) => {
+                            if (prevSelectedBanks.includes(e.target.value)) {
+                              let previousData = prevSelectedBanks.filter(
+                                (bank) => bank !== e.target.value
+                              );
+                              setPredictionInput((prev) => {
+                                const temp = JSON.parse(JSON.stringify(prev));
+                                temp["banks"] = previousData;
+                                return temp;
+                              });
+                              return previousData;
+                            } else {
+                              let checkedData = [
+                                ...prevSelectedBanks,
+                                e.target.value,
+                              ];
+                              setPredictionInput((prev) => {
+                                const temp = JSON.parse(JSON.stringify(prev));
+                                temp["banks"] = checkedData;
+                                return temp;
+                              });
+                              return checkedData;
+                            }
+                          });
+                        }}
+                        key={index}
+                        control={
+                          <Checkbox
+                            size="small"
+                            checked={selectedBanks.includes(item.toString())}
+                            value={item}
+                          />
+                        }
+                        label={item}
+                      />
+                    ))}
+                </FormGroup>
+              </Paper>
             </div>
 
             <div className="mb-4">
-              <LabelWithOptions
-                defaultValue={predictionInput?.muxType}
-                label="Mux"
-                isDisabled={muxRange.length < 1}
-                onChange={(value) =>
-                  setPredictionInput((prev) => {
-                    const temp = JSON.parse(JSON.stringify(prev));
-                    temp["muxType"] = value;
-                    return temp;
-                  })
-                }
-              />
-              {predictionInput?.muxType === "specific" ? (
-                <Paper className="h-14 flex items-center justify-center">
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
-                    onChange={(e) =>
-                      setPredictionInput((prev) => {
-                        const temp = JSON.parse(JSON.stringify(prev));
-                        temp["mux"] = e.target.value;
-                        return temp;
-                      })
-                    }
-                  >
-                    {muxRange.length > 0 &&
-                      muxRange.map((item, index) => (
-                        <FormControlLabel
-                          key={index}
-                          value={item}
-                          control={<Radio size="small" />}
-                          label={item}
-                        />
-                      ))}
-                  </RadioGroup>
-                </Paper>
-              ) : (
-                <TextField
-                  fullWidth
-                  placeholder={`${muxRange.join(",")}`}
-                  disabled
-                />
-              )}
+              <LabelWithOptions label="Mux" />
+
+              <Paper className="h-14 flex items-center justify-center">
+                {/* <RadioGroup
+                  row
+                  aria-labelledby="demo-row-radio-buttons-group-label"
+                  name="row-radio-buttons-group"
+                  onChange={(e) =>
+                    setPredictionInput((prev) => {
+                      const temp = JSON.parse(JSON.stringify(prev));
+                      temp["mux"] = e.target.value;
+                      return temp;
+                    })
+                  }
+                >
+                  {muxRange.length > 0 &&
+                    muxRange.map((item, index) => (
+                      <FormControlLabel
+                        key={index}
+                        value={item}
+                        control={<Radio size="small" />}
+                        label={item}
+                      />
+                    ))}
+                </RadioGroup> */}
+                <FormGroup row>
+                  {muxRange.length > 0 &&
+                    muxRange.map((item, index) => (
+                      <FormControlLabel
+                        onChange={(e) => {
+                          setSelectedMux((prevSelectedMux) => {
+                            if (prevSelectedMux.includes(e.target.value)) {
+                              let previousData = prevSelectedMux.filter(
+                                (mux) => mux !== e.target.value
+                              );
+                              setPredictionInput((prev) => {
+                                const temp = JSON.parse(JSON.stringify(prev));
+                                temp["mux"] = previousData;
+                                return temp;
+                              });
+                              return previousData;
+                            } else {
+                              let checkedData = [
+                                ...prevSelectedMux,
+                                e.target.value,
+                              ];
+                              setPredictionInput((prev) => {
+                                const temp = JSON.parse(JSON.stringify(prev));
+                                temp["mux"] = checkedData;
+                                return temp;
+                              });
+                              return checkedData;
+                            }
+                          });
+                        }}
+                        key={index}
+                        control={
+                          <Checkbox
+                            size="small"
+                            checked={selectedMux.includes(item.toString())}
+                            value={item}
+                          />
+                        }
+                        label={item}
+                      />
+                    ))}
+                </FormGroup>
+              </Paper>
             </div>
           </>
         ) : (

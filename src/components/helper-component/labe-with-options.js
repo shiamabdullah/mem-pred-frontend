@@ -1,15 +1,14 @@
 // @flow strict
 
-import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import * as React from 'react';
-import Label from './label';
+import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
+import * as React from "react";
+import Label from "./label";
 
 function LabelWithOptions({ label, onChange, defaultValue, isDisabled }) {
-
   return (
     <div className="flex justify-between items-center p-0 m-0">
       <Label className="mb-0">{label}</Label>
-      <RadioGroup
+      {/* <RadioGroup
         row
         aria-labelledby="demo-row-radio-buttons-group-label"
         name="row-radio-buttons-group"
@@ -28,9 +27,9 @@ function LabelWithOptions({ label, onChange, defaultValue, isDisabled }) {
           disabled={isDisabled}
           control={<Radio className="p-0 mx-1" size="small" />}
           label="Range" />
-      </RadioGroup>
+      </RadioGroup> */}
     </div>
   );
-};
+}
 
 export default LabelWithOptions;
