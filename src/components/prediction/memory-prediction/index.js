@@ -42,17 +42,6 @@ const MemoryPrediction = () => {
     });
   };
 
-  const handleCheckboxChange = (event) => {
-    const { value, checked } = event.target;
-    if (checked) {
-      setSelectedBanks((prevSelectedBanks) => [...prevSelectedBanks, value]);
-    } else {
-      setSelectedBanks((prevSelectedBanks) =>
-        prevSelectedBanks.filter((bank) => bank !== value)
-      );
-    }
-  };
-
   // Define handleChangeAutoComplete function
   const handleChangeAutoComplete = (value, name) => {
     setInputData((prev) => {
@@ -382,9 +371,9 @@ const MemoryPrediction = () => {
         optionForBits={optionBits}
         selectedBanks={selectedBanks}
         selectedMux={selectedMux}
-        handleCheckboxChange={handleCheckboxChange}
         setSelectedBanks={setSelectedBanks}
         setSelectedMux={setSelectedMux}
+        fileName={fileName}
       />
     </>
   );

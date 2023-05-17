@@ -8,6 +8,7 @@ import {
   TextField,
   Checkbox,
   FormGroup,
+  Tooltip,
 } from "@mui/material";
 import {
   BITS,
@@ -30,7 +31,11 @@ import LabelWithOptions from "../../helper-component/labe-with-options";
 import Label from "../../helper-component/label";
 import Loader from "../../helper-component/loader";
 import SelectInput from "../../helper-component/select-input";
+import { CSVLink } from "react-csv";
+import { MdOutlineFileDownload } from "react-icons/md";
 import { CleaningServices } from "@mui/icons-material";
+import DownloadIcon from "@mui/icons-material/Download";
+import { getInputCsvStructData } from "../../../utils/helper/solution";
 
 export default function MemoryPredictionInputs({
   onSubmit,
@@ -44,15 +49,36 @@ export default function MemoryPredictionInputs({
   muxRange,
   optionForWords,
   optionForBits,
-  handleCheckboxChange,
   selectedBanks,
   setSelectedBanks,
   selectedMux,
   setSelectedMux,
+  fileName,
 }) {
-  // console.log(predictionInput)
+  console.log({ fileName });
   return (
-    <div className="w-full">
+    <div className="w-full relative">
+      {fileName ? (
+        <Tooltip title="Download CSV" placement="top">
+          <Button className="absolute top-0 right-0">
+            <MdOutlineFileDownload className="text-2xl text-[#F24E1E]" />
+            {/* <CSVLink
+          // data={[{ ...newData }]}
+          // headers={getHeader(output)}
+          // filename={generateFileName(output) + ".csv"}
+          // className={`inline-flex items-center`}
+          >
+            <MdOutlineFileDownload className="text-2xl text-[#F24E1E]" />
+          </CSVLink> */}
+          </Button>
+        </Tooltip>
+      ) : (
+        <Button className="absolute top-0 right-0" disabled>
+          {" "}
+          <MdOutlineFileDownload className="text-2xl text-[#F24E1E]" />
+        </Button>
+      )}
+
       <div className="grid sm:grid-cols-3 sm:gap-6">
         <div className="mb-4">
           <Label>Tech</Label>
