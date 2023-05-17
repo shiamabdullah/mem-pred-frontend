@@ -329,7 +329,11 @@ export default function MemoryPredictionInputs({
                 onChange={(event, newValue) =>
                   handleChangeAutoComplete(newValue, "words")
                 }
-                options={predictionInput?.tech === "12LPP" ? WORDS : WORDS23FDX}
+                options={
+                  predictionInput?.tech === "12LPP"
+                    ? WORDS.map((x) => x.toString())
+                    : WORDS23FDX
+                }
                 renderInput={(params) => (
                   <TextField
                     {...params}

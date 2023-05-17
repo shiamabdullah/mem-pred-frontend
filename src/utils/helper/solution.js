@@ -1,13 +1,11 @@
-// function range(startAt, size, range) {
-//   let temp = [];
-//   for (let i = startAt; i <= size; i += range) {
-//     temp.push(i);
-//   }
-//   return temp;
-// }
+import config from "../data/memory-input-valid-data.json";
 
+function findUniqueValues(arr) {
+  return [...new Set(arr)];
+}
+
+// A helper function to generate a range of numbers
 function range(startAt, size, range) {
-  // optimized with array assignment at first
   const temp = new Array(Math.ceil((size - startAt + 1) / range));
   let index = 0;
   for (let i = startAt; i <= size; i += range) {
@@ -16,191 +14,53 @@ function range(startAt, size, range) {
   return temp;
 }
 
-let config = {
-  //  sram_sp_hse_rvt_mvt_range_src.csv
-  sram_sp_hse_lvt: [
-    [2, 2, range(256, 1024, 8), range(8, 160, 2)],
-    [2, 4, range(512, 2048, 16), range(8, 160, 2)],
-    [4, 2, range(512, 2048, 16), range(4, 160, 1)],
-    [4, 4, range(1024, 4096, 32), range(4, 160, 1)],
-    [4, 8, range(2048, 8192, 64), range(4, 160, 1)],
-    [8, 2, range(1024, 4096, 32), range(4, 160, 1)],
-    [8, 4, range(2048, 8192, 64), range(4, 160, 1)],
-    [8, 8, range(4096, 16384, 128), range(4, 160, 1)],
-    [16, 2, range(2048, 8192, 64), range(4, 80, 1)],
-    [16, 4, range(4096, 16384, 128), range(4, 80, 1)],
-    [16, 8, range(8192, 32768, 256), range(4, 80, 1)],
-    [16, 2, range(2048, 8192, 64), range(4, 80, 1)],
-    [16, 4, range(4096, 16384, 128), range(4, 80, 1)],
-    [16, 8, range(8192, 32768, 256), range(4, 80, 1)],
-  ],
-  sram_sp_hse_rvt: [
-    [2, 2, range(256, 1024, 8), range(8, 160, 2)],
-    [2, 4, range(512, 2048, 16), range(8, 160, 2)],
-    [4, 2, range(512, 2048, 16), range(4, 160, 1)],
-    [4, 4, range(1024, 4096, 32), range(4, 160, 1)],
-    [4, 8, range(2048, 8192, 64), range(4, 160, 1)],
-    [8, 2, range(1024, 4096, 32), range(4, 160, 1)],
-    [8, 4, range(2048, 8192, 64), range(4, 160, 1)],
-    [8, 8, range(4096, 16384, 128), range(4, 160, 1)],
-    [16, 2, range(2048, 8192, 64), range(4, 80, 1)],
-    [16, 4, range(4096, 16384, 128), range(4, 80, 1)],
-    [16, 8, range(8192, 32768, 256), range(4, 80, 1)],
-    [16, 2, range(2048, 8192, 64), range(4, 80, 1)],
-    [16, 4, range(4096, 16384, 128), range(4, 80, 1)],
-    [16, 8, range(8192, 32768, 256), range(4, 80, 1)],
-  ],
-  // sram_sp_hdf_rvt_mvt_range_src.csv
-  sram_sp_hdf_lvt: [
-    [4, 1, range(512, 2048, 8), range(4, 160, 1)],
-    [4, 2, range(512, 4096, 16), range(4, 160, 1)],
-    [4, 4, range(1024, 8192, 32), range(4, 160, 1)],
-    [4, 8, range(2048, 8192, 64), range(4, 160, 1)],
-    [8, 1, range(1024, 4096, 16), range(4, 80, 1)],
-    [8, 2, range(1024, 8192, 32), range(4, 160, 1)],
-    [8, 4, range(2048, 16384, 64), range(4, 160, 1)],
-    [8, 8, range(4096, 16384, 128), range(4, 160, 1)],
-    [16, 2, range(2048, 16384, 64), range(4, 80, 1)],
-    [16, 4, range(4096, 32768, 128), range(4, 80, 1)],
-    [16, 8, range(8192, 32768, 256), range(4, 80, 1)],
-    [32, 2, range(4096, 32768, 128), range(4, 40, 1)],
-    [32, 4, range(8192, 65536, 256), range(4, 40, 1)],
-  ],
-
-  sram_sp_hdf_rvt: [
-    [4, 1, range(512, 2048, 8), range(4, 160, 1)],
-    [4, 2, range(512, 4096, 16), range(4, 160, 1)],
-    [4, 4, range(1024, 8192, 32), range(4, 160, 1)],
-    [4, 8, range(2048, 8192, 64), range(4, 160, 1)],
-    [8, 1, range(1024, 4096, 16), range(4, 80, 1)],
-    [8, 2, range(1024, 8192, 32), range(4, 160, 1)],
-    [8, 4, range(2048, 16384, 64), range(4, 160, 1)],
-    [8, 8, range(4096, 16384, 128), range(4, 160, 1)],
-    [16, 2, range(2048, 16384, 64), range(4, 80, 1)],
-    [16, 4, range(4096, 32768, 128), range(4, 80, 1)],
-    [16, 8, range(8192, 32768, 256), range(4, 80, 1)],
-    [32, 2, range(4096, 32768, 128), range(4, 40, 1)],
-    [32, 4, range(8192, 65536, 256), range(4, 40, 1)],
-  ],
-
-  //   Sram_sp_2p_hse_rvt_mvt_range_src.csv
-  sram_2p_hse_rvt: [
-    [(2, 2, range(256, 1024, 8)), range(8, 160, 2)],
-    [(2, 4, range(512, 2048, 16)), range(8, 160, 2)],
-    [(4, 2, range(512, 2048, 16)), range(4, 160, 1)],
-    [(4, 4, range(1024, 4096, 32)), range(4, 160, 1)],
-    [(4, 8, range(2048, 8192, 64)), range(4, 160, 1)],
-    [(8, 2, range(1024, 4096, 32)), range(4, 80, 1)],
-    [(8, 4, range(2048, 8192, 64)), range(4, 80, 1)],
-    [(8, 8, range(4096, 16384, 128)), range(4, 80, 1)],
-  ],
-  sram_2p_hse_lvt: [
-    [(2, 2, range(256, 1024, 8)), range(8, 160, 2)],
-    [(2, 4, range(512, 2048, 16)), range(8, 160, 2)],
-    [(4, 2, range(512, 2048, 16)), range(4, 160, 1)],
-    [(4, 4, range(1024, 4096, 32)), range(4, 160, 1)],
-    [(4, 8, range(2048, 8192, 64)), range(4, 160, 1)],
-    [(8, 2, range(1024, 4096, 32)), range(4, 80, 1)],
-    [(8, 4, range(2048, 8192, 64)), range(4, 80, 1)],
-    [(8, 8, range(4096, 16384, 128)), range(4, 80, 1)],
-  ],
-  //  sram_dp_hse_rvt_mvt_range_src.csv
-
-  sram_dp_hse_rvt: [
-    [4, 1, range(32, 1024, 16), range(4, 80, 1)],
-    [4, 2, range(256, 2048, 32), range(4, 80, 1)],
-    [4, 4, range(512, 4096, 64), range(4, 80, 1)],
-    [4, 8, range(1024, 4096, 128), range(4, 80, 1)],
-    [8, 1, range(64, 2048, 32), range(4, 40, 1)],
-    [8, 2, range(512, 4096, 64), range(4, 40, 1)],
-    [8, 4, range(1024, 8192, 128), range(4, 40, 1)],
-    [8, 8, range(2048, 8192, 256), range(4, 40, 1)],
-    [16, 1, range(128, 4096, 64), range(4, 20, 1)],
-    [16, 2, range(1024, 8192, 128), range(4, 20, 1)],
-    [16, 4, range(2048, 16384, 256), range(4, 20, 1)],
-    [16, 8, range(4096, 16384, 512), range(4, 20, 1)],
-  ],
-  sram_dp_hse_lvt: [
-    [4, 1, range(32, 1024, 16), range(4, 80, 1)],
-    [4, 2, range(256, 2048, 32), range(4, 80, 1)],
-    [4, 4, range(512, 4096, 64), range(4, 80, 1)],
-    [4, 8, range(1024, 4096, 128), range(4, 80, 1)],
-    [8, 1, range(64, 2048, 32), range(4, 40, 1)],
-    [8, 2, range(512, 4096, 64), range(4, 40, 1)],
-    [8, 4, range(1024, 8192, 128), range(4, 40, 1)],
-    [8, 8, range(2048, 8192, 256), range(4, 40, 1)],
-    [16, 1, range(128, 4096, 64), range(4, 20, 1)],
-    [16, 2, range(1024, 8192, 128), range(4, 20, 1)],
-    [16, 4, range(2048, 16384, 256), range(4, 20, 1)],
-    [16, 8, range(4096, 16384, 512), range(4, 20, 1)],
-  ],
-
-  // rf_sp_uhse_rvt_mvt_range_src.csv
-  rf_sp_uhse_lvt: [
-    [1, 1, range(8, 256, 2), range(8, 320, 4)],
-    [2, 1, range(16, 512, 4), range(4, 160, 2)],
-    [4, 1, range(64, 1024, 8), range(4, 160, 1)],
-    [8, 1, range(128, 2048, 16), range(4, 80, 1)],
-  ],
-
-  //   rf_sp_hse_rvt_mvt_range_src.csv
-  rf_sp_hse_rvt: [
-    [2, 1, range(16, 512, 4), range(4, 160, 2)],
-    [4, 1, range(64, 1024, 8), range(4, 160, 1)],
-    [8, 1, range(128, 2048, 16), range(4, 80, 1)],
-  ],
-  rf_sp_hse_lvt: [
-    [2, 1, range(16, 512, 4), range(4, 160, 2)],
-    [4, 1, range(64, 1024, 8), range(4, 160, 1)],
-    [8, 1, range(128, 2048, 16), range(4, 80, 1)],
-  ],
-
-  //   rf_2p_hsc_rvt_mvt_range_src
-  rf_2p_hsc_rvt: [
-    [1, 1, range(4, 64, 2), range(4, 160, 2)],
-    [1, 2, range(8, 128, 4), range(4, 160, 2)],
-    [1, 4, range(16, 256, 8), range(4, 160, 2)],
-    [1, 8, range(32, 512, 16), range(4, 160, 2)],
-    [2, 1, range(8, 128, 4), range(4, 160, 1)],
-    [2, 2, range(16, 256, 8), range(4, 160, 1)],
-    [2, 4, range(32, 512, 16), range(4, 160, 1)],
-    [2, 8, range(64, 1024, 32), range(4, 160, 1)],
-    [4, 1, range(16, 256, 8), range(4, 80, 1)],
-    [4, 2, range(32, 512, 16), range(4, 80, 1)],
-    [4, 4, range(64, 1024, 32), range(4, 80, 1)],
-    [4, 8, range(128, 2048, 64), range(4, 80, 1)],
-    [8, 1, range(32, 512, 16), range(4, 40, 1)],
-    [8, 2, range(64, 1024, 32), range(4, 40, 1)],
-    [8, 4, range(128, 2048, 64), range(4, 40, 1)],
-    [8, 8, range(256, 4096, 128), range(4, 40, 1)],
-  ],
-
-  rf_2p_hsc_lvt: [
-    [1, 1, range(4, 64, 2), range(4, 160, 2)],
-    [1, 2, range(8, 128, 4), range(4, 160, 2)],
-    [1, 4, range(16, 256, 8), range(4, 160, 2)],
-    [1, 8, range(32, 512, 16), range(4, 160, 2)],
-    [2, 1, range(8, 128, 4), range(4, 160, 1)],
-    [2, 2, range(16, 256, 8), range(4, 160, 1)],
-    [2, 4, range(32, 512, 16), range(4, 160, 1)],
-    [2, 8, range(64, 1024, 32), range(4, 160, 1)],
-    [4, 1, range(16, 256, 8), range(4, 80, 1)],
-    [4, 2, range(32, 512, 16), range(4, 80, 1)],
-    [4, 4, range(64, 1024, 32), range(4, 80, 1)],
-    [4, 8, range(128, 2048, 64), range(4, 80, 1)],
-    [8, 1, range(32, 512, 16), range(4, 40, 1)],
-    [8, 2, range(64, 1024, 32), range(4, 40, 1)],
-    [8, 4, range(128, 2048, 64), range(4, 40, 1)],
-    [8, 8, range(256, 4096, 128), range(4, 40, 1)],
-  ],
-};
-
-function findUniqueValues(arr) {
-  return [...new Set(arr)];
+// Function to get the ranged configuration
+function getRangedConf(config) {
+  return Object.fromEntries(
+    Object.entries(config).map(([key, values]) => {
+      return [
+        key,
+        values.map(([val1, val2, arr1, arr2]) => {
+          return [val1, val2, range(...arr1), range(...arr2)];
+        }),
+      ];
+    })
+  );
 }
 
+const data = getRangedConf(config);
+
+export function getInputCsvStructData(name) {
+  const specs = config[name];
+  //   const parsedArray = specs.split("_");
+  //   console.log(parsedArray[3]);
+
+  const csvHeaders = [
+    { label: "compiler_name", key: "compiler_name" },
+    { label: "mux", key: "mux" },
+    { label: "bank", key: "bank" },
+    { label: "words_min_max_incr", key: "words_min_max_incr" },
+    { label: "bits_min_max_incr", key: "bits_min_max_incr" },
+    { label: "vttype", key: "vttype" },
+  ];
+
+  const csvData = specs.map((obj) => {
+    return {
+      compiler_name: name,
+      mux: obj[0],
+      bank: obj[1],
+      words_min_max_incr: obj[2],
+      bits_min_max_incr: obj[3],
+    };
+  });
+  console.log(csvData);
+  return csvData;
+}
+
+getInputCsvStructData("sram_sp_hse_lvt");
+
 export function findWordsBits(name) {
-  let specs = config[name];
+  let specs = data[name];
   let matchingWords = [];
   let matchingBits = [];
 
@@ -222,7 +82,7 @@ export function findWordsBits(name) {
 }
 
 export function findMuxBanks(name, words, bits) {
-  let specs = config[name];
+  let specs = data[name];
   let matchingIndexes = [];
   let matchingMux = [];
   let matchingBanks = [];
@@ -241,3 +101,5 @@ export function findMuxBanks(name, words, bits) {
     matching_banks: findUniqueValues(matchingBanks),
   };
 }
+
+export function generate_csv_headers() {}
