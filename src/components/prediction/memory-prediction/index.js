@@ -115,7 +115,7 @@ const MemoryPrediction = () => {
   const sendMultipleRequest = () => {
     const payload = [];
 
-    if (inputData?.banksType === "range" && inputData?.muxType === "range") {
+    if (inputData?.banks?.length > 1 && inputData?.mux?.length > 1) {
       for (
         let i = parseInt(inputData?.banksMin);
         i <= inputData?.banksMax;
@@ -140,10 +140,7 @@ const MemoryPrediction = () => {
           });
         }
       }
-    } else if (
-      inputData?.banksType === "range" &&
-      inputData?.muxType === "specific"
-    ) {
+    } else if (inputData?.banks?.length > 1 && inputData?.mux?.length === 1) {
       for (
         let i = parseInt(inputData?.banksMin);
         i <= parseInt(inputData?.banksMax);
@@ -245,10 +242,7 @@ const MemoryPrediction = () => {
     }
     dispatch(updateLoading(true));
 
-    if (
-      inputData?.banksType === "specific" &&
-      inputData?.muxType === "specific"
-    ) {
+    if (inputData?.banks?.length === 1 && inputData?.mux?.length === 1) {
       let url;
       inputData?.tech === "12LPP"
         ? (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-new/`)
