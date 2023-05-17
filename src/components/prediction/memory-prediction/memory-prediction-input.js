@@ -55,29 +55,24 @@ export default function MemoryPredictionInputs({
   setSelectedMux,
   fileName,
 }) {
-  console.log({ fileName });
   return (
     <div className="w-full relative">
-      {fileName ? (
-        <Tooltip title="Download CSV" placement="top">
-          <Button className="absolute top-0 right-0">
+      <Tooltip title="Download CSV" placement="top">
+        <Button className="absolute top-0 right-0" disabled={!fileName}>
+          {fileName ? (
+            <CSVLink
+              data={getInputCsvStructData(fileName)?.csvData || []}
+              headers={getInputCsvStructData(fileName)?.csvHeaders || []}
+              filename={fileName + ".csv"}
+              className={`inline-flex items-center`}
+            >
+              <MdOutlineFileDownload className="text-2xl text-[#F24E1E]" />
+            </CSVLink>
+          ) : (
             <MdOutlineFileDownload className="text-2xl text-[#F24E1E]" />
-            {/* <CSVLink
-          // data={[{ ...newData }]}
-          // headers={getHeader(output)}
-          // filename={generateFileName(output) + ".csv"}
-          // className={`inline-flex items-center`}
-          >
-            <MdOutlineFileDownload className="text-2xl text-[#F24E1E]" />
-          </CSVLink> */}
-          </Button>
-        </Tooltip>
-      ) : (
-        <Button className="absolute top-0 right-0" disabled>
-          {" "}
-          <MdOutlineFileDownload className="text-2xl text-[#F24E1E]" />
+          )}
         </Button>
-      )}
+      </Tooltip>
 
       <div className="grid sm:grid-cols-3 sm:gap-6">
         <div className="mb-4">

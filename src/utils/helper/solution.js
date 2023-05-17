@@ -32,29 +32,30 @@ const data = getRangedConf(config);
 
 export function getInputCsvStructData(name) {
   const specs = config[name];
+  if (specs) {
+    const vt = name.split("_") === "lvt" ? "l" : "r";
 
-  const vt = name.split("_") === "lvt" ? "l" : "r";
+    const csvHeaders = [
+      { label: "compiler_name", key: "compiler_name" },
+      { label: "mux", key: "mux" },
+      { label: "bank", key: "bank" },
+      { label: "words_min_max_incr", key: "words_min_max_incr" },
+      { label: "bits_min_max_incr", key: "bits_min_max_incr" },
+      { label: "vttype", key: "vttype" },
+    ];
 
-  const csvHeaders = [
-    { label: "compiler_name", key: "compiler_name" },
-    { label: "mux", key: "mux" },
-    { label: "bank", key: "bank" },
-    { label: "words_min_max_incr", key: "words_min_max_incr" },
-    { label: "bits_min_max_incr", key: "bits_min_max_incr" },
-    { label: "vttype", key: "vttype" },
-  ];
-
-  const csvData = specs.map((obj) => {
-    return {
-      compiler_name: name,
-      mux: obj[0],
-      bank: obj[1],
-      words_min_max_incr: obj[2]?.join(":"),
-      bits_min_max_incr: obj[3]?.join(":"),
-      vttype: vt,
-    };
-  });
-  return { csvData, csvHeaders };
+    const csvData = specs?.map((obj) => {
+      return {
+        compiler_name: name,
+        mux: obj[0],
+        bank: obj[1],
+        words_min_max_incr: obj[2]?.join(":"),
+        bits_min_max_incr: obj[3]?.join(":"),
+        vttype: vt,
+      };
+    });
+    return { csvData, csvHeaders };
+  }
 }
 
 export function findWordsBits(name) {
