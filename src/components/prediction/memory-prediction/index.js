@@ -81,27 +81,21 @@ const MemoryPrediction = () => {
             "vt_type",
             "words",
             "bits",
+            "banks",
+            "mux",
           ]
         : ["vendor", "tech", "mem_type", "port", "words", "bits"];
 
-    if (
-      inputData.banksType === "specific" &&
-      inputData.muxType === "specific"
-    ) {
-      requiredFields.push("banks", "mux");
-    } else if (
-      inputData.banksType === "specific" &&
-      inputData.muxType === "range"
-    ) {
-      requiredFields.push("banks", "muxMin", "muxMax");
-    } else if (
-      inputData.muxType === "specific" &&
-      inputData.banksType === "range"
-    ) {
-      requiredFields.push("banksMin", "banksMax", "mux");
-    } else {
-      requiredFields.push("banksMin", "banksMax", "muxMin", "muxMax");
-    }
+    // if (inputData.banks.length === 1 && inputData.mux.length === 1) {
+    //   requiredFields.push("banks", "mux");
+    // } else if (inputData.banks.length === 1 && inputData.mux.length > 1) {
+    //   requiredFields.push("banks", "muxMin", "muxMax");
+    // } else if (inputData.mux.length === 1 && inputData.banks.length > 1) {
+    //   requiredFields.push("banksMin", "banksMax", "mux");
+    // } else {
+    //   console.log(`"banksMin", "banksMax", "muxMin", "muxMax"`);
+    //   requiredFields.push("banksMin", "banksMax", "muxMin", "muxMax");
+    // }
 
     const missingFields = requiredFields.filter((field) => !inputData[field]);
     return missingFields.length === 0
@@ -116,16 +110,8 @@ const MemoryPrediction = () => {
     const payload = [];
 
     if (inputData?.banks?.length > 1 && inputData?.mux?.length > 1) {
-      for (
-        let i = parseInt(inputData?.banksMin);
-        i <= inputData?.banksMax;
-        i++
-      ) {
-        for (
-          let j = parseInt(inputData?.muxMin);
-          j <= parseInt(inputData?.muxMax);
-          j++
-        ) {
+      for (let i = 0; i < inputData?.banks.length; i++) {
+        for (let j = 0; j < parseInt(inputData?.mux?.length); j++) {
           payload.push({
             vendor: inputData?.vendor,
             tech: inputData?.tech,
@@ -135,17 +121,13 @@ const MemoryPrediction = () => {
             vt_type: inputData?.vt_type,
             words: inputData.words,
             bits: inputData.bits,
-            mux: j,
-            banks: i,
+            mux: inputData.mux[j],
+            banks: inputData.banks[i],
           });
         }
       }
     } else if (inputData?.banks?.length > 1 && inputData?.mux?.length === 1) {
-      for (
-        let i = parseInt(inputData?.banksMin);
-        i <= parseInt(inputData?.banksMax);
-        i++
-      ) {
+      for (let i = 0; i < parseInt(inputData?.banks.length); i++) {
         payload.push({
           vendor: inputData?.vendor,
           tech: inputData?.tech,
@@ -155,16 +137,12 @@ const MemoryPrediction = () => {
           vt_type: inputData?.vt_type,
           words: inputData.words,
           bits: inputData.bits,
-          mux: inputData?.mux,
-          banks: i,
+          mux: inputData?.mux[0],
+          banks: inputData?.banks[i],
         });
       }
     } else {
-      for (
-        let i = parseInt(inputData?.muxMin);
-        i <= parseInt(inputData?.muxMax);
-        i++
-      ) {
+      for (let i = 0; i < parseInt(inputData?.mux.length); i++) {
         payload.push({
           vendor: inputData?.vendor,
           tech: inputData?.tech,
@@ -174,8 +152,8 @@ const MemoryPrediction = () => {
           vt_type: inputData?.vt_type,
           words: inputData.words,
           bits: inputData.bits,
-          mux: i,
-          banks: inputData?.banks,
+          mux: inputData?.mux[i],
+          banks: inputData?.banks[0],
         });
       }
     }
@@ -200,30 +178,27 @@ const MemoryPrediction = () => {
     // dispatch(updateLoading(false));
   };
 
-  const rangeValidationCheck = (inputData) => {
-    if (inputData?.banksType === "specific" && parseInt(inputData?.banks) < 1) {
-      return "Banks must be a positive number";
-    } else if (
-      inputData?.banksType === "range" &&
-      (parseInt(inputData?.banksMax) < parseInt(inputData?.banksMin) ||
-        parseInt(inputData?.banksMin) < 1)
-    ) {
-      return "Banks must be a positive number";
-    } else if (
-      inputData?.muxType === "specific" &&
-      parseInt(inputData?.mux) < 1
-    ) {
-      return "Mux must be a positive number";
-    } else if (
-      inputData?.muxType === "range" &&
-      (parseInt(inputData?.muxMax) < parseInt(inputData?.muxMin) ||
-        parseInt(inputData?.muxMin) < 1)
-    ) {
-      return "Mux must be a positive number";
-    } else {
-      return false;
-    }
-  };
+  // const rangeValidationCheck = (inputData) => {
+  //   if (inputData?.banksType === "specific" && parseInt(inputData?.banks) < 1) {
+  //     return "Banks must be a positive number";
+  //   } else if (
+  //     inputData?.banksType === "range" &&
+  //     (parseInt(inputData?.banksMax) < parseInt(inputData?.banksMin) ||
+  //       parseInt(inputData?.banksMin) < 1)
+  //   ) {
+  //     return "Banks must be a positive number";
+  //   } else if (inputData?.mux === "specific" && parseInt(inputData?.mux) < 1) {
+  //     return "Mux must be a positive number";
+  //   } else if (
+  //     inputData?.mux === "range" &&
+  //     (parseInt(inputData?.muxMax) < parseInt(inputData?.muxMin) ||
+  //       parseInt(inputData?.muxMin) < 1)
+  //   ) {
+  //     return "Mux must be a positive number";
+  //   } else {
+  //     return false;
+  //   }
+  // };
 
   // Define onSubmit function
   const onSubmit = async () => {
@@ -234,12 +209,12 @@ const MemoryPrediction = () => {
       toast.error(validationError);
       return;
     }
-    const rangeError = rangeValidationCheck(inputData);
+    // const rangeError = rangeValidationCheck(inputData);
 
-    if (rangeError) {
-      toast.error(rangeError);
-      return;
-    }
+    // if (rangeError) {
+    //   toast.error(rangeError);
+    //   return;
+    // }
     dispatch(updateLoading(true));
 
     if (inputData?.banks?.length === 1 && inputData?.mux?.length === 1) {
