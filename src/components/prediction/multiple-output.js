@@ -5,7 +5,10 @@ import { CSVLink } from "react-csv";
 import { MdOutlineFileDownload, MdSave } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { selectLoading } from "../../redux/reducer/layoutSlice";
-import { selectMemoryInput, selectMultipleOutput } from "../../redux/reducer/memorySlice";
+import {
+  selectMemoryInput,
+  selectMultipleOutput,
+} from "../../redux/reducer/memorySlice";
 import { updateSaveMultipleResults } from "../../redux/reducer/resultSlice";
 import getCsvHeadersMultipleData from "../../utils/helper/getCsvHeaders";
 import BuildOutputResult from "./output-result";
@@ -16,24 +19,31 @@ function MultipleOutput() {
   const multipleOutput = useSelector(selectMultipleOutput);
   const memoryInput = useSelector(selectMemoryInput);
 
-
-
   const csvHeaders = getCsvHeadersMultipleData(multipleOutput);
 
   function generateFileName(result) {
-    const { words, bits, mem_type, vendor, mux, banks, vt_type, hd_or_hs } = result;
-    const muxRange = (result.muxMin !== undefined && result.muxMax !== undefined) ? `${result.muxMin}-${result.muxMax}` : result.mux;
-    const banksRange = (result.banksMin !== undefined && result.banksMax !== undefined) ? `${result.banksMin}-${result.banksMax}` : result.banks;
-    const sizeInKb = ((words ?? 0) * (bits ?? 0) / 1024).toFixed(3);
+    const { words, bits, mem_type, vendor, mux, banks, vt_type, hd_or_hs } =
+      result;
+    const muxRange =
+      result.muxMin !== undefined && result.muxMax !== undefined
+        ? `${result.muxMin}-${result.muxMax}`
+        : result.mux;
+    const banksRange =
+      result.banksMin !== undefined && result.banksMax !== undefined
+        ? `${result.banksMin}-${result.banksMax}`
+        : result.banks;
+    const sizeInKb = (((words ?? 0) * (bits ?? 0)) / 1024).toFixed();
     const fileName = `${sizeInKb}kb_${mem_type}_${vendor}_words-${words}_bits-${bits}_mux-${muxRange}_banks-${banksRange}_vt-${vt_type}_${hd_or_hs}`;
     return fileName;
   }
 
-
   const handleSaveResult = () => {
-    const newResult = { name: generateFileName(memoryInput), data: multipleOutput }
-    dispatch(updateSaveMultipleResults(newResult))
-  }
+    const newResult = {
+      name: generateFileName(memoryInput),
+      data: multipleOutput,
+    };
+    dispatch(updateSaveMultipleResults(newResult));
+  };
 
   return (
     <div className="relative">
@@ -42,8 +52,7 @@ function MultipleOutput() {
       </h3>
       <div className="flex justify-end items-center mb-2">
         <div className="flex gap-2">
-
-          <Tooltip title="Save Result" placement='top'>
+          <Tooltip title="Save Result" placement="top">
             <Button onClick={handleSaveResult} className="p-1 min-w-fit">
               <MdSave className="text-xl text-[#F24E1E]" />
             </Button>

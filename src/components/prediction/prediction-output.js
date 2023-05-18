@@ -38,7 +38,7 @@ function PredictionOutput() {
 
   function generateFileName(result) {
     const fileName =
-      ((result?.Words * result?.Bits) / 1024).toFixed(1) +
+      ((result?.Words * result?.Bits) / 1024).toFixed() +
       "kb" +
       "_" +
       result?.Mem_Type +

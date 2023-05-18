@@ -224,7 +224,6 @@ export default function MemoryPredictionInputs({
               <LabelWithOptions label="Banks" />
 
               <Paper className="h-14 flex items-center justify-center">
-                {console.log(selectedBanks)}
                 <FormGroup row>
                   {banksRange.length > 0 &&
                     banksRange.map((item, index) => (

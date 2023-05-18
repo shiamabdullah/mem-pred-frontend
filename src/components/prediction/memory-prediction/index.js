@@ -303,10 +303,19 @@ const MemoryPrediction = () => {
       // setBanksRange(matchedRange.matching_banks);
       // setMuxRange(matchedRange.matching_mux);
       let vtType = inputData.vt_type === "r" ? "rvt" : "lvt";
-      let fileName = `${inputData.mem_type}_${inputData.port}_${inputData.hd_or_hs}_${vtType}`;
-      setFileName(fileName);
-      console.log(fileName);
-      let { matchingWords, matchingBits } = findWordsBits(fileName);
+      let fileNameTemp = `${inputData.mem_type}_${inputData.port}_${inputData.hd_or_hs}_${vtType}`;
+      if (fileName && fileNameTemp !== fileName) {
+        // predictionInput?.words
+        setInputData((prev) => {
+          const temp = JSON.parse(JSON.stringify(prev));
+          temp["words"] = [];
+          temp["bits"] = [];
+          return temp;
+        });
+      }
+      setFileName(fileNameTemp);
+      console.log(fileNameTemp);
+      let { matchingWords, matchingBits } = findWordsBits(fileNameTemp);
       console.log({ matchingWords, matchingBits });
       setOptionWords(matchingWords);
       setoptionBits(matchingBits);
