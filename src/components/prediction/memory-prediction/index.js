@@ -26,6 +26,8 @@ const MemoryPrediction = () => {
   const [selectedBanks, setSelectedBanks] = useState([]);
   const [selectedMux, setSelectedMux] = useState([]);
   const [fileName, setFileName] = useState();
+  const [selectAllValuesForBanks, setSelectAllValuesForBanks] = useState([]);
+  const [selectAllValuesForMux, setSelectAllValuesForMux] = useState([]);
   const loading = useSelector(selectLoading);
   const dispatch = useDispatch();
 
@@ -108,10 +110,54 @@ const MemoryPrediction = () => {
   // Send request with multiple input
   const sendMultipleRequest = () => {
     const payload = [];
+    console.log(inputData?.banks);
+    console.log(inputData?.mux);
+    let valueAllFlag = false;
+    inputData?.banks?.includes("All") ? (valueAllFlag = true) : "";
+    inputData?.mux?.includes("All") ? (valueAllFlag = true) : "";
+    console.log({ selectAllValuesForBanks });
+    console.log({ selectAllValuesForMux });
+    console.log({ valueAllFlag });
 
     if (inputData?.banks?.length > 1 && inputData?.mux?.length > 1) {
-      for (let i = 0; i < inputData?.banks.length; i++) {
-        for (let j = 0; j < parseInt(inputData?.mux?.length); j++) {
+      if (valueAllFlag === true) {
+        for (let i = 0; i < selectAllValuesForBanks.length; i++) {
+          for (let j = 0; j < selectAllValuesForMux.length; j++) {
+            payload.push({
+              vendor: inputData?.vendor,
+              tech: inputData?.tech,
+              mem_type: inputData?.mem_type,
+              port: inputData?.port,
+              hd_or_hs: inputData?.hd_or_hs,
+              vt_type: inputData?.vt_type,
+              words: inputData.words,
+              bits: inputData.bits,
+              mux: selectAllValuesForMux[j],
+              banks: selectAllValuesForBanks[i],
+            });
+          }
+        }
+      } else {
+        for (let i = 0; i < inputData?.banks.length; i++) {
+          for (let j = 0; j < parseInt(inputData?.mux?.length); j++) {
+            payload.push({
+              vendor: inputData?.vendor,
+              tech: inputData?.tech,
+              mem_type: inputData?.mem_type,
+              port: inputData?.port,
+              hd_or_hs: inputData?.hd_or_hs,
+              vt_type: inputData?.vt_type,
+              words: inputData.words,
+              bits: inputData.bits,
+              mux: inputData.mux[j],
+              banks: inputData.banks[i],
+            });
+          }
+        }
+      }
+    } else if (inputData?.banks?.length > 1 && inputData?.mux?.length === 1) {
+      if (valueAllFlag === true) {
+        for (let i = 0; i < selectAllValuesForBanks.length; i++) {
           payload.push({
             vendor: inputData?.vendor,
             tech: inputData?.tech,
@@ -121,40 +167,57 @@ const MemoryPrediction = () => {
             vt_type: inputData?.vt_type,
             words: inputData.words,
             bits: inputData.bits,
-            mux: inputData.mux[j],
-            banks: inputData.banks[i],
+            mux: inputData?.mux[0],
+            banks: selectAllValuesForBanks[i],
+          });
+        }
+      } else {
+        for (let i = 0; i < parseInt(inputData?.banks.length); i++) {
+          payload.push({
+            vendor: inputData?.vendor,
+            tech: inputData?.tech,
+            mem_type: inputData?.mem_type,
+            port: inputData?.port,
+            hd_or_hs: inputData?.hd_or_hs,
+            vt_type: inputData?.vt_type,
+            words: inputData.words,
+            bits: inputData.bits,
+            mux: inputData?.mux[0],
+            banks: inputData?.banks[i],
           });
         }
       }
-    } else if (inputData?.banks?.length > 1 && inputData?.mux?.length === 1) {
-      for (let i = 0; i < parseInt(inputData?.banks.length); i++) {
-        payload.push({
-          vendor: inputData?.vendor,
-          tech: inputData?.tech,
-          mem_type: inputData?.mem_type,
-          port: inputData?.port,
-          hd_or_hs: inputData?.hd_or_hs,
-          vt_type: inputData?.vt_type,
-          words: inputData.words,
-          bits: inputData.bits,
-          mux: inputData?.mux[0],
-          banks: inputData?.banks[i],
-        });
-      }
     } else {
-      for (let i = 0; i < parseInt(inputData?.mux.length); i++) {
-        payload.push({
-          vendor: inputData?.vendor,
-          tech: inputData?.tech,
-          mem_type: inputData?.mem_type,
-          port: inputData?.port,
-          hd_or_hs: inputData?.hd_or_hs,
-          vt_type: inputData?.vt_type,
-          words: inputData.words,
-          bits: inputData.bits,
-          mux: inputData?.mux[i],
-          banks: inputData?.banks[0],
-        });
+      if (valueAllFlag === true) {
+        for (let i = 0; i < selectAllValuesForMux.length; i++) {
+          payload.push({
+            vendor: inputData?.vendor,
+            tech: inputData?.tech,
+            mem_type: inputData?.mem_type,
+            port: inputData?.port,
+            hd_or_hs: inputData?.hd_or_hs,
+            vt_type: inputData?.vt_type,
+            words: inputData.words,
+            bits: inputData.bits,
+            mux: selectAllValuesForMux[i],
+            banks: inputData?.banks[0],
+          });
+        }
+      } else {
+        for (let i = 0; i < parseInt(inputData?.mux.length); i++) {
+          payload.push({
+            vendor: inputData?.vendor,
+            tech: inputData?.tech,
+            mem_type: inputData?.mem_type,
+            port: inputData?.port,
+            hd_or_hs: inputData?.hd_or_hs,
+            vt_type: inputData?.vt_type,
+            words: inputData.words,
+            bits: inputData.bits,
+            mux: inputData?.mux[i],
+            banks: inputData?.banks[0],
+          });
+        }
       }
     }
 
@@ -277,8 +340,8 @@ const MemoryPrediction = () => {
           parseInt(inputData.words),
           parseInt(inputData.bits)
         );
-      // matchedRange?.matching_banks?.push("All");
-      // matchedRange?.matching_mux?.push("All");
+      matchedRange?.matching_banks?.push("All");
+      matchedRange?.matching_mux?.push("All");
       // console.log(matchedRange)
       setBanksRange(
         matchedRange?.matching_banks?.length > 0
@@ -354,6 +417,8 @@ const MemoryPrediction = () => {
         setSelectedBanks={setSelectedBanks}
         setSelectedMux={setSelectedMux}
         fileName={fileName}
+        setSelectAllValuesForBanks={setSelectAllValuesForBanks}
+        setSelectAllValuesForMux={setSelectAllValuesForMux}
       />
     </>
   );

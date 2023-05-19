@@ -54,10 +54,12 @@ export default function MemoryPredictionInputs({
   selectedMux,
   setSelectedMux,
   fileName,
+  setSelectAllValuesForBanks,
+  setSelectAllValuesForMux,
 }) {
   return (
     <div className="w-full relative">
-      <Tooltip title="Download CSV" placement="top">
+      <Tooltip title="Download specs" placement="top">
         <Button className="absolute top-0 right-0" disabled={!fileName}>
           {fileName ? (
             <CSVLink
@@ -207,9 +209,6 @@ export default function MemoryPredictionInputs({
                       )
                         handleChangeAutoComplete(input, "bits");
                     }}
-                    // onChange={(e) =>
-                    //   handleChangeAutoComplete(e.target.value, "bits")
-                    // }
                     label={
                       predictionInput["bits"]
                         ? ""
@@ -234,29 +233,50 @@ export default function MemoryPredictionInputs({
                               let previousData = prevSelectedBanks.filter(
                                 (bank) => bank !== e.target.value
                               );
+                              let tempPreviousData;
                               if (e.target.value === "All") {
-                                previousData = banksRange;
+                                e.target.checked
+                                  ? (tempPreviousData = banksRange.map((e) =>
+                                      String(e)
+                                    ))
+                                  : (tempPreviousData = []);
+                                const valueWithoutAll = banksRange.slice(0, -1);
+                                e.target.checked &&
+                                  setSelectAllValuesForBanks(valueWithoutAll);
+                              } else {
+                                tempPreviousData = previousData;
                               }
                               setPredictionInput((prev) => {
                                 const temp = JSON.parse(JSON.stringify(prev));
-                                temp["banks"] = previousData;
+                                temp["banks"] = tempPreviousData;
                                 return temp;
                               });
-                              return previousData;
+                              return tempPreviousData;
                             } else {
                               let checkedData = [
                                 ...prevSelectedBanks,
                                 e.target.value,
                               ];
+                              let tempPreviousData;
                               if (e.target.value === "All") {
                                 checkedData = banksRange;
+                                e.target.checked
+                                  ? (tempPreviousData = banksRange.map((e) =>
+                                      String(e)
+                                    ))
+                                  : (tempPreviousData = []);
+                                const valueWithoutAll = banksRange.slice(0, -1);
+                                e.target.checked &&
+                                  setSelectAllValuesForBanks(valueWithoutAll);
+                              } else {
+                                tempPreviousData = checkedData;
                               }
                               setPredictionInput((prev) => {
                                 const temp = JSON.parse(JSON.stringify(prev));
-                                temp["banks"] = checkedData;
+                                temp["banks"] = tempPreviousData;
                                 return temp;
                               });
-                              return checkedData;
+                              return tempPreviousData;
                             }
                           });
                         }}
@@ -289,23 +309,50 @@ export default function MemoryPredictionInputs({
                               let previousData = prevSelectedMux.filter(
                                 (mux) => mux !== e.target.value
                               );
+                              let tempPreviousData;
+                              if (e.target.value === "All") {
+                                e.target.checked
+                                  ? (tempPreviousData = muxRange.map((e) =>
+                                      String(e)
+                                    ))
+                                  : (tempPreviousData = []);
+                                const valueWithoutAll = muxRange.slice(0, -1);
+                                e.target.checked &&
+                                  setSelectAllValuesForMux(valueWithoutAll);
+                              } else {
+                                tempPreviousData = previousData;
+                              }
                               setPredictionInput((prev) => {
                                 const temp = JSON.parse(JSON.stringify(prev));
-                                temp["mux"] = previousData;
+                                temp["mux"] = tempPreviousData;
                                 return temp;
                               });
-                              return previousData;
+                              return tempPreviousData;
                             } else {
                               let checkedData = [
                                 ...prevSelectedMux,
                                 e.target.value,
                               ];
+                              let tempPreviousData;
+                              if (e.target.value === "All") {
+                                checkedData = muxRange;
+                                e.target.checked
+                                  ? (tempPreviousData = muxRange.map((e) =>
+                                      String(e)
+                                    ))
+                                  : (tempPreviousData = []);
+                                const valueWithoutAll = muxRange.slice(0, -1);
+                                e.target.checked &&
+                                  setSelectAllValuesForMux(valueWithoutAll);
+                              } else {
+                                tempPreviousData = checkedData;
+                              }
                               setPredictionInput((prev) => {
                                 const temp = JSON.parse(JSON.stringify(prev));
-                                temp["mux"] = checkedData;
+                                temp["mux"] = tempPreviousData;
                                 return temp;
                               });
-                              return checkedData;
+                              return tempPreviousData;
                             }
                           });
                         }}
