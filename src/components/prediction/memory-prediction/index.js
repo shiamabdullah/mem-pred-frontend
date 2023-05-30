@@ -110,14 +110,9 @@ const MemoryPrediction = () => {
   // Send request with multiple input
   const sendMultipleRequest = () => {
     const payload = [];
-    console.log(inputData?.banks);
-    console.log(inputData?.mux);
     let valueAllFlag = false;
     inputData?.banks?.includes("All") ? (valueAllFlag = true) : "";
     inputData?.mux?.includes("All") ? (valueAllFlag = true) : "";
-    console.log({ selectAllValuesForBanks });
-    console.log({ selectAllValuesForMux });
-    console.log({ valueAllFlag });
 
     if (inputData?.banks?.length > 1 && inputData?.mux?.length > 1) {
       if (valueAllFlag === true) {
@@ -223,7 +218,12 @@ const MemoryPrediction = () => {
 
     console.log(payload, inputData);
 
-    const url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-new-multi/`;
+    let url;
+
+    inputData?.tech === "22FDX"
+      ? (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-22fdx-multi/`)
+      : (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-new-multi/`);
+
     axios
       .post(url, payload)
       .then((response) => {
@@ -284,10 +284,25 @@ const MemoryPrediction = () => {
       let url;
       inputData?.tech === "12LPP"
         ? (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-new/`)
+        : inputData?.tech === "22FDX"
+        ? (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-22fdx/`)
         : (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory/`);
 
       const payload =
         inputData?.tech === "12LPP"
+          ? {
+              vendor: inputData?.vendor,
+              tech: inputData?.tech,
+              mem_type: inputData?.mem_type,
+              port: inputData?.port,
+              hd_or_hs: inputData?.hd_or_hs,
+              vt_type: inputData?.vt_type,
+              words: inputData.words,
+              bits: inputData.bits,
+              mux: inputData.mux,
+              banks: inputData.banks,
+            }
+          : inputData?.tech === "22FDX"
           ? {
               vendor: inputData?.vendor,
               tech: inputData?.tech,
@@ -340,8 +355,11 @@ const MemoryPrediction = () => {
           parseInt(inputData.words),
           parseInt(inputData.bits)
         );
-      matchedRange?.matching_banks?.push("All");
-      matchedRange?.matching_mux?.push("All");
+
+      matchedRange?.matching_banks?.length > 0 &&
+        matchedRange?.matching_banks?.push("All");
+      matchedRange?.matching_banks?.length > 0 &&
+        matchedRange?.matching_mux?.push("All");
       // console.log(matchedRange)
       setBanksRange(
         matchedRange?.matching_banks?.length > 0

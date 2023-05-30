@@ -21,11 +21,15 @@ import {
   WORDS,
 } from "../../../utils/data/memory-prediction-data";
 import {
-  BITS23FDX,
   MEMTYPE22FDX,
   PORTTYPE22FDX,
   VENDOR22FDX,
+  VTTYPE22FDX,
+  HDORHS22FDX,
   WORDS23FDX,
+  BITS23FDX,
+  MUX22FDX,
+  BANKS22FDX,
 } from "../../../utils/data/memory-prediction-data-22fdx";
 import LabelWithOptions from "../../helper-component/labe-with-options";
 import Label from "../../helper-component/label";
@@ -286,6 +290,7 @@ export default function MemoryPredictionInputs({
                             size="small"
                             checked={selectedBanks.includes(item.toString())}
                             value={item}
+                            disabled={selectedBanks.length > 0}
                           />
                         }
                         label={item}
@@ -362,6 +367,7 @@ export default function MemoryPredictionInputs({
                             size="small"
                             checked={selectedMux.includes(item.toString())}
                             value={item}
+                            disabled={selectedMux.length > 0}
                           />
                         }
                         label={item}
@@ -373,6 +379,27 @@ export default function MemoryPredictionInputs({
           </>
         ) : (
           <>
+            <div className="mb-4">
+              <Label>HD_or_HS</Label>
+              <SelectInput
+                name="hd_or_hs"
+                handleOnChange={handleOnChange}
+                predictionInput={predictionInput}
+                options={HDORHS22FDX}
+                value={predictionInput?.hd_or_hs}
+              />
+            </div>
+
+            <div className="mb-4">
+              <Label>Vt_Type</Label>
+              <SelectInput
+                name="vt_type"
+                handleOnChange={handleOnChange}
+                predictionInput={predictionInput}
+                options={VTTYPE22FDX}
+                value={predictionInput?.vt_type}
+              />
+            </div>
             <div className="mb-4">
               <Label>Words</Label>
               <Autocomplete
@@ -438,6 +465,234 @@ export default function MemoryPredictionInputs({
                   />
                 )}
               />
+            </div>
+
+            <div className="mb-4">
+              <LabelWithOptions label="Banks" />
+
+              <Paper className="h-14 flex items-center justify-center">
+                <FormGroup row>
+                  {BANKS22FDX.length > 0 &&
+                    BANKS22FDX.map((item, index) => (
+                      <FormControlLabel
+                        onChange={(e) => {
+                          setSelectedBanks((prevSelectedBanks) => {
+                            if (prevSelectedBanks.includes(e.target.value)) {
+                              let previousData = prevSelectedBanks.filter(
+                                (bank) => bank !== e.target.value
+                              );
+                              let tempPreviousData;
+                              if (e.target.value === "All") {
+                                e.target.checked
+                                  ? (tempPreviousData = BANKS22FDX.map((e) =>
+                                      String(e)
+                                    ))
+                                  : (tempPreviousData = []);
+                                const valueWithoutAll = BANKS22FDX.slice(0, -1);
+                                e.target.checked &&
+                                  setSelectAllValuesForBanks(valueWithoutAll);
+                              } else {
+                                tempPreviousData = previousData;
+                              }
+                              setPredictionInput((prev) => {
+                                const temp = JSON.parse(JSON.stringify(prev));
+                                temp["banks"] = tempPreviousData;
+                                return temp;
+                              });
+                              return tempPreviousData;
+                            } else {
+                              let checkedData = [
+                                ...prevSelectedBanks,
+                                e.target.value,
+                              ];
+                              let tempPreviousData;
+                              if (e.target.value === "All") {
+                                checkedData = BANKS22FDX;
+                                e.target.checked
+                                  ? (tempPreviousData = BANKS22FDX.map((e) =>
+                                      String(e)
+                                    ))
+                                  : (tempPreviousData = []);
+                                const valueWithoutAll = BANKS22FDX.slice(0, -1);
+                                e.target.checked &&
+                                  setSelectAllValuesForBanks(valueWithoutAll);
+                              } else {
+                                tempPreviousData = checkedData;
+                              }
+                              setPredictionInput((prev) => {
+                                const temp = JSON.parse(JSON.stringify(prev));
+                                temp["banks"] = tempPreviousData;
+                                return temp;
+                              });
+                              return tempPreviousData;
+                            }
+                          });
+                        }}
+                        key={index}
+                        control={
+                          <Checkbox
+                            size="small"
+                            checked={selectedBanks.includes(item.toString())}
+                            value={item}
+                          />
+                        }
+                        label={item}
+                      />
+                    ))}
+                </FormGroup>
+              </Paper>
+            </div>
+
+            <div className="mb-4">
+              <LabelWithOptions label="Mux" />
+
+              <Paper className="h-14 flex items-center justify-center">
+                <FormGroup row>
+                  {MUX22FDX.length > 0 &&
+                    MUX22FDX.map((item, index) => (
+                      <FormControlLabel
+                        onChange={(e) => {
+                          setSelectedMux((prevSelectedMux) => {
+                            if (prevSelectedMux.includes(e.target.value)) {
+                              let previousData = prevSelectedMux.filter(
+                                (mux) => mux !== e.target.value
+                              );
+                              let tempPreviousData;
+                              if (e.target.value === "All") {
+                                e.target.checked
+                                  ? (tempPreviousData = MUX22FDX.map((e) =>
+                                      String(e)
+                                    ))
+                                  : (tempPreviousData = []);
+                                const valueWithoutAll = MUX22FDX.slice(0, -1);
+                                e.target.checked &&
+                                  setSelectAllValuesForMux(valueWithoutAll);
+                              } else {
+                                tempPreviousData = previousData;
+                              }
+                              setPredictionInput((prev) => {
+                                const temp = JSON.parse(JSON.stringify(prev));
+                                temp["mux"] = tempPreviousData;
+                                return temp;
+                              });
+                              return tempPreviousData;
+                            } else {
+                              let checkedData = [
+                                ...prevSelectedMux,
+                                e.target.value,
+                              ];
+                              let tempPreviousData;
+                              if (e.target.value === "All") {
+                                checkedData = MUX22FDX;
+                                e.target.checked
+                                  ? (tempPreviousData = MUX22FDX.map((e) =>
+                                      String(e)
+                                    ))
+                                  : (tempPreviousData = []);
+                                const valueWithoutAll = MUX22FDX.slice(0, -1);
+                                e.target.checked &&
+                                  setSelectAllValuesForMux(valueWithoutAll);
+                              } else {
+                                tempPreviousData = checkedData;
+                              }
+                              setPredictionInput((prev) => {
+                                const temp = JSON.parse(JSON.stringify(prev));
+                                temp["mux"] = tempPreviousData;
+                                return temp;
+                              });
+                              return tempPreviousData;
+                            }
+                          });
+                        }}
+                        key={index}
+                        control={
+                          <Checkbox
+                            size="small"
+                            checked={selectedMux.includes(item.toString())}
+                            value={item}
+                          />
+                        }
+                        label={item}
+                      />
+                    ))}
+                </FormGroup>
+              </Paper>
+            </div>
+
+            <div className="mb-4">
+              <LabelWithOptions label="Banks" />
+
+              <Paper className="h-14 flex items-center justify-center">
+                <FormGroup row>
+                  {banksRange.length > 0 &&
+                    banksRange.map((item, index) => (
+                      <FormControlLabel
+                        onChange={(e) => {
+                          setSelectedBanks((prevSelectedBanks) => {
+                            if (prevSelectedBanks.includes(e.target.value)) {
+                              let previousData = prevSelectedBanks.filter(
+                                (bank) => bank !== e.target.value
+                              );
+                              let tempPreviousData;
+                              if (e.target.value === "All") {
+                                e.target.checked
+                                  ? (tempPreviousData = banksRange.map((e) =>
+                                      String(e)
+                                    ))
+                                  : (tempPreviousData = []);
+                                const valueWithoutAll = banksRange.slice(0, -1);
+                                e.target.checked &&
+                                  setSelectAllValuesForBanks(valueWithoutAll);
+                              } else {
+                                tempPreviousData = previousData;
+                              }
+                              setPredictionInput((prev) => {
+                                const temp = JSON.parse(JSON.stringify(prev));
+                                temp["banks"] = tempPreviousData;
+                                return temp;
+                              });
+                              return tempPreviousData;
+                            } else {
+                              let checkedData = [
+                                ...prevSelectedBanks,
+                                e.target.value,
+                              ];
+                              let tempPreviousData;
+                              if (e.target.value === "All") {
+                                checkedData = banksRange;
+                                e.target.checked
+                                  ? (tempPreviousData = banksRange.map((e) =>
+                                      String(e)
+                                    ))
+                                  : (tempPreviousData = []);
+                                const valueWithoutAll = banksRange.slice(0, -1);
+                                e.target.checked &&
+                                  setSelectAllValuesForBanks(valueWithoutAll);
+                              } else {
+                                tempPreviousData = checkedData;
+                              }
+                              setPredictionInput((prev) => {
+                                const temp = JSON.parse(JSON.stringify(prev));
+                                temp["banks"] = tempPreviousData;
+                                return temp;
+                              });
+                              return tempPreviousData;
+                            }
+                          });
+                        }}
+                        key={index}
+                        control={
+                          <Checkbox
+                            size="small"
+                            checked={selectedBanks.includes(item.toString())}
+                            value={item}
+                          />
+                        }
+                        label={item}
+                      />
+                    ))}
+                </FormGroup>
+              </Paper>
             </div>
           </>
         )}
