@@ -290,7 +290,6 @@ export default function MemoryPredictionInputs({
                             size="small"
                             checked={selectedBanks.includes(item.toString())}
                             value={item}
-                            disabled={selectedBanks.length > 0}
                           />
                         }
                         label={item}
@@ -367,7 +366,6 @@ export default function MemoryPredictionInputs({
                             size="small"
                             checked={selectedMux.includes(item.toString())}
                             value={item}
-                            disabled={selectedMux.length > 0}
                           />
                         }
                         label={item}
@@ -609,82 +607,6 @@ export default function MemoryPredictionInputs({
                           <Checkbox
                             size="small"
                             checked={selectedMux.includes(item.toString())}
-                            value={item}
-                          />
-                        }
-                        label={item}
-                      />
-                    ))}
-                </FormGroup>
-              </Paper>
-            </div>
-
-            <div className="mb-4">
-              <LabelWithOptions label="Banks" />
-
-              <Paper className="h-14 flex items-center justify-center">
-                <FormGroup row>
-                  {banksRange.length > 0 &&
-                    banksRange.map((item, index) => (
-                      <FormControlLabel
-                        onChange={(e) => {
-                          setSelectedBanks((prevSelectedBanks) => {
-                            if (prevSelectedBanks.includes(e.target.value)) {
-                              let previousData = prevSelectedBanks.filter(
-                                (bank) => bank !== e.target.value
-                              );
-                              let tempPreviousData;
-                              if (e.target.value === "All") {
-                                e.target.checked
-                                  ? (tempPreviousData = banksRange.map((e) =>
-                                      String(e)
-                                    ))
-                                  : (tempPreviousData = []);
-                                const valueWithoutAll = banksRange.slice(0, -1);
-                                e.target.checked &&
-                                  setSelectAllValuesForBanks(valueWithoutAll);
-                              } else {
-                                tempPreviousData = previousData;
-                              }
-                              setPredictionInput((prev) => {
-                                const temp = JSON.parse(JSON.stringify(prev));
-                                temp["banks"] = tempPreviousData;
-                                return temp;
-                              });
-                              return tempPreviousData;
-                            } else {
-                              let checkedData = [
-                                ...prevSelectedBanks,
-                                e.target.value,
-                              ];
-                              let tempPreviousData;
-                              if (e.target.value === "All") {
-                                checkedData = banksRange;
-                                e.target.checked
-                                  ? (tempPreviousData = banksRange.map((e) =>
-                                      String(e)
-                                    ))
-                                  : (tempPreviousData = []);
-                                const valueWithoutAll = banksRange.slice(0, -1);
-                                e.target.checked &&
-                                  setSelectAllValuesForBanks(valueWithoutAll);
-                              } else {
-                                tempPreviousData = checkedData;
-                              }
-                              setPredictionInput((prev) => {
-                                const temp = JSON.parse(JSON.stringify(prev));
-                                temp["banks"] = tempPreviousData;
-                                return temp;
-                              });
-                              return tempPreviousData;
-                            }
-                          });
-                        }}
-                        key={index}
-                        control={
-                          <Checkbox
-                            size="small"
-                            checked={selectedBanks.includes(item.toString())}
                             value={item}
                           />
                         }
