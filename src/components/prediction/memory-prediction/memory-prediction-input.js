@@ -290,7 +290,6 @@ export default function MemoryPredictionInputs({
                             size="small"
                             checked={selectedBanks.includes(item.toString())}
                             value={item}
-                            disabled={selectedBanks.length > 0}
                           />
                         }
                         label={item}
@@ -367,7 +366,6 @@ export default function MemoryPredictionInputs({
                             size="small"
                             checked={selectedMux.includes(item.toString())}
                             value={item}
-                            disabled={selectedMux.length > 0}
                           />
                         }
                         label={item}
