@@ -206,7 +206,7 @@ function MultipleOutput() {
     const percentageValues = {};
     for (const prop in MEAN) {
       if (typeof MEAN[prop] === "number" && typeof STDDEV[prop] === "number") {
-        percentageValues[prop] = (STDDEV[prop] / MEAN[prop]) * 100;
+        const percentage = (STDDEV[prop] / MEAN[prop]) * 100;
         percentageValues[prop] = Number(percentage.toFixed(2));
       }
     }
