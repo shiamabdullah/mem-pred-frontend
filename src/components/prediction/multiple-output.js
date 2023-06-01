@@ -27,16 +27,29 @@ function MultipleOutput() {
     let generatedData = [...dataArray];
     const { minValues, maxValues } = findMinMax(dataArray);
     let mean = findMean(dataArray);
-    let mode = findMode(dataArray);
+    // let mode = findMode(dataArray);
     let standardDeviation = findStandardDeviation(dataArray);
+    let median = findMedian(dataArray);
+    let percentageDiffOfStdDevMean = percentageDiffSTDDEVMEAN(
+      standardDeviation,
+      mean
+    );
 
     generatedData.push(minValues);
     generatedData.push(maxValues);
     generatedData.push(mean);
-    generatedData.push(mode);
+    generatedData.push(median);
     generatedData.push(standardDeviation);
+    generatedData.push(percentageDiffOfStdDevMean);
 
-    console.log({ minValues, maxValues, mean, mode, standardDeviation });
+    console.log({
+      minValues,
+      maxValues,
+      mean,
+      median,
+      standardDeviation,
+      percentageDiffOfStdDevMean,
+    });
     console.log(generatedData);
     return generatedData;
   }
@@ -187,6 +200,71 @@ function MultipleOutput() {
     console.log("Mode values:", modeValues);
 
     return modeValues;
+  }
+
+  function percentageDiffSTDDEVMEAN(STDDEV, MEAN) {
+    const percentageValues = {};
+    for (const prop in MEAN) {
+      if (typeof MEAN[prop] === "number" && typeof STDDEV[prop] === "number") {
+        percentageValues[prop] = (STDDEV[prop] / MEAN[prop]) * 100;
+        percentageValues[prop] = Number(percentage.toFixed(2));
+      }
+    }
+
+    percentageValues["Vendor"] = "StdDev/Mean %";
+    percentageValues["Tech"] = "";
+    percentageValues["Mem_Type"] = "";
+    percentageValues["Vt_Type"] = "";
+    percentageValues["Port"] = "";
+    percentageValues["HD_or_HS"] = "";
+    percentageValues["Words"] = "";
+    percentageValues["Bits"] = "";
+    percentageValues["Mux"] = "";
+    percentageValues["Banks"] = "";
+
+    return percentageValues;
+  }
+
+  function findMedian(dataArray) {
+    const medianValues = {};
+    for (const data of dataArray) {
+      for (const prop in data) {
+        if (!isNaN(data[prop])) {
+          if (typeof medianValues[prop] === "undefined") {
+            medianValues[prop] = [];
+          }
+          medianValues[prop].push(data[prop]);
+        }
+      }
+    }
+
+    for (const prop in medianValues) {
+      medianValues[prop].sort((a, b) => a - b); // Sort the values in ascending order
+      const midIndex = Math.floor(medianValues[prop].length / 2);
+      if (medianValues[prop].length % 2 === 0) {
+        // If the number of values is even, average the two middle values
+        medianValues[prop] =
+          (medianValues[prop][midIndex - 1] + medianValues[prop][midIndex]) / 2;
+      } else {
+        // If the number of values is odd, take the middle value
+        medianValues[prop] = medianValues[prop][midIndex];
+      }
+    }
+
+    medianValues["Vendor"] = "MEDIAN";
+    medianValues["Tech"] = "";
+    medianValues["Mem_Type"] = "";
+    medianValues["Vt_Type"] = "";
+    medianValues["Port"] = "";
+    medianValues["HD_or_HS"] = "";
+    medianValues["Words"] = "";
+    medianValues["Bits"] = "";
+    medianValues["Mux"] = "";
+    medianValues["Banks"] = "";
+
+    console.log("Median values:", medianValues);
+
+    return medianValues;
   }
 
   function findMean(dataArray) {
