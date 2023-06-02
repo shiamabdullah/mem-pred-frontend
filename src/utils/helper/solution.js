@@ -1,3 +1,4 @@
+import csv_headers_12llp from "../data/csv_headers_12llp";
 import config from "../data/memory-input-valid-data.json";
 
 function findUniqueValues(arr) {
@@ -28,34 +29,51 @@ function getRangedConf(config) {
   );
 }
 
+function invertRange(range) {
+  const start = range[0];
+  const end = range[range.length - 1];
+  const step = range[1] - range[0];
+
+  return `${start}:${end}:${step}`;
+}
+
 const data = getRangedConf(config);
 
-export function getInputCsvStructData(name) {
-  const specs = config[name];
-  if (specs) {
-    const vt = name.split("_") === "lvt" ? "l" : "r";
+export function getInputCsvStructData(name, words, bits) {
+  const vt = name?.split("_") === "lvt" ? "l" : "r";
+  const specs = data[name];
 
-    const csvHeaders = [
-      { label: "compiler_name", key: "compiler_name" },
-      { label: "mux", key: "mux" },
-      { label: "bank", key: "bank" },
-      { label: "words_min_max_incr", key: "words_min_max_incr" },
-      { label: "bits_min_max_incr", key: "bits_min_max_incr" },
-      { label: "vttype", key: "vttype" },
-    ];
+  const matchedSpecs = specs.filter((obj) => {
+    return (
+      obj[2].some((value) => value === words) &&
+      obj[3].some((value) => value === bits)
+    );
+  });
 
-    const csvData = specs?.map((obj) => {
+  if (matchedSpecs.length > 0) {
+    const csvData = matchedSpecs.map((obj) => {
       return {
         compiler_name: name,
         mux: obj[0],
         bank: obj[1],
-        words_min_max_incr: obj[2]?.join(":"),
-        bits_min_max_incr: obj[3]?.join(":"),
+        words_min_max_incr: invertRange(obj[2]).toString(),
+        bits_min_max_incr: invertRange(obj[3]).toString(),
         vttype: vt,
       };
     });
-    return { csvData, csvHeaders };
-  }
+
+    return csvData;
+  } else
+    return [
+      {
+        compiler_name: "",
+        mux: "",
+        bank: "",
+        words_min_max_incr: "",
+        bits_min_max_incr: "",
+        vttype: "",
+      },
+    ];
 }
 
 export function findWordsBits(name) {

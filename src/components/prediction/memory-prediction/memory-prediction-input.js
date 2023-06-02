@@ -40,6 +40,8 @@ import { MdOutlineFileDownload } from "react-icons/md";
 import { CleaningServices } from "@mui/icons-material";
 import DownloadIcon from "@mui/icons-material/Download";
 import { getInputCsvStructData } from "../../../utils/helper/solution";
+import csv_headers_12llp from "../../../utils/data/csv_headers_12llp";
+import { isWordsBitsSelected } from "../../../utils/helper/small_helpers";
 
 export default function MemoryPredictionInputs({
   onSubmit,
@@ -61,14 +63,37 @@ export default function MemoryPredictionInputs({
   setSelectAllValuesForBanks,
   setSelectAllValuesForMux,
 }) {
+  const selected_words_bits = isWordsBitsSelected(predictionInput);
+  let csvData =
+    selected_words_bits?.words && selected_words_bits?.bits
+      ? getInputCsvStructData(
+          fileName,
+          selected_words_bits.words,
+          selected_words_bits.bits
+        )
+      : [
+          {
+            compiler_name: "",
+            mux: "",
+            bank: "",
+            words_min_max_incr: "",
+            bits_min_max_incr: "",
+            vttype: "",
+          },
+        ];
+
+  console.log({ csvData });
   return (
     <div className="w-full relative">
       <Tooltip title="Download specs" placement="top">
-        <Button className="absolute top-0 right-0" disabled={!fileName}>
-          {fileName ? (
+        <Button
+          className="absolute top-0 right-0"
+          disabled={!(selected_words_bits.words || selected_words_bits.bits)}
+        >
+          {selected_words_bits?.words || selected_words_bits?.bits ? (
             <CSVLink
-              data={getInputCsvStructData(fileName)?.csvData || []}
-              headers={getInputCsvStructData(fileName)?.csvHeaders || []}
+              data={csvData}
+              headers={csv_headers_12llp}
               filename={fileName + ".csv"}
               className={`inline-flex items-center`}
             >
