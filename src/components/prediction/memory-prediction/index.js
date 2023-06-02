@@ -222,7 +222,7 @@ const MemoryPrediction = () => {
 
     inputData?.tech === "22FDX"
       ? (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-22fdx-multi/`)
-      : (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-new-multi/`);
+      : (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-12lpp-multi/`);
 
     axios
       .post(url, payload)
@@ -283,7 +283,7 @@ const MemoryPrediction = () => {
     if (inputData?.banks?.length === 1 && inputData?.mux?.length === 1) {
       let url;
       inputData?.tech === "12LPP"
-        ? (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-new/`)
+        ? (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-12lpp/`)
         : inputData?.tech === "22FDX"
         ? (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-22fdx/`)
         : (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory/`);
