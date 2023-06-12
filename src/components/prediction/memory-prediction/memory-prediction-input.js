@@ -64,28 +64,28 @@ export default function MemoryPredictionInputs({
   setSelectAllValuesForMux,
 }) {
   const selected_words_bits = isWordsBitsSelected(predictionInput);
-  let csvData =
-    selected_words_bits?.words && selected_words_bits?.bits
-      ? getInputCsvStructData(
-          fileName,
-          selected_words_bits.words,
-          selected_words_bits.bits
-        )
-      : [
-          {
-            compiler_name: "",
-            mux: "",
-            bank: "",
-            words_min_max_incr: "",
-            bits_min_max_incr: "",
-            vttype: "",
-          },
-        ];
+  // let csvData =
+  //   selected_words_bits?.words && selected_words_bits?.bits
+  //     ? getInputCsvStructData(
+  //         fileName,
+  //         selected_words_bits.words,
+  //         selected_words_bits.bits
+  //       )
+  //     : [
+  //         {
+  //           compiler_name: "",
+  //           mux: "",
+  //           bank: "",
+  //           words_min_max_incr: "",
+  //           bits_min_max_incr: "",
+  //           vttype: "",
+  //         },
+  //       ];
 
-  console.log({ csvData });
+  // console.log({ csvData });
   return (
     <div className="w-full relative">
-      <Tooltip title="Download specs" placement="top">
+      {/* <Tooltip title="Download specs" placement="top">
         <Button
           className="absolute top-0 right-0"
           disabled={!(selected_words_bits.words || selected_words_bits.bits)}
@@ -103,7 +103,7 @@ export default function MemoryPredictionInputs({
             <MdOutlineFileDownload className="text-2xl text-[#F24E1E]" />
           )}
         </Button>
-      </Tooltip>
+      </Tooltip> */}
 
       <div className="grid sm:grid-cols-3 sm:gap-6">
         <div className="mb-4">

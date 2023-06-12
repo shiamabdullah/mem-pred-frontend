@@ -59,8 +59,12 @@ const MemoryPrediction = () => {
     axios
       .post(url, payload)
       .then((response) => {
-        if (response.data?.result?.length > 0) {
-          dispatch(updateMemoryOutput(response?.data.result[0]));
+        console.log(response.data);
+        if (response.data?.model_1?.length > 0) {
+          let temp = response.data.model_1[0];
+          temp["Area_umA2"] = response.data?.model_2[0]["Area_umA2"];
+          console.log({ temp });
+          dispatch(updateMemoryOutput(temp));
         }
         dispatch(updateLoading(false));
       })
