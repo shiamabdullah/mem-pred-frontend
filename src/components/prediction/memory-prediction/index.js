@@ -231,9 +231,12 @@ const MemoryPrediction = () => {
     axios
       .post(url, payload)
       .then((response) => {
-        if (response.data?.result?.length > 0) {
+        if (response.data?.model_1?.length > 0) {
           // console.log(response?.data?.result)
-          dispatch(updateMultipleOutput(response?.data.result));
+          response.data?.model_1.map(
+            (e, i) => (e["Area_umA2"] = response.data?.model_2[i]["Area_umA2"])
+          );
+          dispatch(updateMultipleOutput(response.data?.model_1));
         }
         dispatch(updateLoading(false));
       })
