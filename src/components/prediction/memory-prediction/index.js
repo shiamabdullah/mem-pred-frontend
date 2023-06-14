@@ -28,6 +28,11 @@ const MemoryPrediction = () => {
   const [fileName, setFileName] = useState();
   const [selectAllValuesForBanks, setSelectAllValuesForBanks] = useState([]);
   const [selectAllValuesForMux, setSelectAllValuesForMux] = useState([]);
+  const [selectModel, setSelectModel] = useState("M1");
+  const [optionForSelectModel, setOptionForselectModel] = useState([
+    "M1",
+    "M1_M2",
+  ]);
   const loading = useSelector(selectLoading);
   const dispatch = useDispatch();
 
@@ -53,6 +58,11 @@ const MemoryPrediction = () => {
     });
   };
 
+  const handleChangeModel = (e) => {
+    console.log(e.target.value);
+    setSelectModel(e.target.value);
+  };
+
   // Function to send data payload to a server endpoint for prediction
   const postPrediction = (payload, url) => {
     // console.log(payload)
@@ -61,10 +71,17 @@ const MemoryPrediction = () => {
       .then((response) => {
         console.log(response.data);
         if (response.data?.model_1?.length > 0) {
-          let temp = response.data.model_1[0];
-          temp["Area_umA2"] = response.data?.model_2[0]["Area_umA2"];
-          console.log({ temp });
-          dispatch(updateMemoryOutput(temp));
+          if (selectModel === "M1") {
+            let temp = { ...response.data.model_1[0] }; // Create a deep copy of model_1[0]
+            dispatch(updateMemoryOutput(temp));
+            console.log(response.data);
+          } else {
+            let temp = { ...response.data.model_1[0] }; // Create a deep copy of model_1[0]
+            let temp2 = { ...response.data.model_2[0] }; // Create a deep copy of model_2[0]
+            temp["Area_umA2"] = temp2["Area_umA2"];
+            console.log(response.data);
+            dispatch(updateMemoryOutput(temp));
+          }
         }
         dispatch(updateLoading(false));
       })
@@ -232,11 +249,15 @@ const MemoryPrediction = () => {
       .post(url, payload)
       .then((response) => {
         if (response.data?.model_1?.length > 0) {
-          // console.log(response?.data?.result)
-          response.data?.model_1.map(
-            (e, i) => (e["Area_umA2"] = response.data?.model_2[i]["Area_umA2"])
-          );
-          dispatch(updateMultipleOutput(response.data?.model_1));
+          if (selectModel === "M1") {
+            dispatch(updateMultipleOutput(response.data?.model_1));
+          } else {
+            response.data?.model_1.map(
+              (e, i) =>
+                (e["Area_umA2"] = response.data?.model_2[i]["Area_umA2"])
+            );
+            dispatch(updateMultipleOutput(response.data?.model_1));
+          }
         }
         dispatch(updateLoading(false));
       })
@@ -444,6 +465,9 @@ const MemoryPrediction = () => {
         fileName={fileName}
         setSelectAllValuesForBanks={setSelectAllValuesForBanks}
         setSelectAllValuesForMux={setSelectAllValuesForMux}
+        selectModel={selectModel}
+        optionForSelectModel={optionForSelectModel}
+        handleChangeModel={handleChangeModel}
       />
     </>
   );

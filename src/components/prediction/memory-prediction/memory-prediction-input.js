@@ -9,6 +9,9 @@ import {
   Checkbox,
   FormGroup,
   Tooltip,
+  FormControl,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import {
   BITS,
@@ -62,6 +65,9 @@ export default function MemoryPredictionInputs({
   fileName,
   setSelectAllValuesForBanks,
   setSelectAllValuesForMux,
+  selectModel,
+  optionForSelectModel,
+  handleChangeModel,
 }) {
   const selected_words_bits = isWordsBitsSelected(predictionInput);
   // let csvData =
@@ -666,6 +672,25 @@ export default function MemoryPredictionInputs({
             value={predictionInput?.vddce || ""}
             onChange={handleOnChange}
           />
+        </div>
+
+        <div className="mb-4">
+          <Label>SELECT MODEL</Label>
+          <FormControl fullWidth>
+            <Select
+              labelId="demo-simple-select-label"
+              value={selectModel || ""}
+              // name={name}
+              onChange={(e) => handleChangeModel(e)}
+            >
+              {optionForSelectModel?.length > 0 &&
+                optionForSelectModel.map((option) => (
+                  <MenuItem className="" value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+            </Select>
+          </FormControl>
         </div>
       </div>
 
