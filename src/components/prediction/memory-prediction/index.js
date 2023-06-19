@@ -13,7 +13,12 @@ import {
   updateMemoryOutput,
   updateMultipleOutput,
 } from "../../../redux/reducer/memorySlice";
-import { findMuxBanks, findWordsBits } from "../../../utils/helper/solution";
+import {
+  findMuxBanks,
+  findWordsBits,
+  findWordsBitsFor22fdx,
+  findMuxBanksFor22fdx,
+} from "../../../utils/helper/solution";
 import MemoryPredictionInputs from "./memory-prediction-input";
 
 const MemoryPrediction = () => {
@@ -59,28 +64,33 @@ const MemoryPrediction = () => {
   };
 
   const handleChangeModel = (e) => {
-    console.log(e.target.value);
     setSelectModel(e.target.value);
   };
 
   // Function to send data payload to a server endpoint for prediction
   const postPrediction = (payload, url) => {
-    // console.log(payload)
+    console.log(payload);
     axios
       .post(url, payload)
       .then((response) => {
         console.log(response.data);
-        if (response.data?.model_1?.length > 0) {
-          if (selectModel === "M1") {
-            let temp = { ...response.data.model_1[0] }; // Create a deep copy of model_1[0]
-            dispatch(updateMemoryOutput(temp));
-            console.log(response.data);
-          } else {
-            let temp = { ...response.data.model_1[0] }; // Create a deep copy of model_1[0]
-            let temp2 = { ...response.data.model_2[0] }; // Create a deep copy of model_2[0]
-            temp["Area_umA2"] = temp2["Area_umA2"];
-            console.log(response.data);
-            dispatch(updateMemoryOutput(temp));
+        if (payload.tech === "12LPP") {
+          if (response.data?.model_1?.length > 0) {
+            if (selectModel === "M1") {
+              let temp = { ...response.data.model_1[0] }; // Create a deep copy of model_1[0]
+              dispatch(updateMemoryOutput(temp));
+              console.log(response.data);
+            } else {
+              let temp = { ...response.data.model_1[0] }; // Create a deep copy of model_1[0]
+              let temp2 = { ...response.data.model_2[0] }; // Create a deep copy of model_2[0]
+              temp["Area_umA2"] = temp2["Area_umA2"];
+              console.log(response.data);
+              dispatch(updateMemoryOutput(temp));
+            }
+          }
+        } else {
+          if (response.data?.result.length > 0) {
+            dispatch(updateMemoryOutput(response.data?.result[0]));
           }
         }
         dispatch(updateLoading(false));
@@ -244,19 +254,26 @@ const MemoryPrediction = () => {
     inputData?.tech === "22FDX"
       ? (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-22fdx-multi/`)
       : (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-12lpp-multi/`);
-
+    console.log(payload[0].tech);
     axios
       .post(url, payload)
       .then((response) => {
-        if (response.data?.model_1?.length > 0) {
-          if (selectModel === "M1") {
-            dispatch(updateMultipleOutput(response.data?.model_1));
-          } else {
-            response.data?.model_1.map(
-              (e, i) =>
-                (e["Area_umA2"] = response.data?.model_2[i]["Area_umA2"])
-            );
-            dispatch(updateMultipleOutput(response.data?.model_1));
+        if (payload[0].tech === "12LPP") {
+          console.log("sgfsd gfsefh");
+          if (response.data?.model_1?.length > 0) {
+            if (selectModel === "M1") {
+              dispatch(updateMultipleOutput(response.data?.model_1));
+            } else {
+              response.data?.model_1.map(
+                (e, i) =>
+                  (e["Area_umA2"] = response.data?.model_2[i]["Area_umA2"])
+              );
+              dispatch(updateMultipleOutput(response.data?.model_1));
+            }
+          }
+        } else {
+          if (response.data?.result?.length > 0) {
+            dispatch(updateMultipleOutput(response.data.result));
           }
         }
         dispatch(updateLoading(false));
@@ -361,7 +378,6 @@ const MemoryPrediction = () => {
       sendMultipleRequest();
     }
   };
-
   // Define handleReset function
   const handleReset = () => {
     setInputData({
@@ -375,28 +391,62 @@ const MemoryPrediction = () => {
   };
 
   const setBanksAndMuxRanges = () => {
-    if (inputData.words && inputData.bits) {
-      const matchedRange =
-        fileName &&
-        findMuxBanks(
-          fileName,
-          parseInt(inputData.words),
-          parseInt(inputData.bits)
-        );
+    console.log(inputData);
+    if (inputData.tech === "12LPP") {
+      if (inputData.words && inputData.bits) {
+        const matchedRange =
+          fileName &&
+          findMuxBanks(
+            fileName,
+            parseInt(inputData.words),
+            parseInt(inputData.bits)
+          );
 
-      matchedRange?.matching_banks?.length > 0 &&
-        matchedRange?.matching_banks?.push("All");
-      matchedRange?.matching_banks?.length > 0 &&
-        matchedRange?.matching_mux?.push("All");
-      // console.log(matchedRange)
-      setBanksRange(
-        matchedRange?.matching_banks?.length > 0
-          ? matchedRange.matching_banks
-          : []
-      );
-      setMuxRange(
-        matchedRange?.matching_mux?.length > 0 ? matchedRange.matching_mux : []
-      );
+        matchedRange?.matching_banks?.length > 0 &&
+          matchedRange?.matching_banks?.push("All");
+        matchedRange?.matching_banks?.length > 0 &&
+          matchedRange?.matching_mux?.push("All");
+        // console.log(matchedRange)
+        setBanksRange(
+          matchedRange?.matching_banks?.length > 0
+            ? matchedRange.matching_banks
+            : []
+        );
+        setMuxRange(
+          matchedRange?.matching_mux?.length > 0
+            ? matchedRange.matching_mux
+            : []
+        );
+      }
+    } else {
+      console.log("22fdx");
+      console.log(fileName);
+
+      if (inputData.words && inputData.bits) {
+        const matchedRange =
+          fileName &&
+          findMuxBanksFor22fdx(
+            fileName,
+            parseInt(inputData.words),
+            parseInt(inputData.bits)
+          );
+
+        matchedRange?.matching_banks?.length > 0 &&
+          matchedRange?.matching_banks?.push("All");
+        matchedRange?.matching_banks?.length > 0 &&
+          matchedRange?.matching_mux?.push("All");
+        // console.log(matchedRange)
+        setBanksRange(
+          matchedRange?.matching_banks?.length > 0
+            ? matchedRange.matching_banks
+            : []
+        );
+        setMuxRange(
+          matchedRange?.matching_mux?.length > 0
+            ? matchedRange.matching_mux
+            : []
+        );
+      }
     }
   };
 
@@ -407,27 +457,41 @@ const MemoryPrediction = () => {
       inputData.hd_or_hs &&
       inputData.vt_type
     ) {
-      // const matchedRange = findMuxBanks(parseInt(inputData.words), parseInt(inputData.bits));
-      // // console.log(matchedRange)
-      // setBanksRange(matchedRange.matching_banks);
-      // setMuxRange(matchedRange.matching_mux);
       let vtType = inputData.vt_type === "r" ? "rvt" : "lvt";
-      let fileNameTemp = `${inputData.mem_type}_${inputData.port}_${inputData.hd_or_hs}_${vtType}`;
-      if (fileName && fileNameTemp !== fileName) {
-        // predictionInput?.words
-        setInputData((prev) => {
-          const temp = JSON.parse(JSON.stringify(prev));
-          temp["words"] = [];
-          temp["bits"] = [];
-          return temp;
-        });
+      if (inputData.tech && inputData.tech === "12LPP") {
+        let fileNameTemp = `${inputData.mem_type}_${inputData.port}_${inputData.hd_or_hs}_${vtType}`;
+        if (fileName && fileNameTemp !== fileName) {
+          // predictionInput?.words
+          setInputData((prev) => {
+            const temp = JSON.parse(JSON.stringify(prev));
+            temp["words"] = [];
+            temp["bits"] = [];
+            return temp;
+          });
+        }
+        setFileName(fileNameTemp);
+        let { matchingWords, matchingBits } = findWordsBits(fileNameTemp);
+        console.log({ matchingWords, matchingBits });
+        setOptionWords(matchingWords);
+        setoptionBits(matchingBits);
+      } else {
+        let fileNameTemp = `${inputData.mem_type}_${inputData.port}_${inputData.hd_or_hs}`;
+        if (fileName && fileNameTemp !== fileName) {
+          // predictionInput?.words
+          setInputData((prev) => {
+            const temp = JSON.parse(JSON.stringify(prev));
+            temp["words"] = [];
+            temp["bits"] = [];
+            return temp;
+          });
+        }
+        setFileName(fileNameTemp);
+        let { matchingWords, matchingBits } =
+          findWordsBitsFor22fdx(fileNameTemp);
+        console.log({ matchingWords, matchingBits });
+        setOptionWords(matchingWords);
+        setoptionBits(matchingBits);
       }
-      setFileName(fileNameTemp);
-      console.log(fileNameTemp);
-      let { matchingWords, matchingBits } = findWordsBits(fileNameTemp);
-      console.log({ matchingWords, matchingBits });
-      setOptionWords(matchingWords);
-      setoptionBits(matchingBits);
     }
   };
 
@@ -442,6 +506,7 @@ const MemoryPrediction = () => {
     inputData.port,
     inputData.hd_or_hs,
     inputData.vt_type,
+    inputData.tech,
   ]);
 
   return (

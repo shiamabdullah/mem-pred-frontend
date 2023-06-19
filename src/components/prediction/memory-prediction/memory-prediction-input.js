@@ -193,11 +193,7 @@ export default function MemoryPredictionInputs({
                 onChange={(event, newValue) =>
                   handleChangeAutoComplete(newValue, "words")
                 }
-                options={
-                  predictionInput?.tech === "12LPP"
-                    ? optionForWords.sort((a, b) => a - b)
-                    : WORDS23FDX
-                }
+                options={optionForWords.sort((a, b) => a - b)}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -226,11 +222,7 @@ export default function MemoryPredictionInputs({
                 onChange={(event, newValue) =>
                   handleChangeAutoComplete(newValue, "bits")
                 }
-                options={
-                  predictionInput?.tech === "12LPP"
-                    ? optionForBits.sort((a, b) => a - b)
-                    : BITS23FDX
-                }
+                options={optionForBits.sort((a, b) => a - b)}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -436,11 +428,7 @@ export default function MemoryPredictionInputs({
                 onChange={(event, newValue) =>
                   handleChangeAutoComplete(newValue, "words")
                 }
-                options={
-                  predictionInput?.tech === "12LPP"
-                    ? WORDS.map((x) => x.toString())
-                    : WORDS23FDX
-                }
+                options={optionForWords.sort((a, b) => a - b)}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -469,7 +457,7 @@ export default function MemoryPredictionInputs({
                 onChange={(event, newValue) =>
                   handleChangeAutoComplete(newValue, "bits")
                 }
-                options={predictionInput?.tech === "12LPP" ? BITS : BITS23FDX}
+                options={optionForBits.sort((a, b) => a - b)}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -501,8 +489,8 @@ export default function MemoryPredictionInputs({
 
               <Paper className="h-14 flex items-center justify-center">
                 <FormGroup row>
-                  {BANKS22FDX.length > 0 &&
-                    BANKS22FDX.map((item, index) => (
+                  {banksRange.length > 0 &&
+                    banksRange.map((item, index) => (
                       <FormControlLabel
                         onChange={(e) => {
                           setSelectedBanks((prevSelectedBanks) => {
@@ -513,11 +501,11 @@ export default function MemoryPredictionInputs({
                               let tempPreviousData;
                               if (e.target.value === "All") {
                                 e.target.checked
-                                  ? (tempPreviousData = BANKS22FDX.map((e) =>
+                                  ? (tempPreviousData = banksRange.map((e) =>
                                       String(e)
                                     ))
                                   : (tempPreviousData = []);
-                                const valueWithoutAll = BANKS22FDX.slice(0, -1);
+                                const valueWithoutAll = banksRange.slice(0, -1);
                                 e.target.checked &&
                                   setSelectAllValuesForBanks(valueWithoutAll);
                               } else {
@@ -536,13 +524,13 @@ export default function MemoryPredictionInputs({
                               ];
                               let tempPreviousData;
                               if (e.target.value === "All") {
-                                checkedData = BANKS22FDX;
+                                checkedData = banksRange;
                                 e.target.checked
-                                  ? (tempPreviousData = BANKS22FDX.map((e) =>
+                                  ? (tempPreviousData = banksRange.map((e) =>
                                       String(e)
                                     ))
                                   : (tempPreviousData = []);
-                                const valueWithoutAll = BANKS22FDX.slice(0, -1);
+                                const valueWithoutAll = banksRange.slice(0, -1);
                                 e.target.checked &&
                                   setSelectAllValuesForBanks(valueWithoutAll);
                               } else {
@@ -577,8 +565,8 @@ export default function MemoryPredictionInputs({
 
               <Paper className="h-14 flex items-center justify-center">
                 <FormGroup row>
-                  {MUX22FDX.length > 0 &&
-                    MUX22FDX.map((item, index) => (
+                  {banksRange.length > 0 &&
+                    banksRange.map((item, index) => (
                       <FormControlLabel
                         onChange={(e) => {
                           setSelectedMux((prevSelectedMux) => {
@@ -589,11 +577,11 @@ export default function MemoryPredictionInputs({
                               let tempPreviousData;
                               if (e.target.value === "All") {
                                 e.target.checked
-                                  ? (tempPreviousData = MUX22FDX.map((e) =>
+                                  ? (tempPreviousData = banksRange.map((e) =>
                                       String(e)
                                     ))
                                   : (tempPreviousData = []);
-                                const valueWithoutAll = MUX22FDX.slice(0, -1);
+                                const valueWithoutAll = banksRange.slice(0, -1);
                                 e.target.checked &&
                                   setSelectAllValuesForMux(valueWithoutAll);
                               } else {
@@ -612,13 +600,13 @@ export default function MemoryPredictionInputs({
                               ];
                               let tempPreviousData;
                               if (e.target.value === "All") {
-                                checkedData = MUX22FDX;
+                                checkedData = banksRange;
                                 e.target.checked
-                                  ? (tempPreviousData = MUX22FDX.map((e) =>
+                                  ? (tempPreviousData = banksRange.map((e) =>
                                       String(e)
                                     ))
                                   : (tempPreviousData = []);
-                                const valueWithoutAll = MUX22FDX.slice(0, -1);
+                                const valueWithoutAll = banksRange.slice(0, -1);
                                 e.target.checked &&
                                   setSelectAllValuesForMux(valueWithoutAll);
                               } else {
@@ -674,7 +662,7 @@ export default function MemoryPredictionInputs({
           />
         </div>
 
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <Label>SELECT MODEL</Label>
           <FormControl fullWidth>
             <Select
@@ -691,7 +679,7 @@ export default function MemoryPredictionInputs({
                 ))}
             </Select>
           </FormControl>
-        </div>
+        </div> */}
       </div>
 
       <div className="flex w-full items-center  justify-center gap-6 mt-5">
