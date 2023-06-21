@@ -41,41 +41,100 @@ function invertRange(range) {
 const data = getRangedConf(config);
 const dataFor22fdx = getRangedConf(configFor22fdx);
 
-export function getInputCsvStructData(name, words, bits) {
-  const vt = name?.split("_") === "lvt" ? "l" : "r";
-  const specs = data[name];
-
-  const matchedSpecs = specs.filter((obj) => {
-    return (
-      obj[2].some((value) => value === words) &&
-      obj[3].some((value) => value === bits)
-    );
-  });
-
-  if (matchedSpecs.length > 0) {
-    const csvData = matchedSpecs.map((obj) => {
-      return {
-        compiler_name: name,
-        mux: obj[0],
-        bank: obj[1],
-        words_min_max_incr: invertRange(obj[2]).toString(),
-        bits_min_max_incr: invertRange(obj[3]).toString(),
-        vttype: vt,
-      };
+export function getInputCsvStructData(name, words, bits, tech) {
+  if (tech === "12LPP") {
+    const vt = name?.split("_") === "lvt" ? "l" : "r";
+    const specs = data[name];
+    console.log(specs);
+    const matchedSpecs = specs.filter((obj) => {
+      return (
+        obj[2].some((value) => value === words) &&
+        obj[3].some((value) => value === bits)
+      );
     });
 
-    return csvData;
-  } else
-    return [
-      {
-        compiler_name: "",
-        mux: "",
-        bank: "",
-        words_min_max_incr: "",
-        bits_min_max_incr: "",
-        vttype: "",
-      },
-    ];
+    if (matchedSpecs.length > 0) {
+      const csvData = matchedSpecs.map((obj) => {
+        return {
+          compiler_name: name,
+          mux: obj[0],
+          bank: obj[1],
+          words_min_max_incr: invertRange(obj[2]).toString(),
+          bits_min_max_incr: invertRange(obj[3]).toString(),
+          vttype: vt,
+        };
+      });
+
+      return csvData;
+    } else
+      return [
+        {
+          compiler_name: "",
+          mux: "",
+          bank: "",
+          words_min_max_incr: "",
+          bits_min_max_incr: "",
+          vttype: "",
+        },
+      ];
+  } else {
+    // const vt = name?.split("_") === "lvt" ? "l" : "r";
+
+    const specSheet = {
+      gf22nsd01p11s1psl02ms: "sram_sp_hd_hvt_ag1",
+      gf22nsd41p11s1dcl02ms: "sram_sp_hd_rvt_ag1",
+      gf22nsd41p11s1crl256s: "rf_sp_hd_rvt_ag1",
+      gf22nsd42p11s1drl128s: "rf_2p_hd_rvt_ag1",
+      gf22nsd81p11sadul256s: "rf_sp_hd_hvt_ag0",
+    };
+
+    const searchValue = name;
+
+    const matchingKeys = [];
+
+    for (const key in specSheet) {
+      if (specSheet[key].includes(searchValue)) {
+        matchingKeys.push(key);
+      }
+    }
+
+    for (let key of matchingKeys) {
+      console.log(key);
+      const specs = dataFor22fdx[key];
+      console.log(specs);
+      const matchedSpecs = specs.filter((obj) => {
+        return (
+          obj[2].some((value) => value === words) &&
+          obj[3].some((value) => value === bits)
+        );
+      });
+
+      if (matchedSpecs.length > 0) {
+        const csvData = matchedSpecs.map((obj) => {
+          return {
+            compiler_name: key,
+            mux: obj[0],
+            bank: obj[1],
+            words_min_max_incr: invertRange(obj[2]).toString(),
+            bits_min_max_incr: invertRange(obj[3]).toString(),
+            // vttype: vt,
+          };
+        });
+
+        return csvData;
+      } else
+        return [
+          {
+            compiler_name: "",
+            mux: "",
+            bank: "",
+            words_min_max_incr: "",
+            bits_min_max_incr: "",
+            // vttype: "",
+          },
+        ];
+    }
+  }
 }
 
 export function findWordsBitsFor22fdx(name) {
