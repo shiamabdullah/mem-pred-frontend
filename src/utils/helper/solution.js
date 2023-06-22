@@ -46,14 +46,14 @@ export function getInputCsvStructData(name, words, bits, tech) {
     const vt = name?.split("_") === "lvt" ? "l" : "r";
     const specs = data[name];
     console.log(specs);
-    const matchedSpecs = specs.filter((obj) => {
+    const matchedSpecs = specs?.filter((obj) => {
       return (
         obj[2].some((value) => value === words) &&
         obj[3].some((value) => value === bits)
       );
     });
 
-    if (matchedSpecs.length > 0) {
+    if (matchedSpecs?.length > 0) {
       const csvData = matchedSpecs.map((obj) => {
         return {
           compiler_name: name,
