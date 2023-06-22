@@ -20,6 +20,7 @@ import {
   findMuxBanksFor22fdx,
 } from "../../../utils/helper/solution";
 import MemoryPredictionInputs from "./memory-prediction-input";
+import { getInputCsvStructData } from "../../../utils/helper/solution";
 
 const MemoryPrediction = () => {
   const memoryInput = useSelector(selectMemoryInput);
@@ -30,7 +31,9 @@ const MemoryPrediction = () => {
   const [optionWords, setOptionWords] = useState([]);
   const [selectedBanks, setSelectedBanks] = useState([]);
   const [selectedMux, setSelectedMux] = useState([]);
-  const [fileName, setFileName] = useState();
+  const [fileName, setFileName] = useState(
+    memoryInput.fileName ? memoryInput.fileName : ""
+  );
   const [selectAllValuesForBanks, setSelectAllValuesForBanks] = useState([]);
   const [selectAllValuesForMux, setSelectAllValuesForMux] = useState([]);
   const [selectModel, setSelectModel] = useState("M1");
@@ -38,8 +41,23 @@ const MemoryPrediction = () => {
     "M1",
     "M1_M2",
   ]);
+  const [csvData, setCsvData] = useState([
+    {
+      compiler_name: "",
+      mux: "",
+      bank: "",
+      words_min_max_incr: "",
+      bits_min_max_incr: "",
+      vttype: "",
+    },
+  ]);
   const loading = useSelector(selectLoading);
   const dispatch = useDispatch();
+
+  // const setFileNameForDownload = (inputs) => {
+  //   console.log(inputs);
+  //   return "";
+  // };
 
   // Define handleOnChange function
   const handleOnChange = (e) => {
@@ -254,7 +272,7 @@ const MemoryPrediction = () => {
     inputData?.tech === "22FDX"
       ? (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-22fdx-multi/`)
       : (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-12lpp-multi/`);
-    console.log(payload[0].tech);
+
     axios
       .post(url, payload)
       .then((response) => {
@@ -308,8 +326,38 @@ const MemoryPrediction = () => {
   //   }
   // };
 
+  const setCSVDataForDownload = () => {
+    const tempData =
+      inputData?.words && inputData?.bits
+        ? getInputCsvStructData(
+            fileName,
+            inputData.words,
+            inputData.bits,
+            inputData.tech
+          )
+        : [
+            {
+              compiler_name: "",
+              mux: "",
+              bank: "",
+              words_min_max_incr: "",
+              bits_min_max_incr: "",
+              vttype: "",
+            },
+          ];
+
+    console.log(csvData);
+
+    setCsvData(tempData);
+  };
+
   // Define onSubmit function
   const onSubmit = async () => {
+    // inputData["banks"] = banksRange;
+    // inputData["mux"] = muxRange;
+    inputData["fileName"] = fileName;
+
+    console.log({ inputData });
     dispatch(updateMemoryInput(inputData));
     const validationError = validateRequiredInput(inputData);
 
@@ -317,6 +365,7 @@ const MemoryPrediction = () => {
       toast.error(validationError);
       return;
     }
+
     // const rangeError = rangeValidationCheck(inputData);
 
     // if (rangeError) {
@@ -492,11 +541,15 @@ const MemoryPrediction = () => {
         setOptionWords(matchingWords);
         setoptionBits(matchingBits);
       }
+    } else {
+      setBanksRange([]);
+      setMuxRange([]);
     }
   };
 
   useEffect(() => {
     setBanksAndMuxRanges();
+    setCSVDataForDownload();
   }, [inputData.words, inputData.bits]);
 
   useEffect(() => {
@@ -533,6 +586,7 @@ const MemoryPrediction = () => {
         selectModel={selectModel}
         optionForSelectModel={optionForSelectModel}
         handleChangeModel={handleChangeModel}
+        csvData={csvData}
       />
     </>
   );

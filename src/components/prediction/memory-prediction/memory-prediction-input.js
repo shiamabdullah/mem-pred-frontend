@@ -44,6 +44,7 @@ import { CleaningServices } from "@mui/icons-material";
 import DownloadIcon from "@mui/icons-material/Download";
 import { getInputCsvStructData } from "../../../utils/helper/solution";
 import csv_headers_12llp from "../../../utils/data/csv_headers_12llp";
+import csv_headers_22fdx from "../../../utils/data/csv_headers_12llp";
 import { isWordsBitsSelected } from "../../../utils/helper/small_helpers";
 
 export default function MemoryPredictionInputs({
@@ -68,38 +69,37 @@ export default function MemoryPredictionInputs({
   selectModel,
   optionForSelectModel,
   handleChangeModel,
+  csvData,
 }) {
-  const selected_words_bits = isWordsBitsSelected(predictionInput);
-  // let csvData =
-  //   selected_words_bits?.words && selected_words_bits?.bits
-  //     ? getInputCsvStructData(
-  //         fileName,
-  //         selected_words_bits.words,
-  //         selected_words_bits.bits
-  //       )
-  //     : [
-  //         {
-  //           compiler_name: "",
-  //           mux: "",
-  //           bank: "",
-  //           words_min_max_incr: "",
-  //           bits_min_max_incr: "",
-  //           vttype: "",
-  //         },
-  //       ];
+  // selected_words_bits?.words && selected_words_bits?.bits
+  //   ? getInputCsvStructData(
+  //       fileName,
+  //       selected_words_bits.words,
+  //       selected_words_bits.bits
+  //     )
+  //   : [
+  //       {
+  //         compiler_name: "",
+  //         mux: "",
+  //         bank: "",
+  //         words_min_max_incr: "",
+  //         bits_min_max_incr: "",
+  //         vttype: "",
+  //       },
+  //     ];
 
-  // console.log({ csvData });
   return (
     <div className="w-full relative">
-      {/* <Tooltip title="Download specs" placement="top">
-        <Button
-          className="absolute top-0 right-0"
-          disabled={!(selected_words_bits.words || selected_words_bits.bits)}
-        >
-          {selected_words_bits?.words || selected_words_bits?.bits ? (
+      <Tooltip title="Download specs" placement="top">
+        <Button className="absolute top-0 right-0">
+          {predictionInput?.words || predictionInput?.bits ? (
             <CSVLink
               data={csvData}
-              headers={csv_headers_12llp}
+              headers={
+                predictionInput?.tech === "12LPP"
+                  ? csv_headers_12llp
+                  : csv_headers_22fdx
+              }
               filename={fileName + ".csv"}
               className={`inline-flex items-center`}
             >
@@ -109,7 +109,7 @@ export default function MemoryPredictionInputs({
             <MdOutlineFileDownload className="text-2xl text-[#F24E1E]" />
           )}
         </Button>
-      </Tooltip> */}
+      </Tooltip>
 
       <div className="grid sm:grid-cols-3 sm:gap-6">
         <div className="mb-4">
