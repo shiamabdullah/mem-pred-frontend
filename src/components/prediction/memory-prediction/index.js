@@ -93,18 +93,21 @@ const MemoryPrediction = () => {
       .then((response) => {
         console.log(response.data);
         if (payload.tech === "12LPP") {
-          if (response.data?.model_1?.length > 0) {
-            if (selectModel === "M1") {
-              let temp = { ...response.data.model_1[0] }; // Create a deep copy of model_1[0]
-              dispatch(updateMemoryOutput(temp));
-              console.log(response.data);
-            } else {
-              let temp = { ...response.data.model_1[0] }; // Create a deep copy of model_1[0]
-              let temp2 = { ...response.data.model_2[0] }; // Create a deep copy of model_2[0]
-              temp["Area_umA2"] = temp2["Area_umA2"];
-              console.log(response.data);
-              dispatch(updateMemoryOutput(temp));
-            }
+          // if (response.data?.model_1?.length > 0) {
+          //   if (selectModel === "M1") {
+          //     let temp = { ...response.data.model_1[0] }; // Create a deep copy of model_1[0]
+          //     dispatch(updateMemoryOutput(temp));
+          //     console.log(response.data);
+          //   } else {
+          //     let temp = { ...response.data.model_1[0] }; // Create a deep copy of model_1[0]
+          //     let temp2 = { ...response.data.model_2[0] }; // Create a deep copy of model_2[0]
+          //     temp["Area_umA2"] = temp2["Area_umA2"];
+          //     console.log(response.data);
+          //     dispatch(updateMemoryOutput(temp));
+          //   }
+          // }
+          if (response.data?.result.length > 0) {
+            dispatch(updateMemoryOutput(response.data?.result[0]));
           }
         } else {
           if (response.data?.result.length > 0) {
@@ -270,24 +273,27 @@ const MemoryPrediction = () => {
     let url;
 
     inputData?.tech === "22FDX"
-      ? (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-22fdx-multi/`)
-      : (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-12lpp-multi/`);
+      ? (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-22fdx-new-multi/`)
+      : (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-12lpp-new-multi/`);
 
     axios
       .post(url, payload)
       .then((response) => {
         if (payload[0].tech === "12LPP") {
-          console.log("sgfsd gfsefh");
-          if (response.data?.model_1?.length > 0) {
-            if (selectModel === "M1") {
-              dispatch(updateMultipleOutput(response.data?.model_1));
-            } else {
-              response.data?.model_1.map(
-                (e, i) =>
-                  (e["Area_umA2"] = response.data?.model_2[i]["Area_umA2"])
-              );
-              dispatch(updateMultipleOutput(response.data?.model_1));
-            }
+          // console.log("sgfsd gfsefh");
+          // if (response.data?.model_1?.length > 0) {
+          //   if (selectModel === "M1") {
+          //     dispatch(updateMultipleOutput(response.data?.model_1));
+          //   } else {
+          //     response.data?.model_1.map(
+          //       (e, i) =>
+          //         (e["Area_umA2"] = response.data?.model_2[i]["Area_umA2"])
+          //     );
+          //     dispatch(updateMultipleOutput(response.data?.model_1));
+          //   }
+          // }
+          if (response.data?.result?.length > 0) {
+            dispatch(updateMultipleOutput(response.data.result));
           }
         } else {
           if (response.data?.result?.length > 0) {
@@ -377,9 +383,9 @@ const MemoryPrediction = () => {
     if (inputData?.banks?.length === 1 && inputData?.mux?.length === 1) {
       let url;
       inputData?.tech === "12LPP"
-        ? (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-12lpp/`)
+        ? (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-12lpp-new/`)
         : inputData?.tech === "22FDX"
-        ? (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-22fdx/`)
+        ? (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-22fdx-new/`)
         : (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory/`);
 
       const payload =

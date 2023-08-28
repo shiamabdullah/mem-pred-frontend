@@ -8,19 +8,18 @@ import { selectCurrentState } from "./redux/reducer/layoutSlice";
 export default function App() {
   const currentState = useSelector(selectCurrentState);
 
-
-  React.useEffect(()=>{
-    if(currentState === "memory"){
-      document.title = "Memory Prediction"
-    }else{
-      document.title = "Logic Prediction"
+  React.useEffect(() => {
+    if (currentState === "memory") {
+      document.title = "Memory Prediction";
+    } else {
+      document.title = "Logic Prediction";
     }
-  },[currentState])
+  }, [currentState]);
 
   return (
     <>
       <Prediction />
-      <ToastContainer autoClose={2000} theme='colored' />
+      <ToastContainer autoClose={2000} theme="colored" />
     </>
   );
 }
