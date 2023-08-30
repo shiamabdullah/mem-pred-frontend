@@ -477,7 +477,10 @@ const MemoryPrediction = () => {
       console.log("22fdx");
       console.log(fileName);
 
+      console.log({ inputData });
+
       if (inputData.words && inputData.bits) {
+        console.log("inside input");
         const matchedRange =
           fileName &&
           findMuxBanksFor22fdx(
@@ -485,6 +488,8 @@ const MemoryPrediction = () => {
             parseInt(inputData.words),
             parseInt(inputData.bits)
           );
+
+        console.log({ matchedRange });
 
         matchedRange?.matching_banks?.length > 0 &&
           matchedRange?.matching_banks?.push("All");

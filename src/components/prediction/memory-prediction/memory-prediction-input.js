@@ -331,6 +331,7 @@ export default function MemoryPredictionInputs({
                     muxRange.map((item, index) => (
                       <FormControlLabel
                         onChange={(e) => {
+                          console.log(muxRange);
                           setSelectedMux((prevSelectedMux) => {
                             if (prevSelectedMux.includes(e.target.value)) {
                               let previousData = prevSelectedMux.filter(
@@ -565,8 +566,8 @@ export default function MemoryPredictionInputs({
 
               <Paper className="h-14 flex items-center justify-center">
                 <FormGroup row>
-                  {banksRange.length > 0 &&
-                    banksRange.map((item, index) => (
+                  {muxRange.length > 0 &&
+                    muxRange.map((item, index) => (
                       <FormControlLabel
                         onChange={(e) => {
                           setSelectedMux((prevSelectedMux) => {
@@ -577,11 +578,11 @@ export default function MemoryPredictionInputs({
                               let tempPreviousData;
                               if (e.target.value === "All") {
                                 e.target.checked
-                                  ? (tempPreviousData = banksRange.map((e) =>
+                                  ? (tempPreviousData = muxRange.map((e) =>
                                       String(e)
                                     ))
                                   : (tempPreviousData = []);
-                                const valueWithoutAll = banksRange.slice(0, -1);
+                                const valueWithoutAll = muxRange.slice(0, -1);
                                 e.target.checked &&
                                   setSelectAllValuesForMux(valueWithoutAll);
                               } else {
@@ -600,13 +601,13 @@ export default function MemoryPredictionInputs({
                               ];
                               let tempPreviousData;
                               if (e.target.value === "All") {
-                                checkedData = banksRange;
+                                checkedData = muxRange;
                                 e.target.checked
-                                  ? (tempPreviousData = banksRange.map((e) =>
+                                  ? (tempPreviousData = muxRange.map((e) =>
                                       String(e)
                                     ))
                                   : (tempPreviousData = []);
-                                const valueWithoutAll = banksRange.slice(0, -1);
+                                const valueWithoutAll = muxRange.slice(0, -1);
                                 e.target.checked &&
                                   setSelectAllValuesForMux(valueWithoutAll);
                               } else {

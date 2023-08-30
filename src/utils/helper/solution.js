@@ -268,6 +268,10 @@ export function findMuxBanksFor22fdx(name, words, bits) {
         }
       }
 
+      console.log("Maching Mux And Banks______________-");
+      console.log(matchingMux);
+      console.log(matchingBanks);
+
       return {
         matching_mux: findUniqueValues(matchingMux),
         matching_banks: findUniqueValues(matchingBanks),
