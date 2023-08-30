@@ -17,7 +17,7 @@ export default function LogicPredictionInputs({
   handleReset,
   predictionInput,
 }) {
-  console.log({ predictionInput });
+  // console.log({ predictionInput });
   return (
     <div className="w-full">
       <div className="grid grid-cols-3 gap-6">

@@ -64,10 +64,8 @@ const LogicPrediction = () => {
       !predictionInput.bias
     ) {
       toast.error(
-        `${!predictionInput.frequency ? "Frequency," : ""} ${
-          !predictionInput.vnom ? "Vnom," : ""
-        } ${!predictionInput.track ? "Track," : ""} ${
-          !predictionInput.design ? "Design," : ""
+        `${!predictionInput.frequency ? "Frequency," : ""} ${!predictionInput.vnom ? "Vnom," : ""
+        } ${!predictionInput.track ? "Track," : ""} ${!predictionInput.design ? "Design," : ""
         } ${!predictionInput.beol ? "Beol," : ""} 
         ${!predictionInput.process ? "Process," : ""}
         ${!predictionInput.bias ? "BIAS," : ""}

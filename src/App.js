@@ -1,24 +1,30 @@
 import * as React from "react";
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Prediction from "./components/prediction";
-import { useSelector } from "react-redux";
-import { selectCurrentState } from "./redux/reducer/layoutSlice";
+import Logic from "./pages/logic";
+import Memory from "./pages/memory";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Memory />,
+  },
+  {
+    path: "/logic",
+    element: <Logic />,
+  },
+]);
+
 
 export default function App() {
-  const currentState = useSelector(selectCurrentState);
-
-  React.useEffect(() => {
-    if (currentState === "memory") {
-      document.title = "Memory Prediction";
-    } else {
-      document.title = "Logic Prediction";
-    }
-  }, [currentState]);
 
   return (
     <>
-      <Prediction />
+      <RouterProvider router={router} />
       <ToastContainer autoClose={2000} theme="colored" />
     </>
   );

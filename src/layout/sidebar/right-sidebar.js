@@ -18,8 +18,8 @@ import {
 } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import PredictionModal from "../../components/modal/predictionModal";
-import { selectCurrentState } from "../../redux/reducer/layoutSlice";
 import {
   removeSavedMultipleResults,
   removeSavedResult,
@@ -43,10 +43,10 @@ function RightSidebar() {
   const [isOpenModal, setOpenModal] = useState(false);
   const [selectedData, setSelectedData] = useState({});
   const [selectedDataMultiple, setSelectedDataMultiple] = useState({});
-  const currentInput = useSelector(selectCurrentState);
   const savedResult = useSelector(selectSavedResult);
   const savedMultipleResult = useSelector(selectMultipleSavedResult) || [];
   const dispatch = useDispatch();
+  let { pathname } = useLocation();
 
   const csvHeaders = [
     {
@@ -222,11 +222,11 @@ function RightSidebar() {
   };
 
   React.useEffect(() => {
-    if (currentInput === "logic") {
+    if (pathname === "/logic") {
       setSelectedData({});
       setSelectedDataMultiple({});
     }
-  }, [currentInput]);
+  }, [pathname]);
 
   return (
     <div className="outline-1 h-fit bg-white min-h-full rounded-lg shadow-lg 2xl:p-8 p-4 ">
@@ -234,7 +234,7 @@ function RightSidebar() {
         Previously saved Predictions
       </p>
       {(savedResult?.length > 0 || savedMultipleResult?.length > 0) &&
-        currentInput === "memory" && (
+        pathname === "/" && (
           <>
             <div className="my-12 flex flex-col">
               {savedResult.length > 0 && (
