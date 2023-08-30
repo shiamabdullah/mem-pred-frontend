@@ -1,51 +1,35 @@
 import {
   Autocomplete,
   Button,
-  FormControlLabel,
-  Paper,
-  Radio,
-  RadioGroup,
-  TextField,
   Checkbox,
+  FormControlLabel,
   FormGroup,
-  Tooltip,
-  FormControl,
-  Select,
-  MenuItem,
+  Paper,
+  TextField,
+  Tooltip
 } from "@mui/material";
+import { CSVLink } from "react-csv";
+import { MdOutlineFileDownload } from "react-icons/md";
+import { default as csv_headers_12llp, default as csv_headers_22fdx } from "../../../utils/data/csv_headers_12llp";
 import {
-  BITS,
   HDHSTYPE,
   MEMTYPE,
   PORTTYPE,
   TECH,
   VENDOR,
-  VTTYPE,
-  WORDS,
+  VTTYPE
 } from "../../../utils/data/memory-prediction-data";
 import {
+  HDORHS22FDX,
   MEMTYPE22FDX,
   PORTTYPE22FDX,
   VENDOR22FDX,
-  VTTYPE22FDX,
-  HDORHS22FDX,
-  WORDS23FDX,
-  BITS23FDX,
-  MUX22FDX,
-  BANKS22FDX,
+  VTTYPE22FDX
 } from "../../../utils/data/memory-prediction-data-22fdx";
 import LabelWithOptions from "../../helper-component/labe-with-options";
 import Label from "../../helper-component/label";
 import Loader from "../../helper-component/loader";
 import SelectInput from "../../helper-component/select-input";
-import { CSVLink } from "react-csv";
-import { MdOutlineFileDownload } from "react-icons/md";
-import { CleaningServices } from "@mui/icons-material";
-import DownloadIcon from "@mui/icons-material/Download";
-import { getInputCsvStructData } from "../../../utils/helper/solution";
-import csv_headers_12llp from "../../../utils/data/csv_headers_12llp";
-import csv_headers_22fdx from "../../../utils/data/csv_headers_12llp";
-import { isWordsBitsSelected } from "../../../utils/helper/small_helpers";
 
 export default function MemoryPredictionInputs({
   onSubmit,
@@ -71,22 +55,6 @@ export default function MemoryPredictionInputs({
   handleChangeModel,
   csvData,
 }) {
-  // selected_words_bits?.words && selected_words_bits?.bits
-  //   ? getInputCsvStructData(
-  //       fileName,
-  //       selected_words_bits.words,
-  //       selected_words_bits.bits
-  //     )
-  //   : [
-  //       {
-  //         compiler_name: "",
-  //         mux: "",
-  //         bank: "",
-  //         words_min_max_incr: "",
-  //         bits_min_max_incr: "",
-  //         vttype: "",
-  //       },
-  //     ];
 
   return (
     <div className="w-full relative">
@@ -194,6 +162,7 @@ export default function MemoryPredictionInputs({
                   handleChangeAutoComplete(newValue, "words")
                 }
                 options={optionForWords.sort((a, b) => a - b)}
+                getOptionLabel={(option) => option.toString()}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -223,6 +192,7 @@ export default function MemoryPredictionInputs({
                   handleChangeAutoComplete(newValue, "bits")
                 }
                 options={optionForBits.sort((a, b) => a - b)}
+                getOptionLabel={(option) => option.toString()}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -264,8 +234,8 @@ export default function MemoryPredictionInputs({
                               if (e.target.value === "All") {
                                 e.target.checked
                                   ? (tempPreviousData = banksRange.map((e) =>
-                                      String(e)
-                                    ))
+                                    String(e)
+                                  ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = banksRange.slice(0, -1);
                                 e.target.checked &&
@@ -289,8 +259,8 @@ export default function MemoryPredictionInputs({
                                 checkedData = banksRange;
                                 e.target.checked
                                   ? (tempPreviousData = banksRange.map((e) =>
-                                      String(e)
-                                    ))
+                                    String(e)
+                                  ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = banksRange.slice(0, -1);
                                 e.target.checked &&
@@ -341,8 +311,8 @@ export default function MemoryPredictionInputs({
                               if (e.target.value === "All") {
                                 e.target.checked
                                   ? (tempPreviousData = muxRange.map((e) =>
-                                      String(e)
-                                    ))
+                                    String(e)
+                                  ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = muxRange.slice(0, -1);
                                 e.target.checked &&
@@ -366,8 +336,8 @@ export default function MemoryPredictionInputs({
                                 checkedData = muxRange;
                                 e.target.checked
                                   ? (tempPreviousData = muxRange.map((e) =>
-                                      String(e)
-                                    ))
+                                    String(e)
+                                  ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = muxRange.slice(0, -1);
                                 e.target.checked &&
@@ -430,6 +400,7 @@ export default function MemoryPredictionInputs({
                   handleChangeAutoComplete(newValue, "words")
                 }
                 options={optionForWords.sort((a, b) => a - b)}
+                getOptionLabel={(option) => option.toString()}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -459,6 +430,7 @@ export default function MemoryPredictionInputs({
                   handleChangeAutoComplete(newValue, "bits")
                 }
                 options={optionForBits.sort((a, b) => a - b)}
+                getOptionLabel={(option) => option.toString()}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -487,7 +459,6 @@ export default function MemoryPredictionInputs({
 
             <div className="mb-4">
               <LabelWithOptions label="Banks" />
-
               <Paper className="h-14 flex items-center justify-center">
                 <FormGroup row>
                   {banksRange.length > 0 &&
@@ -503,8 +474,8 @@ export default function MemoryPredictionInputs({
                               if (e.target.value === "All") {
                                 e.target.checked
                                   ? (tempPreviousData = banksRange.map((e) =>
-                                      String(e)
-                                    ))
+                                    String(e)
+                                  ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = banksRange.slice(0, -1);
                                 e.target.checked &&
@@ -528,8 +499,8 @@ export default function MemoryPredictionInputs({
                                 checkedData = banksRange;
                                 e.target.checked
                                   ? (tempPreviousData = banksRange.map((e) =>
-                                      String(e)
-                                    ))
+                                    String(e)
+                                  ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = banksRange.slice(0, -1);
                                 e.target.checked &&
@@ -579,8 +550,8 @@ export default function MemoryPredictionInputs({
                               if (e.target.value === "All") {
                                 e.target.checked
                                   ? (tempPreviousData = muxRange.map((e) =>
-                                      String(e)
-                                    ))
+                                    String(e)
+                                  ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = muxRange.slice(0, -1);
                                 e.target.checked &&
@@ -604,8 +575,8 @@ export default function MemoryPredictionInputs({
                                 checkedData = muxRange;
                                 e.target.checked
                                   ? (tempPreviousData = muxRange.map((e) =>
-                                      String(e)
-                                    ))
+                                    String(e)
+                                  ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = muxRange.slice(0, -1);
                                 e.target.checked &&
