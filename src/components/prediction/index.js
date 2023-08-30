@@ -1,6 +1,6 @@
 // @flow strict
 
-import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import * as React from 'react';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { useSelector } from 'react-redux';
@@ -31,11 +31,17 @@ function Prediction() {
           (
             ((isNotEmpty(memoryOutput) || multipleOutput.length > 0) && currentState === 'memory')
             || (isNotEmpty(logicOutput) && currentState === 'logic')) ?
-            <Accordion expanded={isExpanded} onChange={(e, f) => setExpanded(f)}>
+            <Accordion
+              className="rounded-lg mt-5 border-none"
+              expanded={isExpanded}
+              onChange={(e, f) => setExpanded(f)}>
               <AccordionSummary
-                expandIcon={<IoMdArrowDropdown className="text-2xl text-[#F24E1E]" />}
+                expandIcon={<IoMdArrowDropdown
+                  className="text-2xl text-[#F24E1E]"
+                />}
               >
-                <Typography>Input</Typography>
+                <h3
+                  className="text-left font-medium my-0 py-0 text-[#84828A] text-xl">Input</h3>
               </AccordionSummary>
               <AccordionDetails>
                 <PredictionInput />

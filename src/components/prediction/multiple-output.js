@@ -1,7 +1,9 @@
 // @flow strict
-import { Box, Button, CircularProgress, Tooltip } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, CircularProgress, Tooltip } from "@mui/material";
 import * as React from "react";
+import { useState } from "react";
 import { CSVLink } from "react-csv";
+import { IoMdArrowDropdown } from "react-icons/io";
 import { MdOutlineFileDownload, MdSave } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { selectLoading } from "../../redux/reducer/layoutSlice";
@@ -11,9 +13,12 @@ import {
 } from "../../redux/reducer/memorySlice";
 import { updateSaveMultipleResults } from "../../redux/reducer/resultSlice";
 import getCsvHeadersMultipleData from "../../utils/helper/getCsvHeaders";
+import SingleChart from "../charts/single-chart";
 import BuildOutputResult from "./output-result";
 
 function MultipleOutput() {
+  const [isExpanded, setExpanded] = useState(true);
+  const [isExpandedChart, setExpandedChart] = useState(false);
   const dispatch = useDispatch();
   const loading = useSelector(selectLoading);
   const multipleOutput = useSelector(selectMultipleOutput);
@@ -354,56 +359,109 @@ function MultipleOutput() {
     dispatch(updateSaveMultipleResults(newResult));
   };
 
-  return (
-    <div className="relative">
-      <h3 className="text-left font-medium p-2 text-[#84828A] text-xl">
-        Output
-      </h3>
-      <div className="flex justify-end items-center mb-2">
-        <div className="flex gap-2">
-          <Tooltip title="Save Result" placement="top">
-            <Button onClick={handleSaveResult} className="p-1 min-w-fit">
-              <MdSave className="text-xl text-[#F24E1E]" />
-            </Button>
-          </Tooltip>
+  const keywords = ['Area_umA2', 'leakage_power_mw_ffg', 'leakage_power_mw_ssg', 'leakage_power_mw_tt',
+    'leakage_power_mw_ffg_log10', 'leakage_power_mw_ssg_log10', 'leakage_power_mw_tt_log10',
+    'read_power_pj_ffg', 'read_power_pj_ssg', 'read_power_pj_tt', 'tacc_ns_ffg', 'tacc_ns_ssg',
+    'tacc_ns_tt', 'tcycle_ns_ffg', 'tcycle_ns_ssg', 'tcycle_ns_tt', 'thold_ns_ffg',
+    'thold_ns_ssg', 'thold_ns_tt', 'tsetup_ns_ffg', 'tsetup_ns_ssg', 'tsetup_ns_tt',
+    'write_power_pj_ffg', 'write_power_pj_ssg', 'write_power_pj_tt'
+  ]
 
-          <Tooltip title="Download CSV" placement="top">
-            <Button className="p-0 min-w-fit">
-              <CSVLink
-                data={generatedData}
-                headers={csvHeaders}
-                filename={generateFileName(memoryInput) + ".csv"}
-                className={`inline-flex items-center`}
-              >
-                <MdOutlineFileDownload className="text-2xl text-[#F24E1E]" />
-              </CSVLink>
-            </Button>
-          </Tooltip>
-        </div>
-      </div>
-      <div className="grid grid-cols-2 gap-2 gap-y-4 mt-3">
-        {loading ? (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              marginTop: 5,
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        ) : (
-          multipleOutput.map((item, index) => (
-            <div
-              key={index}
-              className="shadow-[0_5px_20px_rgba(0,0,0,0.05)]  rounded-lg"
-            >
-              <BuildOutputResult data={item} />
+  return (
+    <div className="">
+      <Accordion
+        className="rounded-lg mt-5 border-none"
+        expanded={isExpanded}
+        onChange={(e, f) => setExpanded(f)}>
+        <AccordionSummary
+          expandIcon={<IoMdArrowDropdown
+            className="text-2xl text-[#F24E1E]"
+          />}
+        >
+          <h3
+            className="text-left font-medium my-0 py-0 text-[#84828A] text-xl">
+            Output
+          </h3>
+        </AccordionSummary>
+        <AccordionDetails>
+          <div className="relative">
+            <div className="flex justify-end items-center mb-2">
+              <div className="flex gap-2">
+                <Tooltip title="Save Result" placement="top">
+                  <Button onClick={handleSaveResult} className="p-1 min-w-fit">
+                    <MdSave className="text-xl text-[#F24E1E]" />
+                  </Button>
+                </Tooltip>
+
+                <Tooltip title="Download CSV" placement="top">
+                  <Button className="p-0 min-w-fit">
+                    <CSVLink
+                      data={generatedData}
+                      headers={csvHeaders}
+                      filename={generateFileName(memoryInput) + ".csv"}
+                      className={`inline-flex items-center`}
+                    >
+                      <MdOutlineFileDownload className="text-2xl text-[#F24E1E]" />
+                    </CSVLink>
+                  </Button>
+                </Tooltip>
+              </div>
             </div>
-          ))
-        )}
-      </div>
+            <div className="grid grid-cols-2 gap-2 gap-y-4 mt-3">
+              {loading ? (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: 5,
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
+              ) : (
+                multipleOutput.map((item, index) => (
+                  <div
+                    key={index}
+                    className="shadow-[0_5px_20px_rgba(0,0,0,0.05)]  rounded-lg"
+                  >
+                    <BuildOutputResult data={item} />
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion
+        className="rounded-lg mt-5 border-none"
+        expanded={isExpandedChart}
+        onChange={(e, f) => setExpandedChart(f)}>
+        <AccordionSummary
+          expandIcon={<IoMdArrowDropdown
+            className="text-2xl text-[#F24E1E]"
+          />}
+        >
+          <h3
+            className="text-left font-medium my-0 py-0 text-[#84828A] text-xl">
+            Chart
+          </h3>
+        </AccordionSummary>
+        <AccordionDetails>
+          <div
+            className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
+            {
+              keywords.map((keyword, index) => (
+                <SingleChart
+                  key={index}
+                  multipleOutput={multipleOutput}
+                  keyword={keyword}
+                />
+              ))
+            }
+          </div>
+        </AccordionDetails>
+      </Accordion>
     </div>
   );
 }
