@@ -1,5 +1,13 @@
 // @flow strict
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, CircularProgress, Tooltip } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Button,
+  CircularProgress,
+  Tooltip,
+} from "@mui/material";
 import * as React from "react";
 import { useState } from "react";
 import { CSVLink } from "react-csv";
@@ -351,6 +359,32 @@ function MultipleOutput() {
     return fileName;
   }
 
+  function generateFileNameForChartName(result) {
+    const {
+      words,
+      bits,
+      mem_type,
+      vendor,
+      mux,
+      banks,
+      vt_type,
+      hd_or_hs,
+      port,
+      tech,
+    } = result;
+    const muxRange =
+      result.muxMin !== undefined && result.muxMax !== undefined
+        ? `${result.muxMin}-${result.muxMax}`
+        : result.mux;
+    const banksRange =
+      result.banksMin !== undefined && result.banksMax !== undefined
+        ? `${result.banksMin}-${result.banksMax}`
+        : result.banks;
+    const sizeInKb = (((words ?? 0) * (bits ?? 0)) / 1024).toFixed();
+    const fileName = `${tech.toLowerCase()}_${vendor.toLowerCase()}_${mem_type}_${port}_${vt_type.toLowerCase()}_${hd_or_hs}`;
+    return fileName;
+  }
+
   const handleSaveResult = () => {
     const newResult = {
       name: generateFileName(memoryInput),
@@ -359,28 +393,46 @@ function MultipleOutput() {
     dispatch(updateSaveMultipleResults(newResult));
   };
 
-  const keywords = ['Area_umA2', 'leakage_power_mw_ffg', 'leakage_power_mw_ssg', 'leakage_power_mw_tt',
-    'leakage_power_mw_ffg_log10', 'leakage_power_mw_ssg_log10', 'leakage_power_mw_tt_log10',
-    'read_power_pj_ffg', 'read_power_pj_ssg', 'read_power_pj_tt', 'tacc_ns_ffg', 'tacc_ns_ssg',
-    'tacc_ns_tt', 'tcycle_ns_ffg', 'tcycle_ns_ssg', 'tcycle_ns_tt', 'thold_ns_ffg',
-    'thold_ns_ssg', 'thold_ns_tt', 'tsetup_ns_ffg', 'tsetup_ns_ssg', 'tsetup_ns_tt',
-    'write_power_pj_ffg', 'write_power_pj_ssg', 'write_power_pj_tt'
-  ]
+  const keywords = [
+    "Area_umA2",
+    "leakage_power_mw_ffg",
+    "leakage_power_mw_ssg",
+    "leakage_power_mw_tt",
+    "leakage_power_mw_ffg_log10",
+    "leakage_power_mw_ssg_log10",
+    "leakage_power_mw_tt_log10",
+    "read_power_pj_ffg",
+    "read_power_pj_ssg",
+    "read_power_pj_tt",
+    "tacc_ns_ffg",
+    "tacc_ns_ssg",
+    "tacc_ns_tt",
+    "tcycle_ns_ffg",
+    "tcycle_ns_ssg",
+    "tcycle_ns_tt",
+    "thold_ns_ffg",
+    "thold_ns_ssg",
+    "thold_ns_tt",
+    "tsetup_ns_ffg",
+    "tsetup_ns_ssg",
+    "tsetup_ns_tt",
+    "write_power_pj_ffg",
+    "write_power_pj_ssg",
+    "write_power_pj_tt",
+  ];
 
   return (
     <div className="">
       <Accordion
         className="rounded-lg mt-5 border-none"
         expanded={isExpanded}
-        onChange={(e, f) => setExpanded(f)}>
+        onChange={(e, f) => setExpanded(f)}
+      >
         <AccordionSummary
-          expandIcon={<IoMdArrowDropdown
-            className="text-2xl text-[#F24E1E]"
-          />}
+          expandIcon={<IoMdArrowDropdown className="text-2xl text-[#F24E1E]" />}
         >
-          <h3
-            className="text-left font-medium my-0 py-0 text-[#84828A] text-xl">
-            Output
+          <h3 className="text-left font-medium my-0 py-0 text-[#84828A] text-xl">
+            Outputs
           </h3>
         </AccordionSummary>
         <AccordionDetails>
@@ -436,29 +488,25 @@ function MultipleOutput() {
       <Accordion
         className="rounded-lg mt-5 border-none"
         expanded={isExpandedChart}
-        onChange={(e, f) => setExpandedChart(f)}>
+        onChange={(e, f) => setExpandedChart(f)}
+      >
         <AccordionSummary
-          expandIcon={<IoMdArrowDropdown
-            className="text-2xl text-[#F24E1E]"
-          />}
+          expandIcon={<IoMdArrowDropdown className="text-2xl text-[#F24E1E]" />}
         >
-          <h3
-            className="text-left font-medium my-0 py-0 text-[#84828A] text-xl">
-            Chart
+          <h3 className="text-left font-medium my-0 py-0 text-[#84828A] text-xl">
+            Charts
           </h3>
         </AccordionSummary>
         <AccordionDetails>
-          <div
-            className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
-            {
-              keywords.map((keyword, index) => (
-                <SingleChart
-                  key={index}
-                  multipleOutput={multipleOutput}
-                  keyword={keyword}
-                />
-              ))
-            }
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
+            {keywords.map((keyword, index) => (
+              <SingleChart
+                key={index}
+                multipleOutput={multipleOutput}
+                keyword={keyword}
+                chartName={generateFileNameForChartName(memoryInput)}
+              />
+            ))}
           </div>
         </AccordionDetails>
       </Accordion>
