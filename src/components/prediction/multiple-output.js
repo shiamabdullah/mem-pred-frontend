@@ -35,7 +35,7 @@ function MultipleOutput() {
   const loading = useSelector(selectLoading);
   const multipleOutput = useSelector(selectMultipleOutput);
   const generatedData = generateCSVData(multipleOutput);
-  console.log(multipleOutput);
+  const [isDownloading, setDownload] = useState(false);
   const memoryInput = useSelector(selectMemoryInput);
 
   const csvHeaders = getCsvHeadersMultipleData(multipleOutput);
@@ -82,8 +82,6 @@ function MultipleOutput() {
       flexGrow: 1,
     },
   });
-
-
 
   function findMinMax(dataArray) {
     let minValues = { ...dataArray[0] };
@@ -519,8 +517,15 @@ function MultipleOutput() {
         </AccordionSummary>
         <AccordionDetails>
           <div className="w-full flex justify-end">
-            <Button onClick={exportMultipleChartsToPdf} className="p-0 min-w-fit">
-              <MdOutlineFileDownload className="text-3xl text-[#F24E1E] " />
+            <Button onClick={() => exportMultipleChartsToPdf(setDownload)}
+              disabled={isDownloading}
+              className="p-0 min-w-fit">
+              {
+                !isDownloading ?
+                  <MdOutlineFileDownload className="text-3xl text-[#F24E1E] " />
+                  :
+                  <CircularProgress color="secondary" size={20} />
+              }
             </Button>
           </div>
           <div className="w-full grid grid-cols-1 gap-4 mt-3">
@@ -529,7 +534,7 @@ function MultipleOutput() {
                 {
                   items.map((item, i) =>
                     <SingleChart
-                      key={index}
+                      key={i.toString() + index}
                       multipleOutput={multipleOutput}
                       keyword={item}
                       chartName={generateFileNameForChartName(memoryInput)}

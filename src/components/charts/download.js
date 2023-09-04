@@ -1,7 +1,8 @@
 import * as htmlToImage from "html-to-image";
 import jsPDF from "jspdf";
 
-export async function exportMultipleChartsToPdf() {
+export async function exportMultipleChartsToPdf(setDownload) {
+  setDownload(true)
   const doc = new jsPDF("p", "px");
 
   const elements = document.getElementsByClassName("multiple-output-chart");
@@ -9,6 +10,7 @@ export async function exportMultipleChartsToPdf() {
   await creatPdf({ doc, elements });
 
   doc.save(`charts.pdf`);
+  setDownload(false)
 }
 
 async function creatPdf({
@@ -18,7 +20,7 @@ async function creatPdf({
   const padding = 20;
   const marginTop = 20;
   let top = marginTop;
-  
+
 
   for (let i = 0; i < elements.length; i++) {
     const el = elements.item(i);
