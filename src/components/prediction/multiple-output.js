@@ -23,6 +23,16 @@ import { updateSaveMultipleResults } from "../../redux/reducer/resultSlice";
 import getCsvHeadersMultipleData from "../../utils/helper/getCsvHeaders";
 import SingleChart from "../charts/single-chart";
 import BuildOutputResult from "./output-result";
+import {
+  Page,
+  Text,
+  View,
+  Document,
+  StyleSheet,
+  PDFDownloadLink,
+} from "@react-pdf/renderer";
+import ReactPDF from "@react-pdf/renderer";
+import PdfGenerator from "../charts/PdfGenerator";
 
 function MultipleOutput() {
   const [isExpanded, setExpanded] = useState(true);
@@ -66,6 +76,35 @@ function MultipleOutput() {
     console.log(generatedData);
     return generatedData;
   }
+
+  const styles = StyleSheet.create({
+    page: {
+      flexDirection: "row",
+      backgroundColor: "#E4E4E4",
+    },
+    section: {
+      margin: 10,
+      padding: 10,
+      flexGrow: 1,
+    },
+  });
+
+  const MyDocument = () => (
+    <Document>
+      <Page>
+        <View>
+          {keywords?.map((keyword, index) => (
+            <SingleChart
+              key={index}
+              multipleOutput={multipleOutput}
+              keyword={keyword}
+              chartName={generateFileNameForChartName(memoryInput)}
+            />
+          ))}
+        </View>
+      </Page>
+    </Document>
+  );
 
   function findMinMax(dataArray) {
     let minValues = { ...dataArray[0] };
@@ -381,7 +420,7 @@ function MultipleOutput() {
         ? `${result.banksMin}-${result.banksMax}`
         : result.banks;
     const sizeInKb = (((words ?? 0) * (bits ?? 0)) / 1024).toFixed();
-    const fileName = `${tech.toLowerCase()}_${vendor.toLowerCase()}_${mem_type}_${port}_${vt_type.toLowerCase()}_${hd_or_hs}`;
+    const fileName = `${tech.toLowerCase()}_${vendor.toLowerCase()}_${mem_type}_${port}_${vt_type.toLowerCase()}_${hd_or_hs}_words-${words}_bits-${bits}`;
     return fileName;
   }
 
@@ -491,13 +530,38 @@ function MultipleOutput() {
         onChange={(e, f) => setExpandedChart(f)}
       >
         <AccordionSummary
-          expandIcon={<IoMdArrowDropdown className="text-2xl text-[#F24E1E]" />}
+          expandIcon={
+            <IoMdArrowDropdown className="text-2xl text-[#F24E1E] " />
+          }
         >
           <h3 className="text-left font-medium my-0 py-0 text-[#84828A] text-xl">
             Charts
           </h3>
         </AccordionSummary>
         <AccordionDetails>
+          <div className="w-full flex justify-end">
+            <PDFDownloadLink
+              document={
+                <PdfGenerator
+                  keywords={keywords}
+                  multipleOutput={multipleOutput}
+                  generateFileNameForChartName={generateFileNameForChartName}
+                  memoryInput={memoryInput}
+                />
+              }
+              fileName="example.pdf"
+            >
+              {({ blob, url, loading, error }) =>
+                loading ? (
+                  "Loading document..."
+                ) : (
+                  <Button className="p-0 min-w-fit">
+                    <MdOutlineFileDownload className="text-3xl text-[#F24E1E] " />
+                  </Button>
+                )
+              }
+            </PDFDownloadLink>
+          </div>
           <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
             {keywords.map((keyword, index) => (
               <SingleChart

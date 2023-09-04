@@ -63,7 +63,7 @@ function SingleChart({ multipleOutput, keyword, chartName }) {
     title: {
       text: chartName,
       font: {
-        size: 12,
+        size: 11,
       },
     },
     xaxis: {
