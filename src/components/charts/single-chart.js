@@ -1,6 +1,5 @@
 // @flow strict
 
-import { Divider } from "@mui/material";
 import * as React from "react";
 import BarChart from "./BarChart";
 
