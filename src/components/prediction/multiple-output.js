@@ -8,9 +8,7 @@ import {
   CircularProgress,
   Tooltip,
 } from "@mui/material";
-import {
-  StyleSheet
-} from "@react-pdf/renderer";
+import { StyleSheet } from "@react-pdf/renderer";
 import * as React from "react";
 import { useState } from "react";
 import { CSVLink } from "react-csv";
@@ -410,31 +408,29 @@ function MultipleOutput() {
   };
 
   const keywords = [
-    ["Area_umA2",
-      "leakage_power_mw_ffg",
-      "leakage_power_mw_ssg"],
-    ["leakage_power_mw_tt",
-      "leakage_power_mw_ffg_log10",
-      "leakage_power_mw_ssg_log10"],
-    ["leakage_power_mw_tt_log10",
-      "read_power_pj_ffg",
-      "read_power_pj_ssg"],
-    ["read_power_pj_tt",
-      "tacc_ns_ffg",
-      "tacc_ns_ssg"],
-    ["tacc_ns_tt",
-      "tcycle_ns_ffg",
-      "tcycle_ns_ssg"],
-    ["tcycle_ns_tt",
-      "thold_ns_ffg",
-      "thold_ns_ssg"],
-    ["thold_ns_tt",
-      "tsetup_ns_ffg",
-      "tsetup_ns_ssg"],
-    ["tsetup_ns_tt",
-      "write_power_pj_ffg",
-      "write_power_pj_ssg"],
-    ["write_power_pj_tt"]
+    ["Area_umA2", "leakage_power_mw_ffg", "leakage_power_mw_ssg"],
+    ["leakage_power_mw_tt", "read_power_pj_ffg", "read_power_pj_ssg"],
+    ["read_power_pj_tt", "tacc_ns_ffg", "tacc_ns_ssg"],
+    ["tacc_ns_tt", "tcycle_ns_ffg", "tcycle_ns_ssg"],
+    ["tcycle_ns_tt", "thold_ns_ffg", "thold_ns_ssg"],
+    ["thold_ns_tt", "tsetup_ns_ffg", "tsetup_ns_ssg"],
+    ["tsetup_ns_tt", "write_power_pj_ffg", "write_power_pj_ssg"],
+    ["write_power_pj_tt"],
+  ];
+
+  const keywordsFor22fdx = [
+    ["Area_um2", "leakage_power_uw_ffg", "leakage_power_uw_ssg"],
+    [
+      "leakage_power_uw_tt",
+      "read_power_uWperMHz_ffg",
+      "read_power_uWperMHz_ssg",
+    ],
+    ["read_power_uWperMHz_tt", "tacc_ns_ffg", "tacc_ns_ssg"],
+    ["tacc_ns_tt", "tcycle_ns_ffg", "tcycle_ns_ssg"],
+    ["tcycle_ns_tt", "thold_ns_ffg", "thold_ns_ssg"],
+    ["thold_ns_tt", "tsetup_ns_ffg", "tsetup_ns_ssg"],
+    ["tsetup_ns_tt", "write_power_uWperMHz_ffg", "write_power_uWperMHz_ssg"],
+    ["write_power_uWperMHz_tt"],
   ];
 
   return (
@@ -517,32 +513,62 @@ function MultipleOutput() {
         </AccordionSummary>
         <AccordionDetails>
           <div className="w-full flex justify-end">
-            <Button onClick={() => exportMultipleChartsToPdf(setDownload)}
-              disabled={isDownloading}
-              className="p-0 min-w-fit">
-              {
-                !isDownloading ?
-                  <MdOutlineFileDownload className="text-3xl text-[#F24E1E] " />
-                  :
-                  <CircularProgress color="secondary" size={20} />
+            <Button
+              onClick={() =>
+                exportMultipleChartsToPdf(
+                  setDownload,
+                  generateFileNameForChartName,
+                  memoryInput
+                )
               }
+              disabled={isDownloading}
+              className="p-0 min-w-fit"
+            >
+              {!isDownloading ? (
+                <MdOutlineFileDownload className="text-3xl text-[#F24E1E] " />
+              ) : (
+                <CircularProgress color="secondary" size={20} />
+              )}
             </Button>
           </div>
           <div className="w-full grid grid-cols-1 gap-4 mt-3">
-            {keywords.map((items, index) => (
-              <div key={index} className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4 mt-3 multiple-output-chart">
-                {
-                  items.map((item, i) =>
-                    <SingleChart
-                      key={i.toString() + index}
-                      multipleOutput={multipleOutput}
-                      keyword={item}
-                      chartName={generateFileNameForChartName(memoryInput)}
-                    />
-                  )
-                }
-              </div>
-            ))}
+            {memoryInput.tech === "12LPP" ? (
+              <>
+                {keywords.map((items, index) => (
+                  <div
+                    key={index}
+                    className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4 mt-3 multiple-output-chart"
+                  >
+                    {items.map((item, i) => (
+                      <SingleChart
+                        key={i.toString() + index}
+                        multipleOutput={multipleOutput}
+                        keyword={item}
+                        chartName={generateFileNameForChartName(memoryInput)}
+                      />
+                    ))}
+                  </div>
+                ))}
+              </>
+            ) : (
+              <>
+                {keywordsFor22fdx.map((items, index) => (
+                  <div
+                    key={index}
+                    className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4 mt-3 multiple-output-chart"
+                  >
+                    {items.map((item, i) => (
+                      <SingleChart
+                        key={i.toString() + index}
+                        multipleOutput={multipleOutput}
+                        keyword={item}
+                        chartName={generateFileNameForChartName(memoryInput)}
+                      />
+                    ))}
+                  </div>
+                ))}
+              </>
+            )}
           </div>
         </AccordionDetails>
       </Accordion>

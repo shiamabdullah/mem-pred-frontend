@@ -2,7 +2,6 @@ import { Divider } from "@mui/material";
 import React from "react";
 import BarChart from "./BarChart";
 
-
 const ChartsContainer = ({ data }) => {
   const chartDesign = {
     autosize: true,
@@ -29,10 +28,9 @@ const ChartsContainer = ({ data }) => {
     data?.tcycle_ns_ssg,
   ];
 
-  const X_AXIS_LEAKAGE = [
-    "leakage_power_mw_ffg",
-    "leakage_power_mw_tt",
-  ]
+  const X_AXIS_LEAKAGE = ["leakage_power_mw_ffg", "leakage_power_mw_tt"];
+
+  const X_AXIS_LEAKAGE_22FDX = ["leakage_power_uw_ffg", "leakage_power_uw_tt"];
 
   const X_AXIS_POWER = [
     "read_power_pj_ffg",
@@ -41,16 +39,34 @@ const ChartsContainer = ({ data }) => {
     "write_power_pj_tt",
   ];
 
-  const Y_AXIS_LEAKAGE =[
+  const X_AXIS_POWER_22FDX = [
+    "read_power_uWperMHz_ffg",
+    "write_power_uWperMHz_ffg",
+    "read_power_uWperMHz_tt",
+    "write_power_uWperMHz_tt",
+  ];
+
+  const Y_AXIS_LEAKAGE = [
     data?.leakage_power_mw_ffg,
     data?.leakage_power_mw_tt,
-  ]
+  ];
+  const Y_AXIS_LEAKAGE_22FDX = [
+    data?.leakage_power_uw_ffg,
+    data?.leakage_power_uw_tt,
+  ];
 
   const Y_AXIS_POWER = [
     data?.read_power_pj_ffg,
     data?.write_power_pj_ffg,
     data?.read_power_pj_tt,
     data?.write_power_pj_tt,
+  ];
+
+  const Y_AXIS_POWER_22FDX = [
+    data?.read_power_uWperMHz_ffg,
+    data?.write_power_uWperMHz_ffg,
+    data?.read_power_uWperMHz_tt,
+    data?.write_power_uWperMHz_tt,
   ];
 
   return (
@@ -69,7 +85,7 @@ const ChartsContainer = ({ data }) => {
               y: Y_AXIS_TIME,
               type: "bar",
               marker: {
-                color: ['#A06BFF', '#DB3899', '#F4568E', '#F7CD60'],
+                color: ["#A06BFF", "#DB3899", "#F4568E", "#F7CD60"],
               },
             },
           ]}
@@ -89,11 +105,11 @@ const ChartsContainer = ({ data }) => {
         <BarChart
           data={[
             {
-              x: X_AXIS_LEAKAGE,
-              y: Y_AXIS_LEAKAGE,
+              x: data?.Tech === "12LPP" ? X_AXIS_LEAKAGE : X_AXIS_LEAKAGE_22FDX,
+              y: data?.Tech === "12LPP" ? Y_AXIS_LEAKAGE : Y_AXIS_LEAKAGE_22FDX,
               type: "bar",
               marker: {
-                color: ['#A06BFF', '#DB3899', '#F4568E', '#F7CD60'],
+                color: ["#A06BFF", "#DB3899", "#F4568E", "#F7CD60"],
               },
             },
           ]}
@@ -113,11 +129,18 @@ const ChartsContainer = ({ data }) => {
         <BarChart
           data={[
             {
-              x: X_AXIS_POWER,
-              y: Y_AXIS_POWER,
+              x: data?.Tech === "12LPP" ? X_AXIS_POWER : X_AXIS_POWER_22FDX,
+              y: data?.Tech === "12LPP" ? Y_AXIS_POWER : Y_AXIS_POWER_22FDX,
               type: "bar",
               marker: {
-                color: ['#8C49FF', '#DB3193', '#FC4986', '#F66D33', '#F8C533', '#C3E975'],
+                color: [
+                  "#8C49FF",
+                  "#DB3193",
+                  "#FC4986",
+                  "#F66D33",
+                  "#F8C533",
+                  "#C3E975",
+                ],
               },
             },
           ]}

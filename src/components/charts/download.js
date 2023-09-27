@@ -1,26 +1,28 @@
 import * as htmlToImage from "html-to-image";
 import jsPDF from "jspdf";
 
-export async function exportMultipleChartsToPdf(setDownload) {
-  setDownload(true)
+export async function exportMultipleChartsToPdf(
+  setDownload,
+  generateFileNameForChartName,
+  memoryInput
+) {
+  setDownload(true);
   const doc = new jsPDF("p", "px");
 
   const elements = document.getElementsByClassName("multiple-output-chart");
 
   await creatPdf({ doc, elements });
 
-  doc.save(`charts.pdf`);
-  setDownload(false)
+  const chartName = generateFileNameForChartName(memoryInput);
+
+  doc.save(`${chartName}.pdf`);
+  setDownload(false);
 }
 
-async function creatPdf({
-  doc,
-  elements,
-}) {
+async function creatPdf({ doc, elements }) {
   const padding = 20;
   const marginTop = 20;
   let top = marginTop;
-
 
   for (let i = 0; i < elements.length; i++) {
     const el = elements.item(i);

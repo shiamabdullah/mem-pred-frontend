@@ -10,7 +10,7 @@ function LeftSidebar() {
   let { pathname } = useLocation();
 
   React.useEffect(() => {
-    if (pathname === "/") {
+    if (pathname === "/ez-gf-internal/jigyasa/") {
       document.title = "Memory Prediction";
     } else {
       document.title = "Logic Prediction";

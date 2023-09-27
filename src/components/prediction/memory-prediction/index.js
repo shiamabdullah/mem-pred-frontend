@@ -293,10 +293,22 @@ const MemoryPrediction = () => {
           //   }
           // }
           if (response.data?.result?.length > 0) {
+            response.data.result.map((e) => {
+              delete e.leakage_power_mw_ffg_log10;
+              delete e.leakage_power_mw_ssg_log10;
+              delete e.leakage_power_mw_tt_log10;
+            });
+            console.log(response.data.result);
             dispatch(updateMultipleOutput(response.data.result));
           }
         } else {
           if (response.data?.result?.length > 0) {
+            response.data.result.map((e) => {
+              delete e.leakage_power_mw_ffg_log10;
+              delete e.leakage_power_mw_ssg_log10;
+              delete e.leakage_power_mw_tt_log10;
+            });
+            console.log(response.data.result);
             dispatch(updateMultipleOutput(response.data.result));
           }
         }
