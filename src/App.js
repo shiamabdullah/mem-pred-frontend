@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Logic from "./pages/logic";
+import Login from "./pages/login";
 import Memory from "./pages/memory";
 
 const router = createBrowserRouter([
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
   {
     path: "/ez-gf-internal/jigyasa/logic",
     element: <Logic />,
+  },
+  {
+    path: "/ez-gf-internal/jigyasa/login",
+    element: <Login />,
   },
 ]);
 

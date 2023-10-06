@@ -1,6 +1,14 @@
+import { Button, Tooltip } from '@mui/material';
 import * as React from 'react';
+import { FiLogOut } from 'react-icons/fi';
 
-function Header() {
+function Header({ user, setUser }) {
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+  };
+
   return (
     <header
       className='h-[10vh] relative w-full z-40 px-5 
@@ -15,7 +23,7 @@ function Header() {
           alt="Global Foundries"
         />
       </div>
-      <div className={"w-max sm:w-44 h-12 md:h-14 flex items-center gap-2.5"}>
+      <div className={"w-max sm:w-56 h-12 md:h-14 flex items-center gap-2"}>
         <div
           className="w-9 h-9 relative flex items-center 
             justify-center rounded-full border border-[#FF5C01] text-[#FF5C01]">
@@ -37,10 +45,17 @@ function Header() {
           </svg>
         </div>
         <span className="hidden sm:block font-medium text-gray-600">
-          Jain Navneet
+          {user?.name}
         </span>
+        <Tooltip title="Logout account">
+          <Button
+            onClick={handleLogout}
+            className='min-w-fit text-orange-700 ml-2'>
+            <FiLogOut size={18} />
+          </Button>
+        </Tooltip>
       </div>
-    </header>
+    </header >
   );
 };
 
