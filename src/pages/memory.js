@@ -73,6 +73,7 @@ function Memory() {
   const handleSaveResult = () => {
     console.log("Saving the results", newResult);
     const newResult = { name: generateFileName(output), data: output };
+    console.log("Saving the results", newResult);
     dispatch(updateSaveResult(newResult));
   };
 

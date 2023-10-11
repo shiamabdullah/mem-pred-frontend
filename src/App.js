@@ -5,6 +5,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Logic from "./pages/logic";
 import Login from "./pages/login";
 import Memory from "./pages/memory";
+import Profile from "./pages/profile";
+import Users from "./pages/users";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +16,14 @@ const router = createBrowserRouter([
   {
     path: "/ez-gf-internal/jigyasa/logic",
     element: <Logic />,
+  },
+  {
+    path: "/ez-gf-internal/jigyasa/profile",
+    element: <Profile />,
+  },
+  {
+    path: "/ez-gf-internal/jigyasa/users",
+    element: <Users />,
   },
   {
     path: "/ez-gf-internal/jigyasa/login",

@@ -179,6 +179,137 @@ function RightSidebar() {
     },
   ];
 
+  const csvHeadersFor22fdx = [
+    {
+      label: "Vendor",
+      key: "Vendor",
+    },
+    {
+      label: "Tech",
+      key: "Tech",
+    },
+    {
+      label: "Mem_Type",
+      key: "Mem_Type",
+    },
+    {
+      label: "Port",
+      key: "Port",
+    },
+    {
+      label: "HD_or_HS",
+      key: "HD_or_HS",
+    },
+    {
+      label: "Vt_Type",
+      key: "Vt_Type",
+    },
+    {
+      label: "Words",
+      key: "Words",
+    },
+    {
+      label: "Bits",
+      key: "Bits",
+    },
+    {
+      label: "Mux",
+      key: "Mux",
+    },
+    {
+      label: "Banks",
+      key: "Banks",
+    },
+    {
+      label: "Area_um2",
+      key: "Area_um2",
+    },
+    {
+      label: "read_power_uWperMHz_ffg",
+      key: "read_power_uWperMHz_ffg",
+    },
+    {
+      label: "read_power_uWperMHz_ssg",
+      key: "read_power_uWperMHz_ssg",
+    },
+    {
+      label: "read_power_uWperMHz_tt",
+      key: "read_power_uWperMHz_tt",
+    },
+    {
+      label: "tacc_ns_ffg",
+      key: "tacc_ns_ffg",
+    },
+    {
+      label: "tacc_ns_ssg",
+      key: "tacc_ns_ssg",
+    },
+    {
+      label: "tacc_ns_tt",
+      key: "tacc_ns_tt",
+    },
+    {
+      label: "tcycle_ns_ffg",
+      key: "tcycle_ns_ffg",
+    },
+    {
+      label: "tcycle_ns_ssg",
+      key: "tcycle_ns_ssg",
+    },
+    {
+      label: "tcycle_ns_tt",
+      key: "tcycle_ns_tt",
+    },
+    {
+      label: "thold_ns_ffg",
+      key: "thold_ns_ffg",
+    },
+    {
+      label: "thold_ns_ssg",
+      key: "thold_ns_ssg",
+    },
+    {
+      label: "thold_ns_tt",
+      key: "thold_ns_tt",
+    },
+    {
+      label: "tsetup_ns_ffg",
+      key: "tsetup_ns_ffg",
+    },
+    {
+      label: "tsetup_ns_ssg",
+      key: "tsetup_ns_ssg",
+    },
+    {
+      label: "tsetup_ns_tt",
+      key: "tsetup_ns_tt",
+    },
+    {
+      label: "write_power_uWperMHz_ffg",
+      key: "write_power_uWperMHz_ffg",
+    },
+    {
+      label: "write_power_uWperMHz_ssg",
+      key: "write_power_uWperMHz_ssg",
+    },
+    {
+      label: "write_power_uWperMHz_tt",
+      key: "write_power_uWperMHz_tt",
+    },
+    {
+      label: "leakage_power_uw_ffg",
+      key: "leakage_power_uw_ffg",
+    },
+    {
+      label: "leakage_power_uw_ssg",
+      key: "leakage_power_uw_ssg",
+    },
+    {
+      label: "leakage_power_uw_tt",
+      key: "leakage_power_uw_tt",
+    },
+  ];
+
   // Update checkbox data on change
   const handleChangeCheckBox = (e) => {
     if (e.target.checked) {
@@ -222,6 +353,7 @@ function RightSidebar() {
   };
 
   React.useEffect(() => {
+    console.log("result___________", savedMultipleResult);
     if (pathname === "/logic") {
       setSelectedData({});
       setSelectedDataMultiple({});
@@ -234,7 +366,7 @@ function RightSidebar() {
         Previously saved Predictions
       </p>
       {(savedResult?.length > 0 || savedMultipleResult?.length > 0) &&
-        pathname === "/" && (
+        pathname === "/ez-gf-internal/jigyasa/" && (
           <>
             <div className="my-12 flex flex-col">
               {savedResult.length > 0 && (
@@ -337,9 +469,14 @@ function RightSidebar() {
                   />
                   <Tooltip title="Download CSV" placement="top">
                     <Button className="p-0 min-w-fit">
+                      {console.log("_________________________", result)}
                       <CSVLink
                         data={result?.data}
-                        headers={csvHeaders}
+                        headers={
+                          result?.data[0].Tech === "22FDX"
+                            ? csvHeadersFor22fdx
+                            : csvHeaders
+                        }
                         filename={result?.name + ".csv"}
                         className={`inline-flex items-center`}
                       >
