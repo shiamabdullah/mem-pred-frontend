@@ -48,13 +48,12 @@ function Profile() {
     try {
       const url = `${process.env.REACT_APP_BASE_URL}/api/authentication_for_update_user/`;
       const res = await axios.post(url, payload);
-      if (res.data.result === false) {
-        toast.error(res.data.Status);
-      } else {
+      if (res.data.result === "Success") {
         localStorage.setItem("user", JSON.stringify(res.data.data));
         setUser(res.data.data);
         toast.success("Profile updated successfully");
-        // console.log(res.data)
+      } else {
+        toast.error(res.data.Message);
       }
     } catch (error) {
       // console.log(error)
