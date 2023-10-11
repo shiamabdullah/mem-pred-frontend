@@ -8,6 +8,7 @@ import {
   CircularProgress,
   Tooltip,
 } from "@mui/material";
+import { StyleSheet } from "@react-pdf/renderer";
 import * as React from "react";
 import { useState } from "react";
 import { CSVLink } from "react-csv";
@@ -21,6 +22,7 @@ import {
 } from "../../redux/reducer/memorySlice";
 import { updateSaveMultipleResults } from "../../redux/reducer/resultSlice";
 import getCsvHeadersMultipleData from "../../utils/helper/getCsvHeaders";
+import { exportMultipleChartsToPdf } from "../charts/download";
 import SingleChart from "../charts/single-chart";
 import BuildOutputResult from "./output-result";
 
@@ -31,7 +33,7 @@ function MultipleOutput() {
   const loading = useSelector(selectLoading);
   const multipleOutput = useSelector(selectMultipleOutput);
   const generatedData = generateCSVData(multipleOutput);
-  console.log(multipleOutput);
+  const [isDownloading, setDownload] = useState(false);
   const memoryInput = useSelector(selectMemoryInput);
 
   const csvHeaders = getCsvHeadersMultipleData(multipleOutput);
@@ -66,6 +68,18 @@ function MultipleOutput() {
     console.log(generatedData);
     return generatedData;
   }
+
+  const styles = StyleSheet.create({
+    page: {
+      flexDirection: "row",
+      backgroundColor: "#E4E4E4",
+    },
+    section: {
+      margin: 10,
+      padding: 10,
+      flexGrow: 1,
+    },
+  });
 
   function findMinMax(dataArray) {
     let minValues = { ...dataArray[0] };
@@ -381,7 +395,7 @@ function MultipleOutput() {
         ? `${result.banksMin}-${result.banksMax}`
         : result.banks;
     const sizeInKb = (((words ?? 0) * (bits ?? 0)) / 1024).toFixed();
-    const fileName = `${tech.toLowerCase()}_${vendor.toLowerCase()}_${mem_type}_${port}_${vt_type.toLowerCase()}_${hd_or_hs}`;
+    const fileName = `${tech.toLowerCase()}_${vendor.toLowerCase()}_${mem_type}_${port}_${vt_type.toLowerCase()}_${hd_or_hs}_words-${words}_bits-${bits}`;
     return fileName;
   }
 
@@ -394,31 +408,29 @@ function MultipleOutput() {
   };
 
   const keywords = [
-    "Area_umA2",
-    "leakage_power_mw_ffg",
-    "leakage_power_mw_ssg",
-    "leakage_power_mw_tt",
-    "leakage_power_mw_ffg_log10",
-    "leakage_power_mw_ssg_log10",
-    "leakage_power_mw_tt_log10",
-    "read_power_pj_ffg",
-    "read_power_pj_ssg",
-    "read_power_pj_tt",
-    "tacc_ns_ffg",
-    "tacc_ns_ssg",
-    "tacc_ns_tt",
-    "tcycle_ns_ffg",
-    "tcycle_ns_ssg",
-    "tcycle_ns_tt",
-    "thold_ns_ffg",
-    "thold_ns_ssg",
-    "thold_ns_tt",
-    "tsetup_ns_ffg",
-    "tsetup_ns_ssg",
-    "tsetup_ns_tt",
-    "write_power_pj_ffg",
-    "write_power_pj_ssg",
-    "write_power_pj_tt",
+    ["Area_umA2", "leakage_power_mw_ffg", "leakage_power_mw_ssg"],
+    ["leakage_power_mw_tt", "read_power_pj_ffg", "read_power_pj_ssg"],
+    ["read_power_pj_tt", "tacc_ns_ffg", "tacc_ns_ssg"],
+    ["tacc_ns_tt", "tcycle_ns_ffg", "tcycle_ns_ssg"],
+    ["tcycle_ns_tt", "thold_ns_ffg", "thold_ns_ssg"],
+    ["thold_ns_tt", "tsetup_ns_ffg", "tsetup_ns_ssg"],
+    ["tsetup_ns_tt", "write_power_pj_ffg", "write_power_pj_ssg"],
+    ["write_power_pj_tt"],
+  ];
+
+  const keywordsFor22fdx = [
+    ["Area_um2", "leakage_power_uw_ffg", "leakage_power_uw_ssg"],
+    [
+      "leakage_power_uw_tt",
+      "read_power_uWperMHz_ffg",
+      "read_power_uWperMHz_ssg",
+    ],
+    ["read_power_uWperMHz_tt", "tacc_ns_ffg", "tacc_ns_ssg"],
+    ["tacc_ns_tt", "tcycle_ns_ffg", "tcycle_ns_ssg"],
+    ["tcycle_ns_tt", "thold_ns_ffg", "thold_ns_ssg"],
+    ["thold_ns_tt", "tsetup_ns_ffg", "tsetup_ns_ssg"],
+    ["tsetup_ns_tt", "write_power_uWperMHz_ffg", "write_power_uWperMHz_ssg"],
+    ["write_power_uWperMHz_tt"],
   ];
 
   return (
@@ -491,22 +503,72 @@ function MultipleOutput() {
         onChange={(e, f) => setExpandedChart(f)}
       >
         <AccordionSummary
-          expandIcon={<IoMdArrowDropdown className="text-2xl text-[#F24E1E]" />}
+          expandIcon={
+            <IoMdArrowDropdown className="text-2xl text-[#F24E1E] " />
+          }
         >
           <h3 className="text-left font-medium my-0 py-0 text-[#84828A] text-xl">
             Charts
           </h3>
         </AccordionSummary>
         <AccordionDetails>
-          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
-            {keywords.map((keyword, index) => (
-              <SingleChart
-                key={index}
-                multipleOutput={multipleOutput}
-                keyword={keyword}
-                chartName={generateFileNameForChartName(memoryInput)}
-              />
-            ))}
+          <div className="w-full flex justify-end">
+            <Button
+              onClick={() =>
+                exportMultipleChartsToPdf(
+                  setDownload,
+                  generateFileNameForChartName,
+                  memoryInput
+                )
+              }
+              disabled={isDownloading}
+              className="p-0 min-w-fit"
+            >
+              {!isDownloading ? (
+                <MdOutlineFileDownload className="text-3xl text-[#F24E1E] " />
+              ) : (
+                <CircularProgress color="secondary" size={20} />
+              )}
+            </Button>
+          </div>
+          <div className="w-full grid grid-cols-1 gap-4 mt-3">
+            {memoryInput.tech === "12LPP" ? (
+              <>
+                {keywords.map((items, index) => (
+                  <div
+                    key={index}
+                    className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4 mt-3 multiple-output-chart"
+                  >
+                    {items.map((item, i) => (
+                      <SingleChart
+                        key={i.toString() + index}
+                        multipleOutput={multipleOutput}
+                        keyword={item}
+                        chartName={generateFileNameForChartName(memoryInput)}
+                      />
+                    ))}
+                  </div>
+                ))}
+              </>
+            ) : (
+              <>
+                {keywordsFor22fdx.map((items, index) => (
+                  <div
+                    key={index}
+                    className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4 mt-3 multiple-output-chart"
+                  >
+                    {items.map((item, i) => (
+                      <SingleChart
+                        key={i.toString() + index}
+                        multipleOutput={multipleOutput}
+                        keyword={item}
+                        chartName={generateFileNameForChartName(memoryInput)}
+                      />
+                    ))}
+                  </div>
+                ))}
+              </>
+            )}
           </div>
         </AccordionDetails>
       </Accordion>

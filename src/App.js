@@ -1,27 +1,27 @@
 import * as React from "react";
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Logic from "./pages/logic";
+import Login from "./pages/login";
 import Memory from "./pages/memory";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/ez-gf-internal/jigyasa/",
     element: <Memory />,
   },
   {
-    path: "/logic",
+    path: "/ez-gf-internal/jigyasa/logic",
     element: <Logic />,
+  },
+  {
+    path: "/ez-gf-internal/jigyasa/login",
+    element: <Login />,
   },
 ]);
 
-
 export default function App() {
-
   return (
     <>
       <RouterProvider router={router} />

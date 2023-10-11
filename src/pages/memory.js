@@ -1,19 +1,30 @@
 // @flow strict
 
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, CircularProgress, Tooltip } from '@mui/material';
-import * as React from 'react';
-import { CSVLink } from 'react-csv';
-import { IoMdArrowDropdown } from 'react-icons/io';
-import { MdOutlineFileDownload, MdSave } from 'react-icons/md';
-import { useDispatch, useSelector } from 'react-redux';
-import ChartsContainer from '../components/charts/ChartsContainer';
-import MemoryPrediction from '../components/prediction/memory-prediction';
-import MultipleOutput from '../components/prediction/multiple-output';
-import BuildOutputResult from '../components/prediction/output-result';
-import HomeLayout from '../layout/home-layout';
-import { selectLoading } from '../redux/reducer/layoutSlice';
-import { selectMemoryOutput, selectMultipleOutput } from '../redux/reducer/memorySlice';
-
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Button,
+  CircularProgress,
+  Tooltip,
+} from "@mui/material";
+import * as React from "react";
+import { CSVLink } from "react-csv";
+import { IoMdArrowDropdown } from "react-icons/io";
+import { MdOutlineFileDownload, MdSave } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import ChartsContainer from "../components/charts/ChartsContainer";
+import MemoryPrediction from "../components/prediction/memory-prediction";
+import MultipleOutput from "../components/prediction/multiple-output";
+import BuildOutputResult from "../components/prediction/output-result";
+import HomeLayout from "../layout/home-layout";
+import { selectLoading } from "../redux/reducer/layoutSlice";
+import {
+  selectMemoryOutput,
+  selectMultipleOutput,
+} from "../redux/reducer/memorySlice";
+import { updateSaveResult } from "../redux/reducer/resultSlice";
 
 function Memory() {
   const [isExpanded, setExpanded] = React.useState(false);
@@ -61,6 +72,7 @@ function Memory() {
 
   const handleSaveResult = () => {
     const newResult = { name: generateFileName(output), data: output };
+    console.log("Saving the results", newResult);
     dispatch(updateSaveResult(newResult));
   };
 
@@ -71,34 +83,36 @@ function Memory() {
   return (
     <>
       <HomeLayout>
-        {
-          (isNotEmpty(memoryOutput) || multipleOutput.length > 0) ?
-            <Accordion
-              className="rounded-lg mt-5 border-none"
-              expanded={isExpanded}
-              onChange={(e, f) => setExpanded(f)}>
-              <AccordionSummary
-                expandIcon={<IoMdArrowDropdown
-                  className="text-2xl text-[#F24E1E]"
-                />
-                }>
-                <h3
-                  className="text-left font-medium my-0 py-0 text-[#84828A] text-xl">Input</h3>
-              </AccordionSummary>
-              <AccordionDetails>
-                <div className="p-3">
-                  <MemoryPrediction />
-                </div>
-              </AccordionDetails>
-            </Accordion>
-            :
-            <div className="p-3">
-              <MemoryPrediction />
-            </div>
-        }
-        {
-          multipleOutput.length > 0 ? <MultipleOutput data={multipleOutput} /> :
-            isNotEmpty(memoryOutput) &&
+        {isNotEmpty(memoryOutput) || multipleOutput.length > 0 ? (
+          <Accordion
+            className="rounded-lg mt-5 border-none"
+            expanded={isExpanded}
+            onChange={(e, f) => setExpanded(f)}
+          >
+            <AccordionSummary
+              expandIcon={
+                <IoMdArrowDropdown className="text-2xl text-[#F24E1E]" />
+              }
+            >
+              <h3 className="text-left font-medium my-0 py-0 text-[#84828A] text-xl">
+                Input
+              </h3>
+            </AccordionSummary>
+            <AccordionDetails>
+              <div className="p-3">
+                <MemoryPrediction />
+              </div>
+            </AccordionDetails>
+          </Accordion>
+        ) : (
+          <div className="p-3">
+            <MemoryPrediction />
+          </div>
+        )}
+        {multipleOutput.length > 0 ? (
+          <MultipleOutput data={multipleOutput} />
+        ) : (
+          isNotEmpty(memoryOutput) && (
             <div className="relative">
               <h3 className="text-left font-medium p-2 text-[#84828A] text-xl">
                 Output
@@ -106,7 +120,10 @@ function Memory() {
               <div className="flex justify-end items-center mb-2">
                 <div className="flex gap-2">
                   <Tooltip title="Save Result" placement="top">
-                    <Button onClick={handleSaveResult} className="p-1 min-w-fit">
+                    <Button
+                      onClick={handleSaveResult}
+                      className="p-1 min-w-fit"
+                    >
                       <MdSave className="text-xl text-[#F24E1E]" />
                     </Button>
                   </Tooltip>
@@ -139,9 +156,7 @@ function Memory() {
                       <CircularProgress />
                     </Box>
                   ) : (
-                    <BuildOutputResult
-                      data={memoryOutput}
-                    />
+                    <BuildOutputResult data={memoryOutput} />
                   )}
                 </div>
                 <div className="">
@@ -149,10 +164,11 @@ function Memory() {
                 </div>
               </div>
             </div>
-        }
+          )
+        )}
       </HomeLayout>
     </>
   );
-};
+}
 
 export default Memory;

@@ -1,6 +1,5 @@
 // @flow strict
 
-import { Divider } from "@mui/material";
 import * as React from "react";
 import BarChart from "./BarChart";
 
@@ -63,7 +62,7 @@ function SingleChart({ multipleOutput, keyword, chartName }) {
     title: {
       text: chartName,
       font: {
-        size: 12,
+        size: 11,
       },
     },
     xaxis: {

@@ -6,30 +6,38 @@ import {
   FormGroup,
   Paper,
   TextField,
-  Tooltip
+  Tooltip,
+  Stack,
+  Snackbar,
+  Alert,
 } from "@mui/material";
+import * as React from "react";
 import { CSVLink } from "react-csv";
 import { MdOutlineFileDownload } from "react-icons/md";
-import { default as csv_headers_12llp, default as csv_headers_22fdx } from "../../../utils/data/csv_headers_12llp";
+import {
+  default as csv_headers_12llp,
+  default as csv_headers_22fdx,
+} from "../../../utils/data/csv_headers_12llp";
 import {
   HDHSTYPE,
   MEMTYPE,
   PORTTYPE,
   TECH,
   VENDOR,
-  VTTYPE
+  VTTYPE,
 } from "../../../utils/data/memory-prediction-data";
 import {
   HDORHS22FDX,
   MEMTYPE22FDX,
   PORTTYPE22FDX,
   VENDOR22FDX,
-  VTTYPE22FDX
+  VTTYPE22FDX,
 } from "../../../utils/data/memory-prediction-data-22fdx";
 import LabelWithOptions from "../../helper-component/labe-with-options";
 import Label from "../../helper-component/label";
 import Loader from "../../helper-component/loader";
 import SelectInput from "../../helper-component/select-input";
+import { AiFillInfoCircle } from "react-icons/ai";
 
 export default function MemoryPredictionInputs({
   onSubmit,
@@ -55,6 +63,15 @@ export default function MemoryPredictionInputs({
   handleChangeModel,
   csvData,
 }) {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    setOpen(false);
+  };
 
   return (
     <div className="w-full relative">
@@ -234,8 +251,8 @@ export default function MemoryPredictionInputs({
                               if (e.target.value === "All") {
                                 e.target.checked
                                   ? (tempPreviousData = banksRange.map((e) =>
-                                    String(e)
-                                  ))
+                                      String(e)
+                                    ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = banksRange.slice(0, -1);
                                 e.target.checked &&
@@ -259,8 +276,8 @@ export default function MemoryPredictionInputs({
                                 checkedData = banksRange;
                                 e.target.checked
                                   ? (tempPreviousData = banksRange.map((e) =>
-                                    String(e)
-                                  ))
+                                      String(e)
+                                    ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = banksRange.slice(0, -1);
                                 e.target.checked &&
@@ -311,8 +328,8 @@ export default function MemoryPredictionInputs({
                               if (e.target.value === "All") {
                                 e.target.checked
                                   ? (tempPreviousData = muxRange.map((e) =>
-                                    String(e)
-                                  ))
+                                      String(e)
+                                    ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = muxRange.slice(0, -1);
                                 e.target.checked &&
@@ -336,8 +353,8 @@ export default function MemoryPredictionInputs({
                                 checkedData = muxRange;
                                 e.target.checked
                                   ? (tempPreviousData = muxRange.map((e) =>
-                                    String(e)
-                                  ))
+                                      String(e)
+                                    ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = muxRange.slice(0, -1);
                                 e.target.checked &&
@@ -474,8 +491,8 @@ export default function MemoryPredictionInputs({
                               if (e.target.value === "All") {
                                 e.target.checked
                                   ? (tempPreviousData = banksRange.map((e) =>
-                                    String(e)
-                                  ))
+                                      String(e)
+                                    ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = banksRange.slice(0, -1);
                                 e.target.checked &&
@@ -499,8 +516,8 @@ export default function MemoryPredictionInputs({
                                 checkedData = banksRange;
                                 e.target.checked
                                   ? (tempPreviousData = banksRange.map((e) =>
-                                    String(e)
-                                  ))
+                                      String(e)
+                                    ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = banksRange.slice(0, -1);
                                 e.target.checked &&
@@ -550,8 +567,8 @@ export default function MemoryPredictionInputs({
                               if (e.target.value === "All") {
                                 e.target.checked
                                   ? (tempPreviousData = muxRange.map((e) =>
-                                    String(e)
-                                  ))
+                                      String(e)
+                                    ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = muxRange.slice(0, -1);
                                 e.target.checked &&
@@ -575,8 +592,8 @@ export default function MemoryPredictionInputs({
                                 checkedData = muxRange;
                                 e.target.checked
                                   ? (tempPreviousData = muxRange.map((e) =>
-                                    String(e)
-                                  ))
+                                      String(e)
+                                    ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = muxRange.slice(0, -1);
                                 e.target.checked &&
@@ -633,44 +650,146 @@ export default function MemoryPredictionInputs({
             onChange={handleOnChange}
           />
         </div>
-
-        {/* <div className="mb-4">
-          <Label>SELECT MODEL</Label>
-          <FormControl fullWidth>
-            <Select
-              labelId="demo-simple-select-label"
-              value={selectModel || ""}
-              // name={name}
-              onChange={(e) => handleChangeModel(e)}
-            >
-              {optionForSelectModel?.length > 0 &&
-                optionForSelectModel.map((option) => (
-                  <MenuItem className="" value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-            </Select>
-          </FormControl>
-        </div> */}
+        {predictionInput?.tech === "12LPP" ? (
+          ""
+        ) : (
+          <div className="mb-4">
+            <Label>CENTER_DECODE</Label>
+            <TextField
+              fullWidth
+              id="center_decode"
+              name="CENTER_DECODE"
+              defaultValue="TRUE"
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+          </div>
+        )}
+        <div className="mb-4">
+          <Label>PVT_FFG</Label>
+          <TextField
+            fullWidth
+            id="PVT_FFG"
+            name="PVT_FFG"
+            defaultValue={
+              predictionInput?.tech === "12LPP"
+                ? "ffpg_sigcmin_0p88v_0p88v_125c"
+                : "ffg_fcmin0p88v125c_0p88v_0v_0v"
+            }
+            value={
+              predictionInput?.tech === "12LPP"
+                ? "ffpg_sigcmin_0p88v_0p88v_125c"
+                : "ffg_fcmin0p88v125c_0p88v_0v_0v"
+            }
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+        </div>
+        <div className="mb-4">
+          <Label>PVT_SSG</Label>
+          <TextField
+            fullWidth
+            id="PVT_SSG"
+            name="PVT_SSG"
+            defaultValue={
+              predictionInput?.tech === "12LPP"
+                ? "sspg_sigcmax_0p72v_0p72v_125c"
+                : "ssg_fcmax0p72v125c_0p72v_0v_0v"
+            }
+            value={
+              predictionInput?.tech === "12LPP"
+                ? "sspg_sigcmax_0p72v_0p72v_125c"
+                : "ssg_fcmax0p72v125c_0p72v_0v_0v"
+            }
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+        </div>
+        <div className="mb-4">
+          <Label>PVT_TT</Label>
+          <TextField
+            fullWidth
+            id="PVT_TT"
+            name="PVT_TT"
+            defaultValue={
+              predictionInput?.tech === "12LPP"
+                ? "tt_nominal_0p80v_0p80v_25c"
+                : "tt0p8v25c_0p8v_0v_0v"
+            }
+            value={
+              predictionInput?.tech === "12LPP"
+                ? "tt_nominal_0p80v_0p80v_25c"
+                : "tt0p8v25c_0p8v_0v_0v"
+            }
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+        </div>
       </div>
 
-      <div className="flex w-full items-center  justify-center gap-6 mt-5">
-        <Button
-          onClick={handleReset}
-          className="w-32 text-center shadow-sm py-2 rounded-md bg-[#753EFE] text-white"
-        >
-          Reset
-        </Button>
-        {!loading ? (
+      <div className="flex w-full items-center justify-between">
+        <div className="flex w-full items-center  justify-center gap-6 mt-5">
           <Button
-            onClick={onSubmit}
-            className="w-32 text-center shadow-sm py-2 rounded-md bg-[#F67E4C] text-white"
+            onClick={handleReset}
+            className="w-32 text-center shadow-sm py-2 rounded-md bg-[#753EFE] text-white"
           >
-            Run
+            Reset
           </Button>
-        ) : (
-          <Loader />
-        )}
+          {!loading ? (
+            <div>
+              <Button
+                onClick={onSubmit}
+                className="w-32 text-center shadow-sm py-2 rounded-md bg-[#F67E4C] text-white"
+              >
+                Run
+              </Button>
+            </div>
+          ) : (
+            <Loader />
+          )}
+        </div>
+        {/* <div className="flex justify-end">
+          <Button
+            className="w-25 text-center shadow-sm py-3 rounded-md bg-[#F67E4C] text-white"
+            onClick={handleClick}
+          >
+            <AiFillInfoCircle className="text-xl" />
+            <Stack>
+              <Snackbar
+                open={open}
+                autoHideDuration={4000}
+                onClose={handleClose}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              >
+                {predictionInput?.tech === "12LPP" ? (
+                  <Alert
+                    onClose={handleClose}
+                    severity="info"
+                    sx={{ width: "100%" }}
+                  >
+                    Corner_ffg - ffpg_sigcmin_0p88v_0p88v_125c
+                    <br /> Corner_ssg - sspg_sigcmax_0p72v_0p72v_125c <br />
+                    Corner_tt - tt_nominal_0p80v_0p80v_25c
+                  </Alert>
+                ) : (
+                  <Alert
+                    onClose={handleClose}
+                    severity="info"
+                    sx={{ width: "100%" }}
+                  >
+                    Corner_ffg - ffg_fcmin0p88vn40c_0p88v_0v_0v
+                    <br /> Corner_ssg - ssg_fcmax0p72v125c_0p72v_0v_0v <br />
+                    Corner_tt - tt0p8v25c_0p8v_0v_0v
+                  </Alert>
+                )}
+              </Snackbar>
+            </Stack>
+          </Button>
+        </div> */}
       </div>
     </div>
   );
