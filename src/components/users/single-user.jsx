@@ -1,6 +1,6 @@
 // @flow strict
 
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TableCell, TableRow, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TableCell, TableRow, TextField } from '@mui/material';
 import axios from 'axios';
 import * as React from 'react';
 import { useState } from 'react';
@@ -118,14 +118,19 @@ function SingleUser({ user, setUserList }) {
               required
             />
           </div>
+          
           <div>
-            <TextField
-              sx={{ marginTop: 4, width: 360 }}
-              value={userInput.change_role}
+            <FormControl
+              sx={{ marginTop: 3, width: 380, padding: '8px 12px' }}
               onChange={(e) => setUserInput({ ...userInput, change_role: e.target.value })}
-              label="User Role"
-              variant="outlined"
-            />
+              required
+            >
+              <FormLabel>User Role</FormLabel>
+              <RadioGroup defaultValue={userInput?.change_role} row>
+                <FormControlLabel value="Admin" control={<Radio />} label="Admin" />
+                <FormControlLabel value="User" control={<Radio />} label="User" />
+              </RadioGroup>
+            </FormControl>
           </div>
         </DialogContent>
         <DialogActions>

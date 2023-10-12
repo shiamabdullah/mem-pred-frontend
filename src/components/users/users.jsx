@@ -1,6 +1,6 @@
 // @flow strict
 
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, FormLabel, Paper, Radio, RadioGroup, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
 import axios from 'axios';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
@@ -109,15 +109,19 @@ function UsersList() {
               required
             />
           </div>
+
           <div>
-            <TextField
-              sx={{ marginTop: 4, width: 380 }}
-              value={userInput?.role}
+            <FormControl
+              sx={{ marginTop: 3, width: 380, padding: '8px 12px' }}
               onChange={(e) => setUserInput({ ...userInput, role: e.target.value })}
-              label="User Role"
-              variant="outlined"
               required
-            />
+            >
+              <FormLabel>User Role</FormLabel>
+              <RadioGroup defaultValue={userInput?.change_role} row>
+                <FormControlLabel value="Admin" control={<Radio />} label="Admin" />
+                <FormControlLabel value="User" control={<Radio />} label="User" />
+              </RadioGroup>
+            </FormControl>
           </div>
           <div>
             <TextField
@@ -132,7 +136,7 @@ function UsersList() {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button color='info' onClick={() => setIsOpenUpdate(false)}>Cancel</Button>
+          <Button color='info' onClick={() => setIsOpenCreate(false)}>Cancel</Button>
           <Button onClick={createNewUser} color='success' autoFocus>
             Create
           </Button>

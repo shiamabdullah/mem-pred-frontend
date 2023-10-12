@@ -34,7 +34,12 @@ const Login = () => {
   };
 
   return (
-    <Container className="min-h-screen flex items-center justify-center">
+    <Container className="min-h-screen flex-col gap-8 flex items-center justify-center">
+      <img
+        className='logo_image h-10'
+        src="./gf-logo.png"
+        alt="Global Foundries"
+      />
       <Paper className="p-8 w-full m-5 lg:w-[480px]">
         <p className="text-left text-2xl capitalize font-semibold text-[#6A5ACD] mb-5">
           Login to Jigyasa
