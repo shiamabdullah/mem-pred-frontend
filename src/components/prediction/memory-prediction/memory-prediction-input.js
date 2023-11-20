@@ -6,10 +6,7 @@ import {
   FormGroup,
   Paper,
   TextField,
-  Tooltip,
-  Stack,
-  Snackbar,
-  Alert,
+  Tooltip
 } from "@mui/material";
 import * as React from "react";
 import { CSVLink } from "react-csv";
@@ -24,7 +21,7 @@ import {
   PORTTYPE,
   TECH,
   VENDOR,
-  VTTYPE,
+  VTTYPE
 } from "../../../utils/data/memory-prediction-data";
 import {
   HDORHS22FDX,
@@ -33,11 +30,11 @@ import {
   VENDOR22FDX,
   VTTYPE22FDX,
 } from "../../../utils/data/memory-prediction-data-22fdx";
+import { filteredOptionsData, filteredOptionsData22fdx } from "../../../utils/helper/sortInput";
 import LabelWithOptions from "../../helper-component/labe-with-options";
 import Label from "../../helper-component/label";
 import Loader from "../../helper-component/loader";
 import SelectInput from "../../helper-component/select-input";
-import { AiFillInfoCircle } from "react-icons/ai";
 
 export default function MemoryPredictionInputs({
   onSubmit,
@@ -77,7 +74,6 @@ export default function MemoryPredictionInputs({
     <div className="w-full relative">
       <Tooltip title="Download specs" placement="top">
         <Button className="absolute top-0 right-0">
-          {console.log(csvData)}
           {predictionInput?.words && predictionInput?.bits ? (
             <CSVLink
               data={csvData ? csvData : []}
@@ -138,7 +134,7 @@ export default function MemoryPredictionInputs({
             handleOnChange={handleOnChange}
             predictionInput={predictionInput}
             options={
-              predictionInput?.tech === "12LPP" ? PORTTYPE : PORTTYPE22FDX
+              predictionInput?.tech === "12LPP" ? filteredOptionsData(1, PORTTYPE, predictionInput) : filteredOptionsData22fdx(1, PORTTYPE22FDX, predictionInput)
             }
             value={predictionInput?.port}
           />
@@ -152,7 +148,7 @@ export default function MemoryPredictionInputs({
                 name="hd_or_hs"
                 handleOnChange={handleOnChange}
                 predictionInput={predictionInput}
-                options={HDHSTYPE}
+                options={filteredOptionsData(2, HDHSTYPE, predictionInput)}
                 value={predictionInput?.hd_or_hs}
               />
             </div>
@@ -163,7 +159,7 @@ export default function MemoryPredictionInputs({
                 name="vt_type"
                 handleOnChange={handleOnChange}
                 predictionInput={predictionInput}
-                options={VTTYPE}
+                options={filteredOptionsData(3, VTTYPE, predictionInput)}
                 value={predictionInput?.vt_type}
               />
             </div>
@@ -252,8 +248,8 @@ export default function MemoryPredictionInputs({
                               if (e.target.value === "All") {
                                 e.target.checked
                                   ? (tempPreviousData = banksRange.map((e) =>
-                                      String(e)
-                                    ))
+                                    String(e)
+                                  ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = banksRange.slice(0, -1);
                                 e.target.checked &&
@@ -277,8 +273,8 @@ export default function MemoryPredictionInputs({
                                 checkedData = banksRange;
                                 e.target.checked
                                   ? (tempPreviousData = banksRange.map((e) =>
-                                      String(e)
-                                    ))
+                                    String(e)
+                                  ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = banksRange.slice(0, -1);
                                 e.target.checked &&
@@ -329,8 +325,8 @@ export default function MemoryPredictionInputs({
                               if (e.target.value === "All") {
                                 e.target.checked
                                   ? (tempPreviousData = muxRange.map((e) =>
-                                      String(e)
-                                    ))
+                                    String(e)
+                                  ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = muxRange.slice(0, -1);
                                 e.target.checked &&
@@ -354,8 +350,8 @@ export default function MemoryPredictionInputs({
                                 checkedData = muxRange;
                                 e.target.checked
                                   ? (tempPreviousData = muxRange.map((e) =>
-                                      String(e)
-                                    ))
+                                    String(e)
+                                  ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = muxRange.slice(0, -1);
                                 e.target.checked &&
@@ -395,7 +391,7 @@ export default function MemoryPredictionInputs({
                 name="hd_or_hs"
                 handleOnChange={handleOnChange}
                 predictionInput={predictionInput}
-                options={HDORHS22FDX}
+                options={filteredOptionsData22fdx(2, HDORHS22FDX, predictionInput)}
                 value={predictionInput?.hd_or_hs}
               />
             </div>
@@ -492,8 +488,8 @@ export default function MemoryPredictionInputs({
                               if (e.target.value === "All") {
                                 e.target.checked
                                   ? (tempPreviousData = banksRange.map((e) =>
-                                      String(e)
-                                    ))
+                                    String(e)
+                                  ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = banksRange.slice(0, -1);
                                 e.target.checked &&
@@ -517,8 +513,8 @@ export default function MemoryPredictionInputs({
                                 checkedData = banksRange;
                                 e.target.checked
                                   ? (tempPreviousData = banksRange.map((e) =>
-                                      String(e)
-                                    ))
+                                    String(e)
+                                  ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = banksRange.slice(0, -1);
                                 e.target.checked &&
@@ -568,8 +564,8 @@ export default function MemoryPredictionInputs({
                               if (e.target.value === "All") {
                                 e.target.checked
                                   ? (tempPreviousData = muxRange.map((e) =>
-                                      String(e)
-                                    ))
+                                    String(e)
+                                  ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = muxRange.slice(0, -1);
                                 e.target.checked &&
@@ -593,8 +589,8 @@ export default function MemoryPredictionInputs({
                                 checkedData = muxRange;
                                 e.target.checked
                                   ? (tempPreviousData = muxRange.map((e) =>
-                                      String(e)
-                                    ))
+                                    String(e)
+                                  ))
                                   : (tempPreviousData = []);
                                 const valueWithoutAll = muxRange.slice(0, -1);
                                 e.target.checked &&

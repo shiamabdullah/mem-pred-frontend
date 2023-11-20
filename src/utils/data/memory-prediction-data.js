@@ -101,3 +101,31 @@ export const VTTYPE = [
 export const WORDS = [];
 // export const BITS = ["4", "8", "9", "14", "19", "20", "24", "34", "40", "44", "48", "64", "80", "84", "88", "124", "128", "160"]
 export const BITS = [];
+
+
+export const DATA_COMBINATION = [
+  "sram_sp_hse_lvt",
+  "sram_sp_hse_rvt",
+  "sram_sp_hdf_lvt",
+  "sram_sp_hdf_rvt",
+  "sram_2p_hse_rvt",
+  "sram_2p_hse_lvt",
+  "sram_dp_hse_rvt",
+  "sram_dp_hse_lvt",
+  "rf_sp_uhse_lvt",
+  "rf_sp_hse_rvt",
+  "rf_sp_hse_lvt",
+  "rf_2p_hsc_rvt",
+  "rf_2p_hsc_lvt"
+]
+
+export const DATA_COMBINATION_22FDX = [
+  "sram_sp_hd_hvt_ag1",
+  "sram_sp_hd_rvt_ag1",
+  "rf_sp_hd_rvt_ag1",
+  "rf_2p_hd_rvt_ag1",
+  "rf_sp_hd_hvt_ag0",
+  "rf_sp_hs_rvt_ag1",
+  "rf_2p_uhd_rvt_ag1",
+  "sram_sp_uhd_hvt_ag1",
+]
