@@ -49,6 +49,11 @@ export const PORTTYPE = [
     name: "DP",
     value: "dp",
   },
+  {
+    id: 3,
+    name: "2P1R1RW",
+    value: "2p1r1rw",
+  },
 ];
 
 export const HDHSTYPE = [
@@ -64,13 +69,18 @@ export const HDHSTYPE = [
   },
   {
     id: 2,
+    name: "HSE",
+    value: "hse",
+  },
+  {
+    id: 3,
     name: "UHSE",
     value: "uhse",
   },
   {
-    id: 3,
-    name: "HSE",
-    value: "hse",
+    id: 4,
+    name: "UHDE",
+    value: "uhde",
   },
 ];
 

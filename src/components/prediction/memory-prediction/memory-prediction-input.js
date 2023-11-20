@@ -77,9 +77,10 @@ export default function MemoryPredictionInputs({
     <div className="w-full relative">
       <Tooltip title="Download specs" placement="top">
         <Button className="absolute top-0 right-0">
-          {predictionInput?.words || predictionInput?.bits ? (
+          {console.log(csvData)}
+          {predictionInput?.words && predictionInput?.bits ? (
             <CSVLink
-              data={csvData}
+              data={csvData ? csvData : []}
               headers={
                 predictionInput?.tech === "12LPP"
                   ? csv_headers_12llp
@@ -627,7 +628,7 @@ export default function MemoryPredictionInputs({
           </>
         )}
 
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <Label>VDDPE</Label>
           <TextField
             fullWidth
@@ -637,9 +638,9 @@ export default function MemoryPredictionInputs({
             value={predictionInput?.vddpe || ""}
             onChange={handleOnChange}
           />
-        </div>
+        </div> */}
 
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <Label>VDDCE</Label>
           <TextField
             fullWidth
@@ -649,7 +650,7 @@ export default function MemoryPredictionInputs({
             value={predictionInput?.vddce || ""}
             onChange={handleOnChange}
           />
-        </div>
+        </div> */}
         {predictionInput?.tech === "12LPP" ? (
           ""
         ) : (

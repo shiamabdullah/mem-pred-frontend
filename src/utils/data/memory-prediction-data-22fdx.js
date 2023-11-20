@@ -43,6 +43,16 @@ export const HDORHS22FDX = [
     name: "hd",
     value: "hd",
   },
+  {
+    id: 1,
+    name: "hs",
+    value: "hs",
+  },
+  {
+    id: 2,
+    name: "uhd",
+    value: "uhd",
+  },
 ];
 
 export const MUX22FDX = ["1", "2", "4", "8", "16"];

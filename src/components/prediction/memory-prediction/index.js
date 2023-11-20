@@ -54,17 +54,12 @@ const MemoryPrediction = () => {
   const loading = useSelector(selectLoading);
   const dispatch = useDispatch();
 
-  // const setFileNameForDownload = (inputs) => {
-  //   console.log(inputs);
-  //   return "";
-  // };
-
   // Define handleOnChange function
   const handleOnChange = (e) => {
     if (e.target.name === "tech") {
       handleReset();
     }
-    // console.log(e.target.name)
+
     setInputData((prev) => {
       const temp = JSON.parse(JSON.stringify(prev));
       temp[e.target?.name] = e.target?.value;
@@ -280,18 +275,6 @@ const MemoryPrediction = () => {
       .post(url, payload)
       .then((response) => {
         if (payload[0].tech === "12LPP") {
-          // console.log("sgfsd gfsefh");
-          // if (response.data?.model_1?.length > 0) {
-          //   if (selectModel === "M1") {
-          //     dispatch(updateMultipleOutput(response.data?.model_1));
-          //   } else {
-          //     response.data?.model_1.map(
-          //       (e, i) =>
-          //         (e["Area_umA2"] = response.data?.model_2[i]["Area_umA2"])
-          //     );
-          //     dispatch(updateMultipleOutput(response.data?.model_1));
-          //   }
-          // }
           if (response.data?.result?.length > 0) {
             response.data.result.map((e) => {
               delete e.leakage_power_mw_ffg_log10;
@@ -322,28 +305,6 @@ const MemoryPrediction = () => {
     // dispatch(updateLoading(false));
   };
 
-  // const rangeValidationCheck = (inputData) => {
-  //   if (inputData?.banksType === "specific" && parseInt(inputData?.banks) < 1) {
-  //     return "Banks must be a positive number";
-  //   } else if (
-  //     inputData?.banksType === "range" &&
-  //     (parseInt(inputData?.banksMax) < parseInt(inputData?.banksMin) ||
-  //       parseInt(inputData?.banksMin) < 1)
-  //   ) {
-  //     return "Banks must be a positive number";
-  //   } else if (inputData?.mux === "specific" && parseInt(inputData?.mux) < 1) {
-  //     return "Mux must be a positive number";
-  //   } else if (
-  //     inputData?.mux === "range" &&
-  //     (parseInt(inputData?.muxMax) < parseInt(inputData?.muxMin) ||
-  //       parseInt(inputData?.muxMin) < 1)
-  //   ) {
-  //     return "Mux must be a positive number";
-  //   } else {
-  //     return false;
-  //   }
-  // };
-
   const setCSVDataForDownload = () => {
     const tempData =
       inputData?.words && inputData?.bits
@@ -373,7 +334,10 @@ const MemoryPrediction = () => {
   const onSubmit = async () => {
     // inputData["banks"] = banksRange;
     // inputData["mux"] = muxRange;
-    inputData["fileName"] = fileName;
+    console.log(fileName);
+    // inputData["fileName"] = fileName;
+    setSelectedBanks([]);
+    setSelectedMux([]);
 
     console.log({ inputData });
     dispatch(updateMemoryInput(inputData));
@@ -384,12 +348,6 @@ const MemoryPrediction = () => {
       return;
     }
 
-    // const rangeError = rangeValidationCheck(inputData);
-
-    // if (rangeError) {
-    //   toast.error(rangeError);
-    //   return;
-    // }
     dispatch(updateLoading(true));
 
     if (inputData?.banks?.length === 1 && inputData?.mux?.length === 1) {
@@ -399,7 +357,6 @@ const MemoryPrediction = () => {
         : inputData?.tech === "22FDX"
         ? (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory-22fdx-new/`)
         : (url = `${process.env.REACT_APP_BASE_URL}/api/predict-memory/`);
-
       const payload =
         inputData?.tech === "12LPP"
           ? {
@@ -469,9 +426,9 @@ const MemoryPrediction = () => {
             parseInt(inputData.bits)
           );
 
-        matchedRange?.matching_banks?.length > 0 &&
+        matchedRange?.matching_banks?.length > 1 &&
           matchedRange?.matching_banks?.push("All");
-        matchedRange?.matching_banks?.length > 0 &&
+        matchedRange?.matching_banks?.length > 1 &&
           matchedRange?.matching_mux?.push("All");
         // console.log(matchedRange)
         setBanksRange(
@@ -503,9 +460,9 @@ const MemoryPrediction = () => {
 
         console.log({ matchedRange });
 
-        matchedRange?.matching_banks?.length > 0 &&
+        matchedRange?.matching_banks?.length > 1 &&
           matchedRange?.matching_banks?.push("All");
-        matchedRange?.matching_banks?.length > 0 &&
+        matchedRange?.matching_banks?.length > 1 &&
           matchedRange?.matching_mux?.push("All");
         // console.log(matchedRange)
         setBanksRange(
@@ -524,6 +481,7 @@ const MemoryPrediction = () => {
 
   const setWordsAndBits = () => {
     if (
+      inputData.vendor &&
       inputData.mem_type &&
       inputData.port &&
       inputData.hd_or_hs &&
@@ -544,6 +502,11 @@ const MemoryPrediction = () => {
         setFileName(fileNameTemp);
         let { matchingWords, matchingBits } = findWordsBits(fileNameTemp);
         console.log({ matchingWords, matchingBits });
+        matchingWords.length > 1
+          ? ""
+          : toast.error(
+              "This Combination has no Compiler, please select a new Combination."
+            );
         setOptionWords(matchingWords);
         setoptionBits(matchingBits);
       } else {
@@ -561,6 +524,11 @@ const MemoryPrediction = () => {
         let { matchingWords, matchingBits } =
           findWordsBitsFor22fdx(fileNameTemp);
         console.log({ matchingWords, matchingBits });
+        matchingWords.length > 1
+          ? ""
+          : toast.error(
+              "This Combination has no Compiler, please select a new Combination."
+            );
         setOptionWords(matchingWords);
         setoptionBits(matchingBits);
       }

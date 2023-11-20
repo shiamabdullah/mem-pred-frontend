@@ -1,8 +1,8 @@
 import { Button, Container, Paper, TextField } from "@mui/material";
+import axios from "axios";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
-import { authUsers } from "../utils/data/users";
 
 const Login = () => {
   const [userInput, setUserInput] = useState({
@@ -11,28 +11,35 @@ const Login = () => {
   });
   const navigate = useNavigate();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!userInput.email || !userInput.password) {
       toast.warning("Please fill all the fields");
       return;
     }
 
-    const findUser = authUsers.find(
-      (user) =>
-        user.email === userInput.email && user.password === userInput.password
-    );
+    try {
+      const url = `${process.env.REACT_APP_BASE_URL}/api/authentication_for_login_user/`;
+      const res = await axios.post(url, userInput);
 
-    if (findUser) {
-      localStorage.setItem("user", JSON.stringify(findUser));
-      toast.success("Login successful");
-      navigate("/ez-gf-internal/jigyasa/");
-    } else {
-      toast.error("Invalid email or password");
+      if (res.data.result === false) {
+        toast.error("Invalid email or password");
+      } else {
+        localStorage.setItem("user", JSON.stringify(res.data.data));
+        toast.success("Login successful");
+        navigate("/ez-gf-internal/jigyasa/");
+      };
+    } catch (error) {
+      toast.error(error.message);
     }
   };
 
   return (
-    <Container className="min-h-screen flex items-center justify-center">
+    <Container className="min-h-screen flex-col gap-8 flex items-center justify-center">
+      <img
+        className='logo_image h-10'
+        src="./gf-logo.png"
+        alt="Global Foundries"
+      />
       <Paper className="p-8 w-full m-5 lg:w-[480px]">
         <p className="text-left text-2xl capitalize font-semibold text-[#6A5ACD] mb-5">
           Login to Jigyasa

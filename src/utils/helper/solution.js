@@ -144,6 +144,9 @@ export function findWordsBitsFor22fdx(name) {
     gf22nsd41p11s1crl256s: "rf_sp_hd_rvt_ag1",
     gf22nsd42p11s1drl128s: "rf_2p_hd_rvt_ag1",
     gf22nsd81p11sadul256s: "rf_sp_hd_hvt_ag0",
+    gf22nsd41p11s1srl256s: "rf_sp_hs_rvt_ag1",
+    gf22nsd42p11s1cul256s: "rf_2p_uhd_rvt_ag1",
+    gf22nsd81p11sadul02ms: "sram_sp_uhd_hvt_ag1",
   };
 
   const searchValue = name;
@@ -240,6 +243,9 @@ export function findMuxBanksFor22fdx(name, words, bits) {
     gf22nsd41p11s1crl256s: "rf_sp_hd_rvt_ag1",
     gf22nsd42p11s1drl128s: "rf_2p_hd_rvt_ag1",
     gf22nsd81p11sadul256s: "rf_sp_hd_hvt_ag0",
+    gf22nsd41p11s1srl256s: "rf_sp_hs_rvt_ag1",
+    gf22nsd42p11s1cul256s: "rf_2p_uhd_rvt_ag1",
+    gf22nsd81p11sadul02ms: "sram_sp_uhd_hvt_ag1",
   };
 
   const searchValue = name;
